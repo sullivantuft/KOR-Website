@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOR | Login</title>
+    <link type="text/css" rel="stylesheet" href="../styles/styles.css">
+    <link rel="icon" href="../images/Logo3.png">
+    <script defer src="/KOR/shop_tools/login_script.js"></script><!--used during development, if development is buggy. Try commenting out this line-->
+    <script defer src="https://jmrcycling.github.io/WDD130/KOR/shop_tools/login_script.js"></script>
+    <!-- <script defer>
+
+        const login = document.getElementById("login");
+        console.log(login)
+
+        login.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            console.log('form has been submitted');
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            var urlencoded = new URLSearchParams();
+            var email = document.getElementById("email").value;
+            urlencoded.append("email", email);
+            var password = document.getElementById("password").value;
+            urlencoded.append("password", password);
+
+            var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: urlencoded,
+                redirect: 'follow'
+            };
+
+            fetch("https://masontuft.com/loginShop", requestOptions)
+                .then(response => response.json())
+                .then(result => {
+                    console.log(('plan type ' + result.plan_type[0].plan_type));
+                    console.log(('shop_name ' + result.plan_type[0].shop_name));
+                    
+                    window.location.replace("https://jmrcycling.github.io/WDD130/KOR/shop_tools/dashboard?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+                })
+                .catch(error => console.log('error', error));
+
+        })
+
+    </script> -->
+</head>
+<body>
+    <header>
+        <iframe class="header" src="../header.html"   scrolling="no"></iframe>
+    </header>
+
+    <main>
+        <!-- <div>
+            <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p>
+            <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p>
+        </div> -->
+        <div class="login_window">
+            <!-- <div id="error"></div> -->
+            <h1>Login</h1>
+            <form id="login" class="login_form">
+            <!-- <div id="feedback"> -->
+                <div class="form_line">
+                    <label for="email">Email: </label>
+                    <input type="email" id="email" name="email" placeholder="Youraddress@example.com" required>
+                </div>
+                <div class="form_line">
+                    <label for="password">Password: </label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form_line">
+                    <button class="link" type="submit">Submit</button>
+                </div>
+            <!-- </div> -->
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <iframe class="footer" src="../footer.html"   scrolling="no"></iframe>
+    </footer>
+    <!-- <script>
+        const name = document.getElementById('user_name')
+        const password = document.getElementById('password')
+        const form = document.getElementById('form')
+         form.addEventListener('submit', (e) => {
+            let messages = []
+            if (name.value ==='' || name.value == null) {
+                messages.push('Name is required')
+            }
+
+            if (password.value.length <= 6) {
+                messages.push('Password must be longer than 6 characters')
+            }
+
+            if (password.value.length >= 20) {
+                messages.push('Password cannot be password')
+            }
+
+            if (password.value === 'password') {
+                messages.push('Password cannot be password')
+            }
+            if (messages.length > 0) {
+                e.preventDefault()
+                errorElement.innerText = messages.join(', ')
+            }
+        })
+    </script> -->
+</body>
+<!-- <script>
+    const name = document.getElementById('user_name')
+    const password = document.getElementById('password')
+    const form = document.getElementById('form')
+     form.addEventListener('submit', (e) => {
+        let messages = []
+        if (name.value ==='' || name.value == null) {
+            messages.push('Name is required')
+        }
+
+        if (password.value.length <= 6) {
+            messages.push('Password must be longer than 6 characters')
+        }
+
+        if (password.value.length >= 20) {
+            messages.push('Password cannot be password')
+        }
+
+        if (password.value === 'password') {
+            messages.push('Password cannot be password')
+        }
+        if (messages.length > 0) {
+            e.preventDefault()
+            errorElement.innerText = messages.join(', ')
+        }
+    })
+</script> -->
+</html>
