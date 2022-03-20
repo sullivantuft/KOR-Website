@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOR | Sign In</title>
+    <link type="text/css" rel="stylesheet" href="../styles/styles.css">
+    <link rel="icon" href="../images/Logo3.png">
+    <script defer src="/KOR/shop_tools/signin_script.js"></script><!--used during development, if development is buggy. Try commenting out this line-->
+    <script defer src="https://jmrcycling.github.io/WDD130/KOR/shop_tools/signin_script.js"></script>
+
+    <!-- <script>
+
+        
+        var sub_Id = new URLSearchParams( window.location.search );
+        sub_Id = sub_Id.get('sub_id');
+        console.log(sub_Id);
+        var invoice_Id = new URLSearchParams( window.location.search );
+        invoice_Id = invoice_Id.get('invoice_id');
+        console.log(invoice_Id);
+
+        var signin = document.getElementById("signin");
+
+signin.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+
+    console.log('form has been submitted');
+    let user = {
+        user_name: document.getElementById("username"),
+        password: document.getElementById("password"),
+        // sub_id: 
+    };
+    
+    let response = fetch('/article/fetch/post/user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+            body: JSON.stringify(user)
+    });
+})
+
+    </script> -->
+</head>
+<body>
+    <header>
+        <iframe class="header" src="../header.html"   scrolling="no"></iframe>
+    </header>
+
+    <main>
+        <div>
+            <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
+            <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
+        </div>
+        <div class="login_window">
+            <div id="error"></div>
+            <h1>Create Account</h1>
+            <form id="signin" class="login_form">
+            <!-- <div id="feedback"> -->
+                <div class="form_line">
+                    <label for="shop_name">Shop Name: </label>
+                    <input type="text" id="shop_name" name="shop_name" placeholder="Your Company" required>
+                </div>
+
+                <div class="form_line">
+                    <label for="email">Email: </label>
+                    <input type="email" id="email" name="email" placeholder="youraddress@example.com" required>
+                </div>
+                <div class="form_line">
+                    <label for="password">Password: </label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+
+                <div class="form_line">
+                    <button class="link" type="submit">Submit</button>
+                </div>
+            <!-- </div> -->
+            </form>
+        </div>
+
+    </main>
+
+    <footer>
+        <iframe class="footer" src="../footer.html"   scrolling="no"></iframe>
+    </footer>
+   
+</body>
+<!-- <script>
+    import axios from 'axios';
+
+    const signin = document.getElementById("signin");
+
+    signin.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+
+        console.log('form has been submitted');
+        axios({
+
+        })
+    })
+    
+    
+
+</script> -->
+</html>
