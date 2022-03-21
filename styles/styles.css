@@ -114,7 +114,7 @@ nav {
 
 .parallax2_sign_up {
   /* The image used */
-  background-image: url("../images/bike_shop-min.jpeg");
+  background-image: url("../images/santa_cruz-min.jpg");
 
   /* Set a specific height */
   min-height: 600px;
@@ -206,6 +206,7 @@ h1 {
   border-radius: 15px;
   grid-column: 2/3;
   grid-row: 1/2;
+  position: relative;
 }
 .payment-card3 {
   margin: 3%;
@@ -215,6 +216,7 @@ h1 {
   /* text-align: center; */
   border-radius: 15px;
   grid-row: 1/2;
+  position: relative;
 }
 .payment1 {
   grid-column: 1/2;
@@ -291,10 +293,12 @@ h1 {
 }
 
 .login_window {
-  margin: 0 auto;
+  margin: 20% auto;
   width: 30%;
   /* height: 50%; */
   background-color: var(--secondary-color);
+  border-radius: 20px;
+
 }
 .login_form {
   text-align: center;

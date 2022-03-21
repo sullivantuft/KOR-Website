@@ -104,6 +104,10 @@
         var shop_name = new URLSearchParams( window.location.search );
         shop_name = shop_name.get('shop_name')
         console.log(shop_name);
+        var token = new URLSearchParams( window.location.search );
+        token = token.get('token')
+        console.log(token)
+
 
     </script>
 </head>
@@ -115,13 +119,14 @@
     <main>
         <div>
             <h1>Welcome <script type="text/javascript">document.write(shop_name)</script></h1>
-            <h2 class="paragraph">This is your Dashboard to invite customers to our app!!!</h2>
-            <h3 class="paragraph">Just fill out the form below</h3>
+            <h2 class="paragraph">This is your dashboard for admin access to your users!!!</h2>
+            <h2 class="paragraph">Your customer access code is <h1><script type="text/javascript">document.write(token)</script></h1></h2>
+            
             <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
             <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
         </div>
         
-        <div>
+        <!-- <div>
             <form action="#" method="post">
                 <div id="feedback"></div>
                 <ul>
@@ -133,17 +138,14 @@
                       <label for="mail">E-mail:</label>
                       <input type="email" id="mail" name="user_email" placeholder="name@example.com">
                     </li>
-                    <!-- <li>
-                      <label for="msg">Message:</label>
-                      <textarea id="msg" name="user_message"></textarea>
-                    </li> -->
+                    
                     <li class="button">
                         <button type="submit">Send your message</button>
                     </li>
                    </ul>
     
             </form>
-        </div>
+        </div> -->
 
     </main>
 

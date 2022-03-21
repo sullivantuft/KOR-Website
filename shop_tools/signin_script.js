@@ -30,6 +30,8 @@ signin.addEventListener("submit", (e) => {
     var password = document.getElementById("password").value;
     urlencoded.append("password", password);
     // console.log((document.getElementById("password").value));
+    var phone = document.getElementById("phone").value;
+    urlencoded.append("phone", phone);
     urlencoded.append("sub_Id", sub_Id);
     urlencoded.append("invoice_Id", invoice_Id);
     urlencoded.append("plan_type", plan_type);
