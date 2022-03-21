@@ -30,7 +30,7 @@ login.addEventListener("submit", (e) => {
             console.log(('token ' + result.plan_type[0].token));
 
 
-            window.location.replace("https://jmrcycling.com/shop_tools/dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name + "&token=" + result.plan_type[0].token);
+            window.location.replace("dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name + "&token=" + result.plan_type[0].token);
 
         })
         .catch(error => console.log('error', error));
