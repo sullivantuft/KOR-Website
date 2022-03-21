@@ -65,10 +65,10 @@
         height: 5em;
         }
 
-        .button {
-        /* Align buttons with the text fields */
-        padding-left: 90px; /* same size as the label elements */
-        }
+        /*.button {*/
+        /*!* Align buttons with the text fields *!*/
+        /*padding-left: 90px; !* same size as the label elements *!*/
+        /*}*/
 
         button {
         /* This extra margin represent roughly the same space as the space
@@ -85,12 +85,12 @@
             /* make this element invisible until we are ready for it */
             display: none;       
         }
-        .moveDown {
-            /* margin-top: 10em; */
-            position: absolute;
-            top: 50%;
-            
-        }
+        /*.moveDown {*/
+        /*     margin-top: 10em; */
+            /*position: absolute;*/
+            /*top: 50%;*/
+        /*    */
+        /*}*/
     </style>
     <script>
 
@@ -113,15 +113,15 @@
 </head>
 <body>
     <header>
-        <iframe class="header" src="header.html"   scrolling="no"></iframe>
+        <iframe class="header" src="./header.html"   scrolling="no"></iframe>
     </header>
 
     <main>
         <div>
             <h1>Welcome <script type="text/javascript">document.write(shop_name)</script></h1>
             <h2 class="paragraph">This is your dashboard for admin access to your users!!!</h2>
-            <h2 class="paragraph">Your customer access code is <h1><script type="text/javascript">document.write(token)</script></h1></h2>
-            
+            <h2 class="paragraph">Your customer access code is </h2>
+            <h1><script type="text/javascript">document.write(token)</script></h1>
             <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
             <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
         </div>
