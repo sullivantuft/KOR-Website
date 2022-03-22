@@ -117,22 +117,23 @@
         <div class="contact-content">
             <div class="contact-card">
                 <h1>Mason Tuft</h1>
-                <img src="images/mason_riding.jpg" alt="Mason" class="image_50">
+                <img src="images/mason_riding_cropped-min.png" alt="Mason" class="image_75">
                 <h3 class="title">Developer</h3>
             </div>
             <div class="contact-card">
                 <h1>Robert Tuft</h1>
-                <img src="#" alt="Robert" class="image_50">
+                <img src="images/robert_riding.JPG" alt="Robert" class="image_100">
                 <h3 class="title">Senior Developer</h3>
             </div>
             <div class="contact-card">
                 <h1>Jessica Wyman</h1>
                 <img src="#" alt="Jessica" class="image_50">
-                <h3 class="title">Project Manager</h3>
+                <h3 class="title">Project Manager/CFO</h3>
             </div>
         </div>
+        <h3>Email us at </h3>
         
-        <!-- <form action="#" method="post">
+        <form action="mailto:admin@jmrcycling.com" method="post" enctype="multipart/form-data" name="EmailForm">
             <div id="feedback"></div>
             <ul>
                 <li>
@@ -152,7 +153,7 @@
                 </li>
                </ul>
 
-        </form> -->
+        </form>
         
     </main>
 
@@ -183,14 +184,14 @@
         // add a 'listener' to wait for a submission of our form. When that happens run the code below.
         formElement.addEventListener('submit', function(e) {
             // stop the form from doing the default action.
-            e.preventDefault();
+            // e.preventDefault();
             // set the contents of our feedback element to a message letting the user know the form was submitted successfully. Notice that we pull the name that was entered in the form to personalize the message!
             window.alert('Hello '+ formElement.user_name.value +'! Thank you for your message. We will get back with you as soon as possible!');
             // feedbackElement.innerHTML = 'Hello '+ formElement.user_name.value +'! Thank you for your message. We will get back with you as soon as possible!';
             // make the feedback element visible.
-            feedbackElement.style.display = "block";
+            // feedbackElement.style.display = "block";
             // add a class to move everything down so our message doesn't cover it.
-            document.body.classList.toggle('moveDown');
+            // document.body.classList.toggle('moveDown');
         });
     </script>
 </body>
