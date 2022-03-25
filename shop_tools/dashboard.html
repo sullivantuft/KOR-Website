@@ -92,15 +92,7 @@
         /*    */
         /*}*/
     </style>
-    <script>
-
-       
-        // var sub_Id = new URLSearchParams( window.location.search );
-        // sub_Id = sub_Id.get('sub_id');
-        // // console.log(sub_Id);
-        // var invoice_Id = new URLSearchParams( window.location.search );
-        // invoice_Id = invoice_Id.get('invoice_id');
-        // // console.log(invoice_Id);
+    <script type="text/javascript" defer>
         var shop_name = new URLSearchParams( window.location.search );
         shop_name = shop_name.get('shop_name')
         console.log(shop_name);
@@ -108,7 +100,25 @@
         token = token.get('token')
         console.log(token)
 
+        /* When the user clicks on the button,
+        toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
 
+        // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }   
+    }
     </script>
 </head>
 <body>
@@ -123,9 +133,16 @@
                 <a class="link" href="../our_story.html" target="_parent">Our Story</a>
                 <a class="link" href="../contact_us.html" target="_parent">Contact Us</a>
             </nav>
-            <!-- <nav> -->
+            <nav>
+                <div class="dropdown">
+                    <button onclick="myFunction()" class="dropbtn">Settings</button>
+                    <div id="myDropdown" class="dropdown-content">
+                      <a href="changePassword.html">Change Password</a>
+                      <a href="changePhone.html">Change Phone</a>
+                    </div>
+                </div>
                 <!-- <a class="link" href="./login.html" target="_blank">Log In</a> -->
-            <!-- </nav> -->
+            </nav>
         </div>
 <!--        <iframe class="header" src="./header.html"   scrolling="no"></iframe>-->
     </header>
