@@ -391,23 +391,26 @@ h1 {
 @media screen and (max-width: 900px) {
   .parallax_home {
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 550px;
+    /* visibility: hidden; */
   }
   .parallax2_home {
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 800px;
+    /* height: 0%; */
   }
   .parallax_sign_up {
     background-attachment: scroll;
-    min-height: 400px;
+    /* min-height: 400px; */
+    min-height: 550px;
   }
   .parallax2_sign_up {
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 1050px;
   }
   .parallax_our_story {
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 760px;
   }
   .parallax2_our_story {
     background-attachment: scroll;
@@ -440,9 +443,35 @@ h1 {
     padding: 20px;
   }
   nav {
-    flex-direction: column;
+    justify-content: center;
+    /* flex-direction: column; */
   }
   .login_window {
     width: 75%;
+  }
+  #header_grid {
+    justify-self: center;
+    display: block;
+    text-align: center;
+  }
+  .link {
+    margin: 2% 2%;
+    padding: 0%;
+  }
+  .right_position {
+    text-align: center;
+  }
+  .parallax_parent {
+    position: relative;
+  }
+  .mobile-position {
+    position: absolute;
+    top: 10px;
+
+  }
+  .mobile_textbox {
+    background-color: var(--secondary-color);
+    margin: 5%;
+    border-radius: 20px;
   }
 } 
