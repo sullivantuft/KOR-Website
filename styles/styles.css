@@ -391,30 +391,30 @@ h1 {
 @media screen and (max-width: 900px) {
   .parallax_home {
     background-attachment: scroll;
-    min-height: 550px;
+    min-height: 600px;
     /* visibility: hidden; */
   }
   .parallax2_home {
     background-attachment: scroll;
-    min-height: 800px;
+    min-height: 1000px;
     /* height: 0%; */
   }
   .parallax_sign_up {
     background-attachment: scroll;
     /* min-height: 400px; */
-    min-height: 550px;
+    min-height: 600px;
   }
   .parallax2_sign_up {
     background-attachment: scroll;
-    min-height: 1050px;
+    min-height: 1200px;
   }
   .parallax_our_story {
     background-attachment: scroll;
-    min-height: 760px;
+    min-height: 800px;
   }
   .parallax2_our_story {
     background-attachment: scroll;
-    min-height: 400px;
+    min-height: 450px;
   }
   .point-content {
     display: block;
