@@ -474,4 +474,7 @@ h1 {
     margin: 5%;
     border-radius: 20px;
   }
+  .paragraph {
+    margin: 0;
+  }
 } 
