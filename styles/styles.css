@@ -33,7 +33,7 @@
 nav {
   align-items: center;
   justify-items: center;
-  padding: 1em;
+  padding: 2em;
 }
 .nav {
   justify-items: center;
@@ -75,6 +75,7 @@ nav {
 .icon {
     height: 80px;
     border-radius: 50px;
+    margin: 10px;
 }
 #header_grid {
     display: grid;
