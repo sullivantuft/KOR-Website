@@ -93,12 +93,14 @@
         /*}*/
     </style>
     <script type="text/javascript" defer>
-        var shop_name = new URLSearchParams( window.location.search );
-        shop_name = shop_name.get('shop_name')
-        console.log(shop_name);
-        var token = new URLSearchParams( window.location.search );
-        token = token.get('token')
-        console.log(token)
+        let shop_name;
+        let token;
+        // shop_name = new URLSearchParams( window.location.search );
+        // shop_name = shop_name.get('shop_name')
+        // console.log(shop_name);
+        // token = new URLSearchParams( window.location.search );
+        // token = token.get('token')
+        // console.log(token)
         token = sessionStorage.getItem('token')
         shop_name = sessionStorage.getItem('shop_name')
 
