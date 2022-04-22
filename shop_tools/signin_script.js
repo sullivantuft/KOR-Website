@@ -64,7 +64,7 @@ signin.addEventListener("submit", (e) => {
                     console.log(('plan type ' + result.plan_type[0].plan_type));
                     console.log(('shop_name ' + result.plan_type[0].shop_name));
                     
-                    window.location.replace("https://jmrcycling.com/shop_tools/dashboard?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+                    window.location.replace("./dashboard?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
                 })
                 .catch(error => console.log('error', error));
 

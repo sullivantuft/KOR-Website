@@ -99,6 +99,31 @@
         var token = new URLSearchParams( window.location.search );
         token = token.get('token')
         console.log(token)
+        token = sessionStorage.getItem('token')
+        shop_name = sessionStorage.getItem('shop_name')
+
+        console.log(shop_name)
+        console.log(token)
+
+
+        // shop_name = get_cookie( "shop_name" )
+        // function get_cookie ( cookie_name )
+        //     {
+        //     // https://www.thesitewizard.com/javascripts/cookies.shtml
+        //     var cookie_string = document.cookie ;
+        //     if (cookie_string.length != 0) {
+        //         var cookie_array = cookie_string.split( '; ' );
+        //         for (i = 0 ; i < cookie_array.length ; i++) {
+        //         cookie_value = cookie_array[i].match ( cookie_name + '=(.*)' );
+        //         if (cookie_value != null) {
+        //             return decodeURIComponent ( cookie_value[1] ) ;
+        //         }
+        //         }
+        //     }
+        //     return '' ;
+        //     }
+        //     console.log(shop_name)
+        // console.log(document.cookie)
 
         /* When the user clicks on the button,
         toggle between hiding and showing the dropdown content */
@@ -213,6 +238,7 @@
             // call a .js to use an email sending service to invite the customer
             
         });
+        
     </script>
 </body>
 </html>
