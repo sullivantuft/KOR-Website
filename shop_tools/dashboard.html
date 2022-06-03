@@ -94,18 +94,18 @@
     </style>
     <script type="text/javascript" defer>
         let shop_name;
-        let token;
+        let shop_code;
         // shop_name = new URLSearchParams( window.location.search );
         // shop_name = shop_name.get('shop_name')
         // console.log(shop_name);
         // token = new URLSearchParams( window.location.search );
         // token = token.get('token')
         // console.log(token)
-        token = sessionStorage.getItem('token')
+        shop_code = sessionStorage.getItem('shop_code')
         shop_name = sessionStorage.getItem('shop_name')
 
         console.log(shop_name)
-        console.log(token)
+        console.log(shop_code)
 
 
         // shop_name = get_cookie( "shop_name" )
@@ -179,7 +179,11 @@
             <h1>Welcome <script type="text/javascript">document.write(shop_name)</script></h1>
             <h2 class="paragraph">This is your dashboard for admin access to your users!!!</h2>
             <h2 class="paragraph">Your customer access code is </h2>
-            <h1><script type="text/javascript">document.write(token)</script></h1>
+            <h1><script type="text/javascript">document.write(shop_code)</script></h1>
+            <h2 class="paragraph">Below is a QR code to both app stores for your customers to scan!</h2>
+            <div class="center">
+                <img class="image_25" src="/images/onlink_to_kgknwe.svg" alt="QR Code">
+            </div>
             <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
             <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
         </div>
@@ -216,9 +220,7 @@
                         <a href="https://facebook.com" target="_blank">
                             <img src="../images/facebook.png" alt="FB Icon">
                         </a>
-                        <a href="https://twitter.com" target="_blank">
-                            <img src="../images/twitter.png" alt="twitter icon">
-                        </a>
+                        
                         <a href="https://instagram.com" target="_blank">
                             <img src="../images/instagram.png" alt="instagram icon" >
                         </a>

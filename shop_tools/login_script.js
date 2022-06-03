@@ -32,9 +32,9 @@ login.addEventListener("submit", (e) => {
             // set the session storage
             sessionStorage.setItem('shop_name', result.plan_type[0].shop_name)
             
-            sessionStorage.setItem('token', result.plan_type[0].token)
+            sessionStorage.setItem('shop_code', result.plan_type[0].shop_code)
             console.log(sessionStorage.getItem('shop_name'))
-            console.log(sessionStorage.getItem('token'))
+            console.log(sessionStorage.getItem('shop_code'))
             // document.cookie =  "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + "; token=" + result.plan_type[0].token + ";"
             // + "path=/; domain=jmrcycling.com";
             // document.cookie = "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + ";"
@@ -42,7 +42,7 @@ login.addEventListener("submit", (e) => {
             // cookie_string = document.cookie.split('; ')
             // console.log(cookie_string)
             // console.log(document.cookie)
-            window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name + "&token=" + result.plan_type[0].token);
+            window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name + "&shop_code=" + result.plan_type[0].shop_code);
 
         })
         .catch(error => console.log('error', error));

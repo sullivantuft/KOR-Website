@@ -53,12 +53,22 @@ nav {
 .link:hover {
   background-color: var(--secondary-color);
   color: whitesmoke;
+  cursor: pointer;
 }
+/* a:hover {
+  cursor: pointer;
+} */
+
 
 
 /* body {
   text-align: center;
 } */
+.img_QR {
+  height: 25%; 
+  width: 25%; 
+  margin: 0 37.5%;
+}
 
 .image_100 {
 
@@ -71,6 +81,15 @@ nav {
 .image_50 {
   /* margin: 5px 25%; */
   width: 50%;
+}
+.image_25 {
+  width: 25%;
+}
+.store_buttons {
+  width: 15%;
+}
+.store_buttons:hover {
+  cursor: pointer;
 }
 .icon {
     height: 80px;
