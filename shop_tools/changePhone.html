@@ -27,6 +27,12 @@
                     <div id="myDropdown" class="dropdown-content">
                       <a href="dashboard.html">Dashboard</a>
                       <a href="changePassword.html">Change Password</a>
+                      <script>
+                        plan_type = sessionStorage.getItem('plan_type');
+                        if (plan_type == 'premium') {
+                            document.write('<a href="sendNotifs.html">Send Notifications</a>')
+                        }
+                        </script>
                     </div>
                 </div>
                 <!-- <a class="link" href="./login.html" target="_blank">Log In</a> -->

@@ -1,8 +1,10 @@
 // var token = new URLSearchParams( window.location.search );
 // token = token.get('token')
 
-var token = sessionStorage.getItem('token');
-console.log(token)
+var shop_code = sessionStorage.getItem('shop_code');
+console.log(shop_code);
+let plan_type = sessionStorage.getItem('plan_type');
+console.log(plan_type);
 
 const changePassword = document.getElementById("changePassword");
 

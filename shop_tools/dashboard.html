@@ -95,18 +95,20 @@
     <script type="text/javascript" defer>
         let shop_name;
         let shop_code;
+        let plan_type;
         // shop_name = new URLSearchParams( window.location.search );
         // shop_name = shop_name.get('shop_name')
         // console.log(shop_name);
         // token = new URLSearchParams( window.location.search );
         // token = token.get('token')
         // console.log(token)
-        shop_code = sessionStorage.getItem('shop_code')
-        shop_name = sessionStorage.getItem('shop_name')
+        shop_code = sessionStorage.getItem('shop_code');
+        shop_name = sessionStorage.getItem('shop_name');
+        plan_type = sessionStorage.getItem('plan_type');
 
-        console.log(shop_name)
-        console.log(shop_code)
-
+        console.log(shop_name);
+        console.log(shop_code);
+        console.log(plan_type);
 
         // shop_name = get_cookie( "shop_name" )
         // function get_cookie ( cookie_name )
@@ -166,6 +168,11 @@
                     <div id="myDropdown" class="dropdown-content">
                       <a href="changePassword.html" >Change Password</a>
                       <a href="changePhone.html">Change Phone</a>
+                      <script>
+                          if (plan_type == 'premium') {
+                              document.write('<a href="sendNotifs.html">Send Notifications</a>')
+                          }
+                      </script>
                     </div>
                 </div>
                 <!-- <a class="link" href="./login.html" target="_blank">Log In</a> -->
@@ -180,7 +187,9 @@
             <h2 class="paragraph">This is your dashboard for admin access to your users!!!</h2>
             <h2 class="paragraph">Your customer access code is </h2>
             <h1><script type="text/javascript">document.write(shop_code)</script></h1>
+            <h4 class="center">(This code will continually change, do not copy!)</h4>
             <h2 class="paragraph">Below is a QR code to both app stores for your customers to scan!</h2>
+            
             <div class="center">
                 <img class="image_25" src="/images/onlink_to_kgknwe.svg" alt="QR Code">
             </div>
