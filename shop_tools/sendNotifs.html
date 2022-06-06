@@ -7,7 +7,7 @@
     <title>KOR | Send Notifications</title>
     <link type="text/css" rel="stylesheet" href="../styles/styles.css">
     <link rel="icon" href="../images/Logo3.png">
-
+    <script defer src="/shop_tools/send_notif_script.js"></script>
     <script defer >
         let shop_name;
         let shop_code;
@@ -16,10 +16,12 @@
         shop_code = sessionStorage.getItem('shop_code');
         shop_name = sessionStorage.getItem('shop_name');
         plan_type = sessionStorage.getItem('plan_type');
+        shop_token = sessionStorage.getItem('shop_token');
 
         console.log(shop_name);
         console.log(shop_code);
         console.log(plan_type);
+        console.log(shop_token);
 
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
@@ -38,6 +40,17 @@
                 }
             }   
         }
+
+        // const send_notif = document.getElementById("send_notif");
+
+        // console.log(send_notif);
+
+
+        // send_notif.addEventListener("submit", (e) => {
+        //     e.preventDefault();
+        //     console.log('form has been submitted');
+        // });
+
     </script>
 </head>
 <body>
@@ -74,15 +87,14 @@
     <main>
         <div class="login_window">
             <h1>Please enter a message for your customers!</h1>
-            <form action="#" method="post">
+            <form id="send_notif">
                     <div class="input_field">
-                        <input type="text" name="" placeholder="" required>
+                        <input type="text" id="message" name="" placeholder="" required>
                         <label>Enter Message Here!</label>
                         <span></span>
                     </div>
-                <!-- <div class="center"> -->
                     <button class="btn" type="submit">Send your message!</button>
-                <!-- </div> -->
+
             </form>
         </div>
     </main>

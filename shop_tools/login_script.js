@@ -27,16 +27,18 @@ login.addEventListener("submit", (e) => {
         .then(result => {
             console.log(('plan type ' + result.plan_type[0].plan_type));
             console.log(('shop_name ' + result.plan_type[0].shop_name));
-            console.log(('token ' + result.plan_type[0].token));
+            console.log(('shop token ' + result.plan_type[0].shop_token));
 
             // set the session storage
             sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
             
             sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
             sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
+            sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
             console.log(sessionStorage.getItem('shop_name'));
             console.log(sessionStorage.getItem('shop_code'));
             console.log(sessionStorage.getItem('plan_type'));
+            console.log(sessionStorage.getItem('shop_token'));
             // document.cookie =  "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + "; token=" + result.plan_type[0].token + ";"
             // + "path=/; domain=jmrcycling.com";
             // document.cookie = "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + ";"

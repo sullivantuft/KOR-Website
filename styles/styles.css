@@ -516,6 +516,30 @@ h1 {
   transform-origin: left;
   transition: transform 0.5s ease-in-out;
 }
+.input_field input[type="tel"]{
+  position: absolute;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-size: 16px;
+  color: #f1f1f1;
+  width: 100%;
+}
+.input_field input[type="tel"]:focus + label,
+.input_field input[type="tel"]:valid + label {
+  transform: translateY(-25px);
+  font-size: 14px;
+  color: #fff;
+  background: #fc6b03;
+  padding: 2px 6px;
+}
+.input_field input[type="tel"]:focus ~ span:before,
+.input_field input[type="tel"]:valid ~ span:before {
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.5s ease-in-out;
+}
+
 .btn{
   margin-top: 20px;
   border: none;
