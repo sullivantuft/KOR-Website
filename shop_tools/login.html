@@ -69,15 +69,10 @@
     </header>
 
     <main>
-        <!-- <div>
-            <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p>
-            <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p>
-        </div> -->
-        <div class="login_window">
-            <!-- <div id="error"></div> -->
+<!-- Working form -->
+        <!-- <div class="login_window">
             <h1>Login</h1>
             <form id="login" class="login_form">
-            <!-- <div id="feedback"> -->
                 <div class="form_line">
                     <label for="email">Email: </label>
                     <input type="email" id="email" name="email" placeholder="Youraddress@example.com" required>
@@ -89,7 +84,26 @@
                 <div class="form_line">
                     <button class="link" type="submit">Submit</button>
                 </div>
-            <!-- </div> -->
+            </form>
+        </div> -->
+
+        <div class="login_window">
+            <h1>Log In</h1>
+            <form id="login">
+                    <div class="input_field">
+                        <input type="email" id="email" name="email" placeholder="" required>
+                        <label>Enter Email Here!</label>
+                        <span></span>
+                        
+                    </div>
+                    <div class="input_field">
+                        <input type="password" id="password" name="password" placeholder="" required>
+                        <label>Enter Password Here!</label>
+                        <span></span>
+                    </div>
+                <!-- <div class="center"> -->
+                    <button class="btn" type="submit">Send your message!</button>
+                <!-- </div> -->
             </form>
         </div>
 
