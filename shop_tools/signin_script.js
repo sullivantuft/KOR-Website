@@ -63,8 +63,18 @@ signin.addEventListener("submit", (e) => {
                 .then(result => {
                     console.log(('plan type ' + result.plan_type[0].plan_type));
                     console.log(('shop_name ' + result.plan_type[0].shop_name));
+
+                    sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
+
+                    sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
+                    sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
+                    sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
+                    console.log(sessionStorage.getItem('shop_name'));
+                    console.log(sessionStorage.getItem('shop_code'));
+                    console.log(sessionStorage.getItem('plan_type'));
+                    console.log(sessionStorage.getItem('shop_token'));
                     
-                    window.location.replace("./dashboard?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+                    window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
                 })
                 .catch(error => console.log('error', error));
 

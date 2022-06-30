@@ -9,6 +9,7 @@
     <link rel="icon" href="../images/Logo3.png">
     <!-- <script defer src="/KOR/shop_tools/dashboard_script.js"></script>used during development, if development is buggy. Try commenting out this line -->
     <!-- <script defer src="https://jmrcycling.github.io/WDD130/KOR/shop_tools/dashboard_script.js"></script> -->
+    <script src="https://js.chargebee.com/v2/chargebee.js" data-cb-site="jmrcycling" ></script>
     <style>
         form {
         /* Center the form on the page */
@@ -96,9 +97,9 @@
         let shop_name;
         let shop_code;
         let plan_type;
-        // shop_name = new URLSearchParams( window.location.search );
-        // shop_name = shop_name.get('shop_name')
-        // console.log(shop_name);
+        shop_name = new URLSearchParams( window.location.search );
+        shop_name = shop_name.get('shop_name')
+        console.log(shop_name);
         // token = new URLSearchParams( window.location.search );
         // token = token.get('token')
         // console.log(token)
@@ -169,7 +170,7 @@
                       <a href="changePassword.html" >Change Password</a>
                       <a href="changePhone.html">Change Phone</a>
                       <script>
-                          if (plan_type == 'premium') {
+                          if (plan_type == 'premium' || plan_type == 'pro') {
                               document.write('<a href="sendNotifs.html">Send Notifications</a>')
                           }
                       </script>
@@ -192,6 +193,9 @@
             
             <div class="center">
                 <img class="image_25" src="/images/onlink_to_kgknwe.svg" alt="QR Code">
+            </div>
+            <div class="center">
+                <a href="javascript:void(0)" data-cb-type="portal" class="subscribe" style="justify-content:center;">Manage account</a>
             </div>
             <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
             <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
