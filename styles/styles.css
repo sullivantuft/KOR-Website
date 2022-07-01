@@ -164,7 +164,7 @@ nav {
   background-image: url("../images/racing_jessie-min.JPG");
 
   /* Set a specific height */
-  min-height: 700px;
+  min-height: 550px;
 
   /* Create the parallax scrolling effect */
   background-attachment: fixed;
