@@ -108,7 +108,7 @@ nav {
   background-image: url("../images/wilson_background-min.JPG");
 
   /* Set a specific height */
-  min-height: 700px;
+  min-height: 650px;
 
   /* Create the parallax scrolling effect */
   background-attachment: fixed;
@@ -122,7 +122,7 @@ nav {
   background-image: url("../images/wilson_background_2-min.JPG");
 
   /* Set a specific height */
-  min-height: 700px;
+  min-height: 500px;
 
   /* Create the parallax scrolling effect */
   background-attachment: fixed;
