@@ -1,4 +1,5 @@
 const login = document.getElementById("login");
+const loginErrorMsg = document.getElementById("login-error-msg");
 
 // console.log(login)
 
@@ -39,16 +40,13 @@ login.addEventListener("submit", (e) => {
             console.log(sessionStorage.getItem('shop_code'));
             console.log(sessionStorage.getItem('plan_type'));
             console.log(sessionStorage.getItem('shop_token'));
-            // document.cookie =  "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + "; token=" + result.plan_type[0].token + ";"
-            // + "path=/; domain=jmrcycling.com";
-            // document.cookie = "shop_name=" + encodeURIComponent(result.plan_type[0].shop_name) + ";"
-            // document.cookie[1] = ("token=" + encodeURIComponent(result.plan_type[0].token) + ";")
-            // cookie_string = document.cookie.split('; ')
-            // console.log(cookie_string)
-            // console.log(document.cookie)
             window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name + "&shop_code=" + result.plan_type[0].shop_code);
-
+            
         })
-        .catch(error => console.log('error', error));
+        .catch(error => {
+            console.log('error', error);
+            // window.alert('Your email or password may be incorrect');
+            loginErrorMsg.style.opacity = 1;
+        });
 
 })
