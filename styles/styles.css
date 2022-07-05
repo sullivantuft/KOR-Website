@@ -197,6 +197,10 @@ h1 {
   background-color: var(--primary-color);
   margin: 0 auto;
   width: fit-content;
+  text-decoration: none;
+  color: black;
+  font-family: var(--paragraph-font);
+
 }
 .title{
   text-align: center;
