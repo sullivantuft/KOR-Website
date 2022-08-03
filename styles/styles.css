@@ -284,6 +284,7 @@ h1 {
 }
 .center {
   text-align: center;
+  justify-items: center;
   /* margin: 10px auto; */
   margin: 10px;
 }
@@ -612,6 +613,19 @@ h1 {
 
 }
 
+.our_app_textbox {
+  background-color: var(--secondary-color);
+  margin: 40% 10% auto 40%;
+  border-radius: 20px;
+}
+.our_app_grid {
+  display: grid;
+  grid-template-columns: .75fr .25fr;
+}
+
+.our_app_example {
+  height: 60rem;
+}
 
 @media screen and (max-width: 900px) {
   .parallax_home {
@@ -719,7 +733,17 @@ h1 {
   .store_buttons {
     width: 35%;
   }
-  /* .mobile { */
-    /* min-height: fit-content; */
-  /* } */
+  .our_app_textbox {
+    background-color: var(--secondary-color);
+    margin: 10%;
+    border-radius: 20px;
+  }
+  .our_app_grid {
+    display: block;
+    /* grid-template-columns: .75fr .25fr; */
+  }
+  
+  .our_app_example {
+    height: 60rem;
+  }
 } 
