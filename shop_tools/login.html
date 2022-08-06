@@ -108,6 +108,19 @@
                     <button class="btn" type="submit">Log In</button>
                 <!-- </div> -->
             </form>
+            <button id="btn-login" disabled="true" onclick="login()">Log in</button>
+            <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+
+
+                <!-- <label>
+                  Access token:
+                  <pre id="ipt-access-token"></pre>
+                </label>
+                <label>
+                  User profile:
+                  <pre id="ipt-user-profile"></pre>
+                </label> -->
+
         </div>
 
     </main>
@@ -156,6 +169,9 @@
             }
         })
     </script> -->
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/1.20/auth0-spa-js.production.js"></script>
+    <script src="./login_script.js"></script>
+
 </body>
 <!-- <script>
     const name = document.getElementById('user_name')
