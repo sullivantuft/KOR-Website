@@ -9,6 +9,14 @@
     <link rel="icon" href="./images/KOR_app_Logo.png">
     <script src="https://js.chargebee.com/v2/chargebee.js" data-cb-site="jmrcycling-test" ></script>
 </head>
+<script>
+    var res = document.cookie;
+    var multiple = res.split(";");
+    for(var i = 0; i < multiple.length; i++) {
+        var key = multiple[i].split("=");
+        document.cookie = key[0]+" =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+</script>
 <body>
 
     <header class="header">

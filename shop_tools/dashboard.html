@@ -94,6 +94,11 @@
         /*}*/
     </style>
     <script type="text/javascript" defer>
+        function listCookies(){
+            var result = document.cookie;
+            console.log(result);
+            // document.getElementById("list").innerHTML = result;
+         }
         let shop_name;
         let shop_code;
         let plan_type;
@@ -162,7 +167,8 @@
                 <a class="link" href="../sign_up.html" target="_parent">Shop Sign Up</a>
                 <a class="link" href="../our_story.html" target="_parent">Our Story</a>
                 <a class="link" href="../contact_us.html" target="_parent">Contact Us</a>
-                <a class="link" href="our_app.html" target="_parent">The KOR App</a>
+                <a class="link" href="../our_app.html" target="_parent">The KOR App</a>
+
             </nav>
             <nav class="right_position">
                 <div class="dropdown">
@@ -256,7 +262,35 @@
             // call a .js to use an email sending service to invite the customer
             
         });
-        
+        function logout() {
+            var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+            myHeaders.append("Cookie", "did=s%3Av0%3A3d090aa0-15b5-11ed-a46c-93807588511c.L%2BZhrC%2B3FntA97rTX6FIeGJ3b0RGE9V2o8dfNLoQzuI; did_compat=s%3Av0%3A3d090aa0-15b5-11ed-a46c-93807588511c.L%2BZhrC%2B3FntA97rTX6FIeGJ3b0RGE9V2o8dfNLoQzuI");
+
+            var urlencoded = new URLSearchParams();
+            urlencoded.append("client_id", "BIiXW01dEohpU5qLM6FTEbBUYDVFUo7v");
+            urlencoded.append("returnTo", "www.jmrcycling.com/index.html");
+
+            var requestOptions = {
+            method: 'GET',
+            headers: myHeaders,
+            // body: urlencoded,
+            redirect: 'follow'
+            };
+
+            fetch("https://dev-oseu3r74.us.auth0.com/v2/logout?client_id=BIiXW01dEohpU5qLM6FTEbBUYDVFUo7v&returnTo=www.jmrcycling.com/index.html")
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
+        }
+        // const routeTo = (location) => {
+        //     console.log('routeTo called')
+        //     auth0.logout({
+        //         returnTo: window.location.origin
+        //     });
+        // };
+
     </script>
+    <!-- <script src="./login_script.js"></script> -->
 </body>
 </html>
