@@ -64,11 +64,16 @@ signin.addEventListener("submit", (e) => {
     </header> -->
 
     <main>
-        <div>
+        <div id="error_msg" class="login_window" style="background-color: red; display: none;">
+            <h1>Error</h1>
+            <p>It seems that you are not authorized to be on this page. If you think you 
+                should be on this page, please reach out to us on our <a href="../contact_us.html">contact page.</a>
+            </p>
+
             <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
             <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
         </div>
-        <div class="login_window">
+        <div id="signin_box" class="login_window">
             <div id="error"></div>
             <h1>Create an Account</h1>
             <form id="signin">
