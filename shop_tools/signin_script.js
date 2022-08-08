@@ -1,4 +1,23 @@
+const query = window.location.search;
+if (!(query.includes("sub_id=") && query.includes("invoice_id=") && query.includes("plan_type="))) {
 
+    var x = document.getElementById("signin_box");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+    var y = document.getElementById("error_msg");
+    if (y.style.display === "none") {
+        y.style.display = "block";
+    } else {
+        y.style.display = "none";
+    }
+
+
+    // Use replaceState to redirect the user away and remove the querystring parameters
+    // window.history.replaceState({}, document.title, "/shop_tools/login.html");
+}
 var sub_Id = new URLSearchParams( window.location.search );
 sub_Id = sub_Id.get('sub_id');
 console.log(sub_Id);
@@ -18,72 +37,121 @@ signin.addEventListener("submit", (e) => {
 
 
     console.log('form has been submitted');
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-    var urlencoded = new URLSearchParams();
+    // variables from form
     var shop_name = document.getElementById("shop_name").value;
-    urlencoded.append("shop_name", shop_name); 
     var email = document.getElementById("email").value;
-    urlencoded.append("email", email);
-    // console.log((document.getElementById("username").value));
     var password = document.getElementById("password").value;
-    urlencoded.append("password", password);
-    // console.log((document.getElementById("password").value));
     var phone = document.getElementById("phone").value;
-    urlencoded.append("phone", phone);
-    urlencoded.append("sub_Id", sub_Id);
-    urlencoded.append("invoice_Id", invoice_Id);
-    urlencoded.append("plan_type", plan_type);
+
+    // auth0 token call
+    var auth0Headers = new Headers();
+    auth0Headers.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var auth0urlencoded = new URLSearchParams();
+    auth0urlencoded.append("access_token", "auth0_token");
 
     var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: urlencoded,
-        redirect: 'follow'
+    method: 'POST',
+    headers: auth0Headers,
+    body: auth0urlencoded,
+    redirect: 'follow'
     };
+    let auth0_token;
+    fetch("https://jmrcycling.com:3001/getauth0Token", requestOptions)
+    .then(response => response.text())
+    .then(result => {
+        console.log(result);
+        // console.log(JSON.parse(result));
+        result = JSON.parse(result)
+        console.log(result.token[0].auth0_token)
+        auth0_token = result.token[0].auth0_token;
+        // call create user auth0 API call
+        //  TODO
+        var createUserHeaders = new Headers();
+        createUserHeaders.append("Authorization", "Bearer " + auth0_token);
+        createUserHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
-    fetch("https://jmrcycling.com:3001/signinShop", requestOptions)
-        .then(response => response.text())
-        .then(result => {
-            console.log(result)
-            var urlencoded2 = new URLSearchParams();
-            urlencoded2.append("email", email)
-            urlencoded2.append("password", password)
+        var createUserUrlencoded = new URLSearchParams();
+        createUserUrlencoded.append("email", email);
+        createUserUrlencoded.append("password", password);
+        createUserUrlencoded.append("connection", "Username-Password-Authentication");
+        createUserUrlencoded.append("name", shop_name);
 
-            var requestOptions2 = {
+        var requestOptions = {
+            method: 'POST',
+            headers: createUserHeaders,
+            body: createUserUrlencoded,
+            redirect: 'follow'
+          };
+          
+          fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions)
+            .then(response => response.text())
+            .then(result => {
+                console.log(result);
+                result = JSON.parse(result);
+                let user_id = result.user_id;
+                console.log(user_id);
+                var myHeaders = new Headers();
+                myHeaders.append("Authorization", "Bearer 97f94bee48b8ebf793f0c445c1ade27070625622");
+                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+                var urlencoded = new URLSearchParams();
+                urlencoded.append("shop_name", shop_name);
+                urlencoded.append("email", email);
+                urlencoded.append("sub_Id", sub_Id);
+                urlencoded.append("invoice_Id", invoice_Id);
+                urlencoded.append("plan_type", plan_type);
+                urlencoded.append("phone", phone);
+                urlencoded.append("user_id", user_id);
+
+                var requestOptions = {
                 method: 'POST',
                 headers: myHeaders,
-                body: urlencoded2,
+                body: urlencoded,
                 redirect: 'follow'
-            };
+                };
 
-            fetch("https://jmrcycling.com:3001/loginShop", requestOptions2)
-                .then(response => response.json())
+                fetch("https://jmrcycling.com:3001/signinShop", requestOptions)
+                .then(response => response.text())
                 .then(result => {
-                    console.log(('plan type ' + result.plan_type[0].plan_type));
-                    console.log(('shop_name ' + result.plan_type[0].shop_name));
+                    console.log(result);
+                    var urlencoded2 = new URLSearchParams();
+                    urlencoded2.append("email", email)
+                    urlencoded2.append("auth0_sub_id", user_id)
 
-                    sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
+                    var requestOptions2 = {
+                        method: 'POST',
+                        headers: myHeaders,
+                        body: urlencoded2,
+                        redirect: 'follow'
+                    };
+                    fetch("https://jmrcycling.com:3001/loginShop", requestOptions2)
+                            .then(response => response.json())
+                            .then(result => {
+                                console.log(('plan type ' + result.plan_type[0].plan_type));
+                                console.log(('shop_name ' + result.plan_type[0].shop_name));
 
-                    sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
-                    sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
-                    sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
-                    console.log(sessionStorage.getItem('shop_name'));
-                    console.log(sessionStorage.getItem('shop_code'));
-                    console.log(sessionStorage.getItem('plan_type'));
-                    console.log(sessionStorage.getItem('shop_token'));
-                    
-                    window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+                                sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
+
+                                sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
+                                sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
+                                sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
+                                console.log(sessionStorage.getItem('shop_name'));
+                                console.log(sessionStorage.getItem('shop_code'));
+                                console.log(sessionStorage.getItem('plan_type'));
+                                console.log(sessionStorage.getItem('shop_token'));
+                                
+                                window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+                            })
+                            .catch(error => console.log('error', error));
                 })
                 .catch(error => console.log('error', error));
 
-        })
-        .catch(error => console.log('error', error));
+                        
 
-
+            })
+            .catch(error => console.log('error', error));
+    })
+    .catch(error => console.log('error', error));
 
 });
-
-
-   
