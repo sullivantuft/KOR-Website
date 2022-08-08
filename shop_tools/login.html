@@ -88,8 +88,12 @@
         </div> -->
 
         <div class="login_window">
-            <h1>Log In</h1>
-            <div id="login-error-msg-holder">
+            <h1>Log In With Auth0</h1>
+            <div class="center">
+                <img style="width: 50%; border-radius: 15px;" src="../images/Auth0_Logo.webp">
+            </div>
+            
+            <!-- <div id="login-error-msg-holder">
                 <p id="login-error-msg">Invalid username <span id="error-msg-second-line">and/or password</span></p>
             </div>          
             <form id="login">
@@ -104,12 +108,15 @@
                         <label>Enter Password Here!</label>
                         <span></span>
                     </div>
-                <!-- <div class="center"> -->
+
                     <button class="btn" type="submit">Log In</button>
-                <!-- </div> -->
-            </form>
-            <button id="btn-login" disabled="true" onclick="login()">Log in</button>
-            <button id="btn-logout" disabled="true" onclick="logout()">Log out</button>
+
+            </form> -->
+            <div class="center">
+                <button id="btn-login" class="link" disabled="true" onclick="login()">Log in</button>
+            </div>
+            <!-- Not Visible -->
+            <button style="display: none;" id="btn-logout" disabled="true" onclick="logout()">Log out</button>
 
 
                 <!-- <label>
