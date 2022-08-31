@@ -18,6 +18,8 @@ if (!(query.includes("sub_id=") && query.includes("invoice_id=") && query.includ
     // Use replaceState to redirect the user away and remove the querystring parameters
     // window.history.replaceState({}, document.title, "/shop_tools/login.html");
 }
+
+
 var sub_Id = new URLSearchParams( window.location.search );
 sub_Id = sub_Id.get('sub_id');
 console.log(sub_Id);
