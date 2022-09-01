@@ -63,7 +63,7 @@ window.onload = async () => {
             })
             .catch(error => {
                 console.log('error', error);
-                // window.alert('Your email or password may be incorrect');
+                window.alert('Your log in was unsuccessful, this could be due to a expired subscription. Please reach out to us if this is not right.');
                 loginErrorMsg.style.opacity = 1;
             });
 
@@ -137,8 +137,8 @@ const updateUI = async () => {
             })
             .catch(error => {
                 console.log('error', error);
-                // window.alert('Your email or password may be incorrect');
-                loginErrorMsg.style.opacity = 1;
+                window.alert('Your log in was unsuccessful, this could be due to a expired subscription. Please reach out to us if this is not right.');
+                // loginErrorMsg.style.opacity = 1;
             });
         
 
