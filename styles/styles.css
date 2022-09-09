@@ -55,15 +55,11 @@ nav {
   color: whitesmoke;
   cursor: pointer;
 }
-/* a:hover {
-  cursor: pointer;
-} */
 
 
 
-/* body {
-  text-align: center;
-} */
+
+
 .img_QR {
   height: 25%; 
   width: 25%; 
@@ -626,6 +622,35 @@ h1 {
 .our_app_example {
   height: 60rem;
 }
+
+
+
+.FAQ{
+  background-color: var(--secondary-color);
+  margin: auto;
+  width: 30%;
+  padding: 2%;
+  border-radius: 15px;
+}
+.question{
+  background-color: #592941;
+  padding: 7px;
+  border-radius: 15px;
+  color: whitesmoke;
+}
+.answer{
+  background-color: #A5FFD6;
+  padding: 7px;
+  border-radius: 15px;
+}
+
+/* .Question_form{
+  width: 75%;
+  background-color: var(--secondary-color);
+  margin: auto;
+  padding: 2%;
+  border-radius: 15px;
+} */
 
 @media screen and (max-width: 900px) {
   .parallax_home {
