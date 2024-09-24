@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOR | App Auth</title>
+    <link type="text/css" rel="stylesheet" href="styles/styles.css">
+    <link rel="icon" href="./images/KOR_app_Logo.png">
+</head>
+<script>
+    var res = document.cookie;
+    var multiple = res.split(";");
+    for(var i = 0; i < multiple.length; i++) {
+        var key = multiple[i].split("=");
+        document.cookie = key[0]+" =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
+    }
+    let shop_name;
+    let shop_code;
+    let plan_type;
+    shop_name = new URLSearchParams( window.location.search );
+    shop_name = shop_name.get('shop_name')
+    console.log(shop_name);
+    // token = new URLSearchParams( window.location.search );
+    // token = token.get('token')
+    // console.log(token)
+    shop_code = sessionStorage.getItem('shop_code');
+    shop_name = sessionStorage.getItem('shop_name');
+    plan_type = sessionStorage.getItem('plan_type');
+
+    console.log(shop_name);
+    console.log(shop_code);
+    console.log(plan_type);
+
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+        
+    }
+    const ua = navigator.userAgent
+    if (/android/i.test(ua)) {
+        window.location.href = 'https://google.com'
+    }
+    else if (/iPad|iPhone|iPod/.test(ua)){
+        window.location.href = 'https://apps.apple.com/us/app/kor-keep-on-rolling/id1599601993';
+    }
+    else if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
+
+    }
+    
+
+
+    // let OSName = "Unknown OS";
+    // if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+    // if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+    // if (navigator.appVersion.indexOf("X11") != -1) OSName = "UNIX";
+    // if (navigator.appVersion.indexOf("Linux") != -1) OSName = "Linux";
+    // if (navigator.appVersion.indexOf("IOS") != -1) OSName = "IOS";
+
+    // console.log('Operating system is ' + OSName)
+    // // Display the OS name
+    // document.getElementById("OS").innerHTML = OSName;
+
+</script>
+<body>
+    <header class="header">
+        <div id="header_grid">
+            <a href="index.html" target="_parent">
+                <img class="icon" src="images/KOR_app_Logo.png" alt="KOR Logo">
+            </a>
+            <nav>
+                <a class="link" href="index.html" target="_parent">Home</a>
+                <a class="link" href="sign_up.html" target="_parent">Shop Sign Up</a>
+                <a class="link" href="our_story.html" target="_parent">Our Story</a>
+                <a class="link" href="contact_us.html" target="_parent">Contact Us</a>
+                <a class="link" href="our_app.html" target="_parent">The KOR App</a>
+                <a class="link" href="FAQ.html" target="_parent">FAQ</a>
+            </nav>
+            <nav class="right_position">
+                <a class="link" href="./shop_tools/login.html" target="_blank">Log In</a>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <h1 style="color: black;"> Your shop code is <script type="text/javascript">document.write(shop_code)</script></h1>
+        <h1 style="color: black;"> If you're not rerouted in a few minutes contact us</h1>
+        <h1 style="color: black;" id="OS"></h1>
+    </main>
+    <footer>
+        <div class="footer">
+            <h3>KOR &copy; 2022 - Mason Tuft</h3>
+                    <!-- <h3><a class="link" href="site-plan.html" target="_parent">Site Plan</a></h3> -->
+                    <h3><a class="link" href="contact_us.html" target="_parent">Contact Us</a></h3>
+                    <div class="social">
+                        <a href="https://facebook.com" target="_blank">
+                            <img src="./images/facebook.png" alt="FB Icon">
+                        </a>
+                        
+                        <a href="https://instagram.com" target="_blank">
+                            <img src="./images/instagram.png" alt="instagram icon" >
+                        </a>
+                    </div>
+        </div>
+    </footer>
+</body>
+</html>
