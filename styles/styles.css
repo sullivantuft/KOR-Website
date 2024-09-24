@@ -209,6 +209,7 @@ h1 {
   font-family: var(--heading-font);
   font-size: 2em;
   color: var(--headline-color-on-dark);
+  word-wrap: break-word;
 }
 .point-content {
   /* margin: 0px 30px; */
@@ -297,7 +298,7 @@ h1 {
   background-color: var(--primary-color);
   border-radius: 5px;
   text-decoration: none;
-  color: var(--accent2-color);
+  color: var(--headline-color-on-dark);
   font-family: var(--heading-font);
   margin: 10px;
 }
@@ -375,6 +376,7 @@ h1 {
 }
 .login_form {
   text-align: center;
+  color: var(--headline-color-on-dark);
 }
 .form_line {
   padding: 10px;
@@ -485,7 +487,7 @@ h1 {
   position: absolute;
   top: 0;
   left: 0;
-  color: #555;
+  color: white;
   pointer-events: none;
   display: block;
   transition: 0.5s;
@@ -715,12 +717,12 @@ h1 {
     width: 90%;
     /*margin: 5px 25%;*/
   }
-  .contact-content {
-    display: block;
-  }
+  /* .contact-content { */
+    /* display: block; */
+  /* } */
   .contact-card {
     width: 50%;
-    margin: 5px 25%;
+    margin: 5%;
     padding: 20px;
   }
   nav {
@@ -729,6 +731,7 @@ h1 {
   }
   .login_window {
     width: 75%;
+    color: white;
   }
   #header_grid {
     justify-self: center;

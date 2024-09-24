@@ -116,7 +116,21 @@
         console.log(shop_code);
         console.log(plan_type);
 
-        // shop_name = get_cookie( "shop_name" )
+        // var myHeaders = new Headers();
+        // myHeaders.append("Authorization", "Bearer 97f94bee48b8ebf793f0c445c1ade27070625622");
+
+        // var requestOptions = {
+        // method: 'GET',
+        // headers: myHeaders,
+        // redirect: 'follow'
+        // };
+
+        // fetch("https://quickchart.io/qr?text=Hello world&size=200", requestOptions)
+        // .then(response => response.text())
+        // .then(result => console.log(result))
+        // .catch(error => console.log('error', error));
+        // QR_url = result;
+        // // shop_name = get_cookie( "shop_name" )
         // function get_cookie ( cookie_name )
         //     {
         //     // https://www.thesitewizard.com/javascripts/cookies.shtml
@@ -154,6 +168,7 @@
             }
         }   
     }
+    
     </script>
 </head>
 <body>
@@ -181,6 +196,7 @@
                               document.write('<a href="sendNotifs.html">Send Notifications</a>')
                           }
                       </script>
+                      
                     </div>
                 </div>
 
@@ -191,15 +207,22 @@
 
     <main>
         <div class="dashboard">
-            <h1>Welcome <script type="text/javascript">document.write(shop_name)</script></h1>
-            <h2 class="paragraph">This is your dashboard for admin access to your users!!!</h2>
-            <h2 class="paragraph">Your customer access code is </h2>
-            <h1><script type="text/javascript">document.write(shop_code)</script></h1>
-            <h4 class="center">(This code will continually change, do not copy!)</h4>
-            <h2 class="paragraph">Below is a QR code to both app stores for your customers to scan!</h2>
-            
+            <h1 style="color: #000;">Welcome <script type="text/javascript">document.write(shop_name)</script></h1>
+            <h2 style="color: #000;" class="paragraph">This is your dashboard for admin access to your users!!!</h2>
+            <h2 style="color: #000;" class="paragraph">Your customer access code is </h2>
+            <h1 style="color: #000;"><script type="text/javascript">document.write(shop_code)</script></h1>
+            <h4 style="color: #000;" class="center">(This code will continually change, do not copy!)</h4>
+            <h2 style="color: #000;" class="paragraph">Below is a QR code to both app stores for your customers to scan!</h2>
+            <!-- <script type="text/javascript">document.write(QR_url)</script> -->
+             
             <div class="center">
-                <img class="image_25" src="/images/onlink_to_kgknwe.svg" alt="QR Code">
+                <script type="text/javascript">console.log(QR_url)</script>
+                <!-- <img class="image_25" src="/images/onlink_to_kgknwe.svg" alt="QR Code"> -->
+                 <!-- Dynamic QR Generating text -->
+                <img id="imageBox" src="" alt="">
+                <script>
+                  document.getElementById('imageBox').setAttribute('src', 'https://quickchart.io/qr?text=jmrcycling.com/app_auth.html?shop-code=' + shop_code);
+                </script>
             </div>
             <div class="center">
                 <a href="javascript:void(0)" data-cb-type="portal" class="subscribe" style="justify-content:center;">Manage account</a>
