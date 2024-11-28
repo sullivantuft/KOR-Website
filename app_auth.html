@@ -32,9 +32,11 @@
     console.log(shop_code);
     console.log(plan_type);
 
-    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-        
-    }
+    localStorage.setItem("shop_code", shop_code);
+    localStorage.getItem("shop_code");
+    console.log(localStorage.getItem("shop_code"));
+
+    // URL redirectbased off of OS
     const ua = navigator.userAgent
     if (/android/i.test(ua)) {
         window.location.href = 'https://google.com'

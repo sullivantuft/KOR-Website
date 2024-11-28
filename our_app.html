@@ -15,6 +15,19 @@
         var key = multiple[i].split("=");
         document.cookie = key[0]+" =; expires = Thu, 01 Jan 1970 00:00:00 UTC";
     }
+    document.addEventListener('DOMContentLoaded', function() {
+    const fadeElements = document.querySelectorAll('.slide-in');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+        });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(element => observer.observe(element));
+    });
 </script>
 <body>
     <header class="header">
@@ -38,57 +51,76 @@
     </header>
 
     <main>
-        <div class="our_app_grid">
-            <div class="our_app_textbox">
-                <p class="paragraph">This app works with a third party app that is a social media for athletes. 
-                    This third party app is called Strava. Our app uses your miles tracked on Strava to 
-                    calculate your part wear on your bike!</p>
+        <section class="app-screen-section">
+        <div class="app-content-grid">
+            <div class="our_app_textbox slide-in">
+                <p class="paragraph">This application integrates with a third-party application,
+                    Strava, a social media platform for athletes. Strava tracks the miles you
+                    accumulate, and our application utilizes this data to calculate the
+                    percentage of wear on your bicycle.
+                </p>
             </div>
-            <div class="center">
-                
+            <div class="center slide-in">
                 <img class="our_app_example" src="./images/KOR_Home_Screen.png" alt="App Home Screen">
             </div>
         </div>
-        <div class="our_app_grid">
-            <div class="our_app_textbox">
-                <p class="paragraph">This screen is the hub of all your bike's part wear. The screen displays 
-                    the parts sorted from most worn to least. You can tap the (i) logo to view your part information!</p>
+        </section>
+            
+
+        <section class="app-screen-section">
+            <div class="app-content-grid">
+              <div class="our_app_textbox slide-in">
+                <p class="paragraph">This screen serves as the central hub for monitoring the 
+                    wear and tear of your bicycle’s components. It organizes the information of 
+                    all your bicycle’s parts in descending order of their level of wear. By 
+                    tapping the (i) icon, you can access detailed information about each 
+                    component.</p>
+                </div>
+                <div class="center slide-in">
+                    <img src="./images/KOR_Dashboard.png" class="our_app_example" alt="App Dashboard">
+                  </div>
             </div>
-            <div class="center">
-                <img class="our_app_example" src="./images/KOR_Dashboard.png" alt="App Dashboard">
-            </div>
+        </section>
+            
         </div>
-        <div class="our_app_grid">
-            <div class="our_app_textbox">
-                <p class="paragraph">This pop up has all of the necessary information for viewing and updating your part 
-                    information!
+        <section class="app-screen-section">
+            <div class="app-content-grid">
+              <div class="our_app_textbox slide-in">
+                <p class="paragraph">This pop-up window provides comprehensive information for viewing 
+                    and updating your part details.
+                </p>
+                </div>
+                <div class="center slide-in">
+                    <img class="our_app_example" src="./images/KOR_Part_Screen.png" alt="App Part Screen">
+                </div>
+            </div>
+        </section>
+        <section class="app-screen-section">
+            <div class="app-content-grid">
+              <div class="our_app_textbox slide-in">
+                <p class="paragraph">You can utilize this provided page to update information, 
+                    including your model, for your chains and cassettes.
                 </p>
             </div>
-            <div class="center">
-                <img class="our_app_example" src="./images/KOR_Part_Screen.png" alt="App Part Screen">
-            </div>
-        </div>
-        <div class="our_app_grid">
-            <div class="our_app_textbox">
-                <p class="paragraph">You can use this page to update information, like your model, 
-                    for your chains and cassettes!
-                </p>
-            </div>
-            <div class="center">
+            <div class="center slide-in">
                 <img class="our_app_example" src="./images/KOR_Part_Model_Change.png" alt="App Part Model Change">
             </div>
         </div>
+        </section>
 
-        <div class="our_app_grid">
-            <div class="our_app_textbox">
-                <p class="paragraph">Here is the place to change the parts that are actually on your bike! You can 
-                    remove things like suspension, sealant, and a dropper seatpost from the app!
+        <section class="app-screen-section">
+            <div class="app-content-grid">
+              <div class="our_app_textbox slide-in">
+                <p class="paragraph">Here is the location to modify the components that are physically 
+                    present on your bicycle. You can remove items such as suspension, sealant, and 
+                    a dropper seatpost from the application.
                 </p>
             </div>
-            <div class="center">
+            <div class="center slide-in">
                 <img class="our_app_example" src="./images/KOR_Part_Visibility.png" alt="App Part Visibility">
             </div>
         </div>
+        </section>
     </main>
 
     <footer>
