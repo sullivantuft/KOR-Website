@@ -76,31 +76,31 @@ signin.addEventListener("submit", (e) => {
         <div id="signin_box" class="login_window">
             <div id="error"></div>
             <h1>Create an Account</h1>
-            <form id="signin">
+            <form id="signin" class="signin">
             <!-- <div id="feedback"> -->
+                <label for="shop_name">Shop Name: </label>
                 <div class="input_field">
                     
                     <input type="text" id="shop_name" name="shop_name" placeholder="" required>
-                    <label for="shop_name">Shop Name: </label>
-                    <span></span>
-                </div>
-
-                <div class="input_field">
                     
-                    <input type="email" id="email" name="email" placeholder="" required>
-                    <label for="email">Email: </label>
                     <span></span>
                 </div>
+                <label for="email">Email: </label>
+                <div class="input_field">
+                    <input type="email" id="email" name="email" placeholder="" required>
+                    <span></span>
+                </div>
+                <label for="password">Password: </label>
                 <div class="input_field">
                     
                     <input type="password" id="password" name="password" placeholder="" required>
-                    <label for="password">Password: </label>
                     <span></span>
                 </div>
+                <label for="phone">Company Phone #: </label>
                 <div class="input_field">
                     
                     <input type="tel" id="phone" name="phone" placeholder="" required>
-                    <label for="phone">Company Phone #: </label>
+                    
                     <span></span>
                 </div>
                 <div class="form_line">

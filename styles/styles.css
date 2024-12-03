@@ -604,10 +604,14 @@ h1 {
 }
 
 .input_field {
-  margin-top: 25px;
+  /* margin-top: 25px; */
   position: relative;
   height: 40px;
   width: 100%;
+}
+.signin label {
+  color: #fff;
+  margin-bottom: 2px;
 }
 .input_field input[type="text"]{
   position: absolute;
