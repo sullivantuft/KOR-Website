@@ -1,6 +1,6 @@
 const query = window.location.search;
 if (!(query.includes("sub_id=") && query.includes("invoice_id=") && query.includes("plan_type="))) {
-
+// Development query ?sub_id=test&invoice_id=test&plan_type=basic
     var x = document.getElementById("signin_box");
     if (x.style.display === "none") {
         x.style.display = "block";
