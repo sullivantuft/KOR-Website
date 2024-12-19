@@ -67,28 +67,28 @@ signin.addEventListener("submit", (e) => {
         result = JSON.parse(result)
         console.log(result.token[0].auth0_token)
         auth0_token = result.token[0].auth0_token;
-        // call create user auth0 API call
-        //  TODO
-        var createUserHeaders = new Headers();
-        createUserHeaders.append("Authorization", "Bearer " + auth0_token);
-        createUserHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        // Dev code
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        myHeaders.append("Authorization", "Bearer " + auth0_token);
+        myHeaders.append("Cookie", "did=s%3Av0%3A18447825-b02f-4979-a834-64659d118b10.2%2F73BuZf6zLVVPTx5t20Dh4Ud9OSjJp9KQNsPMgGKV4; did_compat=s%3Av0%3A18447825-b02f-4979-a834-64659d118b10.2%2F73BuZf6zLVVPTx5t20Dh4Ud9OSjJp9KQNsPMgGKV4");
 
-        var createUserUrlencoded = new URLSearchParams();
-        createUserUrlencoded.append("email", email);
-        createUserUrlencoded.append("password", password);
-        createUserUrlencoded.append("connection", "Username-Password-Authentication");
-        createUserUrlencoded.append("name", shop_name);
+        const urlencoded = new URLSearchParams();
+        urlencoded.append("email", email);
+        urlencoded.append("password", password);
+        urlencoded.append("connection", "Username-Password-Authentication");
+        urlencoded.append("name", shop_name);
 
-        var requestOptions = {
-            method: 'POST',
-            headers: createUserHeaders,
-            body: createUserUrlencoded,
-            redirect: 'follow'
-          };
-          
-          fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions)
-            .then(response => response.text())
-            .then(result => {
+        const requestOptions2 = {
+        method: "POST",
+        headers: myHeaders,
+        body: urlencoded,
+        redirect: "follow"
+        };
+
+        fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions2)
+            .then((response) => response.text())
+            .then((result) => {
                 console.log(result);
                 result = JSON.parse(result);
                 let user_id = result.user_id;
@@ -152,7 +152,93 @@ signin.addEventListener("submit", (e) => {
                         
 
             })
-            .catch(error => console.log('error', error));
+            .catch((error) => console.error(error));
+
+        // call create user auth0 API call
+        // var createUserHeaders = new Headers();
+        // createUserHeaders.append("Authorization", "Bearer " + auth0_token);
+        // createUserHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+        // var createUserUrlencoded = new URLSearchParams();
+        // createUserUrlencoded.append("email", email);
+        // createUserUrlencoded.append("password", password);
+        // createUserUrlencoded.append("connection", "Username-Password-Authentication");
+        // createUserUrlencoded.append("name", shop_name);
+
+        // var requestOptions = {
+        //     method: 'POST',
+        //     headers: createUserHeaders,
+        //     body: createUserUrlencoded,
+        //     redirect: 'follow'
+        //   };
+          
+        //   fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions)
+        //     .then(response => response.text())
+            // .then(result => {
+            //     console.log(result);
+            //     result = JSON.parse(result);
+            //     let user_id = result.user_id;
+            //     console.log(user_id);
+            //     var myHeaders = new Headers();
+            //     myHeaders.append("Authorization", "Bearer 97f94bee48b8ebf793f0c445c1ade27070625622");
+            //     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+            //     var urlencoded = new URLSearchParams();
+            //     urlencoded.append("shop_name", shop_name);
+            //     urlencoded.append("email", email);
+            //     urlencoded.append("sub_Id", sub_Id);
+            //     urlencoded.append("invoice_Id", invoice_Id);
+            //     urlencoded.append("plan_type", plan_type);
+            //     urlencoded.append("phone", phone);
+            //     urlencoded.append("user_id", user_id);
+
+            //     var requestOptions = {
+            //     method: 'POST',
+            //     headers: myHeaders,
+            //     body: urlencoded,
+            //     redirect: 'follow'
+            //     };
+
+            //     fetch("https://jmrcycling.com:3001/signinShop", requestOptions)
+            //     .then(response => response.text())
+            //     .then(result => {
+            //         console.log(result);
+            //         var urlencoded2 = new URLSearchParams();
+            //         urlencoded2.append("email", email)
+            //         urlencoded2.append("auth0_sub_id", user_id)
+
+            //         var requestOptions2 = {
+            //             method: 'POST',
+            //             headers: myHeaders,
+            //             body: urlencoded2,
+            //             redirect: 'follow'
+            //         };
+            //         fetch("https://jmrcycling.com:3001/loginShop", requestOptions2)
+            //                 .then(response => response.json())
+            //                 .then(result => {
+            //                     console.log(('plan type ' + result.plan_type[0].plan_type));
+            //                     console.log(('shop_name ' + result.plan_type[0].shop_name));
+
+            //                     sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
+
+            //                     sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
+            //                     sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
+            //                     sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
+            //                     console.log(sessionStorage.getItem('shop_name'));
+            //                     console.log(sessionStorage.getItem('shop_code'));
+            //                     console.log(sessionStorage.getItem('plan_type'));
+            //                     console.log(sessionStorage.getItem('shop_token'));
+                                
+            //                     window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+            //                 })
+            //                 .catch(error => console.log('error', error));
+            //     })
+            //     .catch(error => console.log('error', error));
+
+                        
+
+            // })
+            // .catch(error => console.log('error', error));
     })
     .catch(error => console.log('error', error));
 
