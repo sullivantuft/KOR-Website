@@ -44,6 +44,7 @@ signin.addEventListener("submit", (e) => {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     var phone = document.getElementById("phone").value;
+    var shop_init = document.getElementById("shop_initials").value;
 
     // auth0 token call
     var auth0Headers = new Headers();
@@ -105,6 +106,7 @@ signin.addEventListener("submit", (e) => {
                 urlencoded.append("plan_type", plan_type);
                 urlencoded.append("phone", phone);
                 urlencoded.append("user_id", user_id);
+                urlencoded.append("shop_init", shop_init);
 
                 var requestOptions = {
                 method: 'POST',
