@@ -47,6 +47,10 @@
     else if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
 
     }
+    else {
+        // If not Android or iOS, redirect to the web app
+        window.location.href = 'https://jmrcycling.com';
+    }
     
 
 
