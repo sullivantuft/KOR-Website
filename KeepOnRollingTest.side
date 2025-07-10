@@ -1,0 +1,546 @@
+{
+  "id": "e0f02024-5a2a-4e9b-8597-97f234bcaafe",
+  "version": "2.0",
+  "name": "KeepOnRollingTest",
+  "url": "https://jmrcycling.github.io/KOR/index.html",
+  "tests": [{
+    "id": "a38a468f-880f-4881-90da-daf216e52925",
+    "name": "KORBasic",
+    "commands": [{
+      "id": "80b91c28-c5af-490e-b31a-76872ec44da7",
+      "comment": "",
+      "command": "open",
+      "target": "/KOR/index.html",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4995c9eb-c6f6-490e-94e1-61042ced438e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1050x795",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "414148e6-e25e-4f30-baa3-1ad07536fcff",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Click here to view Personal account options",
+      "targets": [
+        ["linkText=Click here to view Personal account options", "linkText"],
+        ["css=.center > .link", "css:finder"],
+        ["xpath=//a[contains(text(),'Click here to view Personal account options')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'personal_plans.html')]", "xpath:href"],
+        ["xpath=//div[3]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Click here to view Personal account options')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "e9fe6e18-1834-4002-a0f3-0fd9ab6a6017",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Subscribe Monthly",
+      "targets": [
+        ["linkText=Subscribe Monthly", "linkText"],
+        ["css=.subscribe:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Subscribe Monthly')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'javascript:void(0)')]", "xpath:href"],
+        ["xpath=//div[2]/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Subscribe Monthly')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "386acc8e-e947-4dfa-9b44-aa8fe02bc69d",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "index=0",
+      "targets": [
+        ["index=0"]
+      ],
+      "value": ""
+    }, {
+      "id": "eecf6189-04f8-488b-9d71-84b889011d86",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-remove",
+      "targets": [
+        ["css=.icon-remove", "css:finder"],
+        ["xpath=//div[@id='app']/div[2]/i", "xpath:idRelative"],
+        ["xpath=//div[2]/i", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "365edd3e-a9c2-44f8-9627-1ac72a4139a2",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "relative=parent",
+      "targets": [
+        ["relative=parent"]
+      ],
+      "value": ""
+    }, {
+      "id": "70e25ce2-1f2f-43ec-9067-e8589eb20723",
+      "comment": "",
+      "command": "click",
+      "target": "css=h3 > .link",
+      "targets": [
+        ["css=h3 > .link", "css:finder"],
+        ["xpath=(//a[contains(text(),'Contact Us')])[2]", "xpath:link"],
+        ["xpath=(//a[contains(@href, 'contact_us.html')])[2]", "xpath:href"],
+        ["xpath=//h3[2]/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "313e00d8-069e-4278-9c91-4bcb5f6dfcb3",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Shop Sign Up",
+      "targets": [
+        ["linkText=Shop Sign Up", "linkText"],
+        ["css=.link:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Shop Sign Up')]", "xpath:link"],
+        ["xpath=//div[@id='header_grid']/nav/a[2]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'sign_up.html')]", "xpath:href"],
+        ["xpath=//a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Shop Sign Up')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "38213da3-210d-4d05-8007-ab07ae559b21",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Subscribe Monthly",
+      "targets": [
+        ["linkText=Subscribe Monthly", "linkText"],
+        ["css=.payment1 .subscribe:nth-child(1)", "css:finder"],
+        ["xpath=//a[contains(text(),'Subscribe Monthly')]", "xpath:link"],
+        ["xpath=//a[contains(@href, 'javascript:void(0)')]", "xpath:href"],
+        ["xpath=//div[2]/div/a", "xpath:position"],
+        ["xpath=//a[contains(.,'Subscribe Monthly')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "26d7235c-22f8-4eb4-9117-2ec929f84c59",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "index=0",
+      "targets": [
+        ["index=0"]
+      ],
+      "value": ""
+    }, {
+      "id": "6a967c57-ba31-4b3a-9e9c-ab317fc9af09",
+      "comment": "",
+      "command": "click",
+      "target": "css=body",
+      "targets": [
+        ["css=body", "css:finder"],
+        ["xpath=//body", "xpath:position"],
+        ["xpath=//body[contains(.,'Your order')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "c1ac9653-ba8f-4811-9160-8d9c3b7bbd69",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-remove",
+      "targets": [
+        ["css=.icon-remove", "css:finder"],
+        ["xpath=//div[@id='app']/div[2]/i", "xpath:idRelative"],
+        ["xpath=//div[2]/i", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d7dd4d09-6f44-4191-b336-e3e38b77707d",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "relative=parent",
+      "targets": [
+        ["relative=parent"]
+      ],
+      "value": ""
+    }, {
+      "id": "71046df7-a25f-4adb-9606-1ff8636a6c6f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Subscribe Yearly",
+      "targets": [
+        ["linkText=Subscribe Yearly", "linkText"],
+        ["css=.payment1 .subscribe:nth-child(2)", "css:finder"],
+        ["xpath=//a[contains(text(),'Subscribe Yearly')]", "xpath:link"],
+        ["xpath=(//a[contains(@href, 'javascript:void(0)')])[2]", "xpath:href"],
+        ["xpath=//div/a[2]", "xpath:position"],
+        ["xpath=//a[contains(.,'Subscribe Yearly')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "85873b9b-54dd-41e7-8c7b-0ceabd91a9ca",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "index=0",
+      "targets": [
+        ["index=0"]
+      ],
+      "value": ""
+    }, {
+      "id": "9c2e82a0-b621-432c-a2dd-958e10db4361",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-remove",
+      "targets": [
+        ["css=.icon-remove", "css:finder"],
+        ["xpath=//div[@id='app']/div[2]/i", "xpath:idRelative"],
+        ["xpath=//div[2]/i", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "38d40049-f0cb-49d4-ada0-7676d17d3fe1",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "relative=parent",
+      "targets": [
+        ["relative=parent"]
+      ],
+      "value": ""
+    }, {
+      "id": "9d88c3fe-b295-4850-8805-131cb8617514",
+      "comment": "",
+      "command": "click",
+      "target": "css=.payment2 .subscribe:nth-child(1)",
+      "targets": [
+        ["css=.payment2 .subscribe:nth-child(1)", "css:finder"],
+        ["xpath=(//a[contains(text(),'Subscribe Monthly')])[2]", "xpath:link"],
+        ["xpath=(//a[contains(@href, 'javascript:void(0)')])[3]", "xpath:href"],
+        ["xpath=//div[4]/div/a", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "34765936-f3ce-40f3-83d3-29167a7fbd9b",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "index=0",
+      "targets": [
+        ["index=0"]
+      ],
+      "value": ""
+    }, {
+      "id": "37711cfe-536d-4ccd-b656-d31123a2f62e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon-remove",
+      "targets": [
+        ["css=.icon-remove", "css:finder"],
+        ["xpath=//div[@id='app']/div[2]/i", "xpath:idRelative"],
+        ["xpath=//div[2]/i", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "41545ddc-4349-4b5e-93ce-c186d32a5d3e",
+      "comment": "",
+      "command": "selectFrame",
+      "target": "relative=parent",
+      "targets": [
+        ["relative=parent"]
+      ],
+      "value": ""
+    }, {
+      "id": "1d7846d8-3c26-44f9-a26c-8e945a50c1b2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.payment2 .subscribe:nth-child(2)",
+      "targets": [
+        ["css=.payment2 .subscribe:nth-child(2)", "css:finder"],
+        ["xpath=(//a[contains(text(),'Subscribe Yearly')])[2]", "xpath:link"],
+        ["xpath=(//a[contains(@href, 'javascript:void(0)')])[4]", "xpath:href"],
+        ["xpath=//div[4]/div/a[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "efc2e598-bbdf-40db-9453-189c0bab5a48",
+      "comment": "",
+      "command": "click",
+      "target": "id=cb-modal-close",
+      "targets": [
+        ["id=cb-modal-close", "id"],
+        ["css=#cb-modal-close", "css:finder"],
+        ["xpath=//div[@id='cb-modal-close']", "xpath:attributes"],
+        ["xpath=//div[@id='cb-loader']/div/div[4]", "xpath:idRelative"],
+        ["xpath=//body/div/div/div/div[4]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1bd883c6-8cb2-4304-a710-b16be1704fec",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Our Story",
+      "targets": [
+        ["linkText=Our Story", "linkText"],
+        ["css=.link:nth-child(3)", "css:finder"],
+        ["xpath=//a[contains(text(),'Our Story')]", "xpath:link"],
+        ["xpath=//div[@id='header_grid']/nav/a[3]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'our_story.html')]", "xpath:href"],
+        ["xpath=//a[3]", "xpath:position"],
+        ["xpath=//a[contains(.,'Our Story')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "cf2fbb63-df1f-49f2-b20d-bc22be18bd8f",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Contact Us",
+      "targets": [
+        ["linkText=Contact Us", "linkText"],
+        ["css=.link:nth-child(4)", "css:finder"],
+        ["xpath=//a[contains(text(),'Contact Us')]", "xpath:link"],
+        ["xpath=//div[@id='header_grid']/nav/a[4]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'contact_us.html')]", "xpath:href"],
+        ["xpath=//a[4]", "xpath:position"],
+        ["xpath=//a[contains(.,'Contact Us')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1cae504a-621c-4d68-8873-799ce39d25fc",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=The KOR App",
+      "targets": [
+        ["linkText=The KOR App", "linkText"],
+        ["css=.link:nth-child(5)", "css:finder"],
+        ["xpath=//a[contains(text(),'The KOR App')]", "xpath:link"],
+        ["xpath=//div[@id='header_grid']/nav/a[5]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'our_app.html')]", "xpath:href"],
+        ["xpath=//a[5]", "xpath:position"],
+        ["xpath=//a[contains(.,'The KOR App')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4fb72e42-58a3-4bac-a0b3-6c21475f3612",
+      "comment": "",
+      "command": "click",
+      "target": "css=.social > a:nth-child(1) > img",
+      "targets": [
+        ["css=.social > a:nth-child(1) > img", "css:finder"],
+        ["xpath=//img[@alt='FB Icon']", "xpath:img"],
+        ["xpath=//div/div/a/img", "xpath:position"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win7076",
+      "windowTimeout": 2000
+    }, {
+      "id": "9e6cbe7c-451b-41be-beaa-ec579150324d",
+      "comment": "",
+      "command": "storeWindowHandle",
+      "target": "root",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "37b7266e-3096-46dd-b2d7-c056c0f9a3a6",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win7076}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "c883e208-5da5-404c-afe4-5b82d81c2f9e",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "07ff8208-7882-4844-b1cb-71b33b6a8fe4",
+      "comment": "",
+      "command": "click",
+      "target": "css=a:nth-child(2) > img",
+      "targets": [
+        ["css=a:nth-child(2) > img", "css:finder"],
+        ["xpath=//img[@alt='instagram icon']", "xpath:img"],
+        ["xpath=//a[2]/img", "xpath:position"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win6778",
+      "windowTimeout": 2000
+    }, {
+      "id": "92015c38-9225-4c59-b2bf-73f62c810114",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win6778}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f63326c6-3ee0-44da-9d3a-e70b8807e95e",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "386100cf-a0e8-4a8c-8c5c-cd6de95b0c4f",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fdaf47fd-d4c0-4302-be62-35e76e3fa2a1",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win7076}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "5927b3ee-a21b-4894-a87b-783045468074",
+      "comment": "",
+      "command": "close",
+      "target": "",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "14992f9d-e31b-40bc-b7ab-2462e33b4efd",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${root}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "216ae418-bf7d-4858-9f59-cfcafe23055b",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=FAQ",
+      "targets": [
+        ["linkText=FAQ", "linkText"],
+        ["css=.link:nth-child(6)", "css:finder"],
+        ["xpath=//a[contains(text(),'FAQ')]", "xpath:link"],
+        ["xpath=//div[@id='header_grid']/nav/a[6]", "xpath:idRelative"],
+        ["xpath=//a[contains(@href, 'FAQ.html')]", "xpath:href"],
+        ["xpath=//a[6]", "xpath:position"],
+        ["xpath=//a[contains(.,'FAQ')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "ced4fe47-3d8c-4ea6-b9e9-3b08d6f2d829",
+      "comment": "",
+      "command": "click",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=contact name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "6be1ee0f-8ce6-4948-9d28-6a8659d80d9b",
+      "comment": "",
+      "command": "type",
+      "target": "id=name",
+      "targets": [
+        ["id=name", "id"],
+        ["name=contact name", "name"],
+        ["css=#name", "css:finder"],
+        ["xpath=//input[@id='name']", "xpath:attributes"],
+        ["xpath=//input", "xpath:position"]
+      ],
+      "value": "Mason Tuft"
+    }, {
+      "id": "0795cb4a-fb28-4b4a-9623-4aa97edcbf06",
+      "comment": "",
+      "command": "type",
+      "target": "id=email",
+      "targets": [
+        ["id=email", "id"],
+        ["name=contact email", "name"],
+        ["css=#email", "css:finder"],
+        ["xpath=//input[@id='email']", "xpath:attributes"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "masontuft@gmail.com"
+    }, {
+      "id": "37256212-fe39-478d-8a0e-8018a36fa42a",
+      "comment": "",
+      "command": "click",
+      "target": "css=.form_line:nth-child(3)",
+      "targets": [
+        ["css=.form_line:nth-child(3)", "css:finder"],
+        ["xpath=//div[3]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f96e7c7a-5460-46ae-9b7a-8376ee3201ff",
+      "comment": "",
+      "command": "click",
+      "target": "id=question",
+      "targets": [
+        ["id=question", "id"],
+        ["name=contact question", "name"],
+        ["css=#question", "css:finder"],
+        ["xpath=//input[@id='question']", "xpath:attributes"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "576ef666-2f56-402e-bcfd-7108b04ea439",
+      "comment": "",
+      "command": "type",
+      "target": "id=question",
+      "targets": [
+        ["id=question", "id"],
+        ["name=contact question", "name"],
+        ["css=#question", "css:finder"],
+        ["xpath=//input[@id='question']", "xpath:attributes"],
+        ["xpath=//div[3]/input", "xpath:position"]
+      ],
+      "value": "Test Question"
+    }, {
+      "id": "c1459075-b9fc-465a-a139-ae56f6c47102",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn",
+      "targets": [
+        ["css=.btn", "css:finder"],
+        ["xpath=//button[@type='submit']", "xpath:attributes"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Log In')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d4ac1e5b-96cb-4a97-99a7-caa576fb2d28",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Go back",
+      "targets": [
+        ["linkText=Go back", "linkText"],
+        ["css=.primaryLink", "css:finder"],
+        ["xpath=//a[contains(text(),'Go back')]", "xpath:link"],
+        ["xpath=//a[@onclick='if (!window.__cfRLUnblockHandlers) return false; window.history.go(-1)']", "xpath:attributes"],
+        ["xpath=//a", "xpath:position"],
+        ["xpath=//a[contains(.,'Go back')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "6fc55483-ceaa-4835-b9dd-94491beba12d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.icon",
+      "targets": [
+        ["css=.icon", "css:finder"],
+        ["xpath=//img[@alt='KOR Logo']", "xpath:img"],
+        ["xpath=//div[@id='header_grid']/a/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "6872a032-abd7-494b-ae59-d934484ade70",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["a38a468f-880f-4881-90da-daf216e52925"]
+  }],
+  "urls": ["https://jmrcycling.com/", "https://jmrcycling.github.io/KOR/", "https://jmrcycling.github.io/", "https://jmrcycling.github.io/KOR/index.html"],
+  "plugins": []
+}

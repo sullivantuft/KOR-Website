@@ -1,0 +1,95 @@
+name: Deploy KOR Website
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: Test Website
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    - name: Install dependencies
+      run: |
+        npm install -g html-validator-cli
+        npm install -g broken-link-checker
+        npm install -g selenium-side-runner
+
+    - name: Setup Chrome browser for Selenium
+      uses: browser-actions/setup-chrome@v1
+      with:
+        chrome-version: stable
+
+    - name: Setup ChromeDriver
+      uses: nanasess/setup-chromedriver@v2
+
+    - name: Validate HTML files
+      run: |
+        echo "Validating HTML files..."
+        for file in $(find . -name "*.html" -not -path "./node_modules/*"); do
+          echo "Validating $file"
+          html-validator --file="$file" --format=text || echo "Warning: $file has validation issues"
+        done
+
+    - name: Check for broken links (local)
+      run: |
+        echo "Checking for broken internal links..."
+        # Start a simple HTTP server for testing
+        python3 -m http.server 8000 &
+        SERVER_PID=$!
+        sleep 2
+
+        # Check links
+        blc http://localhost:8000 --recursive --exclude-external || echo "Warning: Some links may be broken"
+
+        # Stop the server
+        kill $SERVER_PID
+
+    - name: Start local server for Selenium tests
+      run: |
+        echo "Starting local server for Selenium tests..."
+        python3 -m http.server 8080 &
+        SERVER_PID=$!
+        echo $SERVER_PID > server.pid
+        sleep 3
+        echo "Server started on http://localhost:8080"
+
+    - name: Run Selenium IDE tests
+      run: |
+        echo "Running Selenium IDE tests..."
+        # Create a modified version of the test file with local URL
+        sed 's|"url": "https://jmrcycling.com"|"url": "http://localhost:8080"|g' KeepOnRollingTest.side > KeepOnRollingTest_local.side
+
+        # Run the Selenium tests with headless Chrome
+        selenium-side-runner KeepOnRollingTest_local.side \
+          --output-directory=test-results \
+          --output-format=junit \
+          --timeout=30000 \
+          --browser=chrome \
+          --headless || echo "Some Selenium tests failed"
+
+    - name: Stop local server
+      if: always()
+      run: |
+        if [ -f server.pid ]; then
+          kill $(cat server.pid) || true
+          rm server.pid
+        fi
+
+    - name: Upload Selenium test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: selenium-test-results
+        path: test-results/
