@@ -177,15 +177,24 @@
             <a href="../index.html" target="_parent">
                 <img class="icon" src="../images/KOR_app_Logo.png" alt="KOR Logo">
             </a>
-            <nav>
+            
+            <!-- Desktop Navigation -->
+            <nav class="desktop-nav">
                 <a class="link" href="../index.html" target="_parent">Home</a>
                 <a class="link" href="../sign_up.html" target="_parent">Shop Sign Up</a>
                 <a class="link" href="../our_story.html" target="_parent">Our Story</a>
                 <a class="link" href="../contact_us.html" target="_parent">Contact Us</a>
                 <a class="link" href="../our_app.html" target="_parent">The KOR App</a>
-
             </nav>
-            <nav class="right_position">
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+            
+            <nav class="right_position desktop-nav">
                 <div class="dropdown">
                     <button onclick="myFunction()" class="dropbtn">Settings</button>
                     <div id="myDropdown" class="dropdown-content">
@@ -199,10 +208,19 @@
                       
                     </div>
                 </div>
-
             </nav>
         </div>
-
+        
+        <!-- Mobile Navigation -->
+        <nav class="mobile-nav" id="mobile-nav">
+            <a class="mobile-link" href="../index.html" target="_parent">Home</a>
+            <a class="mobile-link" href="../sign_up.html" target="_parent">Shop Sign Up</a>
+            <a class="mobile-link" href="../our_story.html" target="_parent">Our Story</a>
+            <a class="mobile-link" href="../contact_us.html" target="_parent">Contact Us</a>
+            <a class="mobile-link" href="../our_app.html" target="_parent">The KOR App</a>
+            <a class="mobile-link" href="changePhone.html">Change Phone</a>
+            <a class="mobile-link" href="sendNotifs.html">Send Notifications</a>
+        </nav>
     </header>
 
     <main>
@@ -314,6 +332,11 @@
         //     });
         // };
 
+        
+        function toggleMobileMenu() {
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.classList.toggle('active');
+        }
     </script>
     <!-- <script src="./login_script.js"></script> -->
 </body>
