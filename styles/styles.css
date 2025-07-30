@@ -1,3 +1,113 @@
+.store_buttons_large {
+  width: 100%;
+  max-width: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.store_buttons_large:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}
+
+/* CTA Section Styles */
+.cta-section {
+  text-align: center;
+  padding: 1.5em;
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+  margin-top: 2em;
+}
+
+.cta-heading {
+  color: white;
+  font-size: 2.2em;
+  font-family: var(--heading-font);
+  margin-bottom: 0.5em;
+}
+
+.app-store-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+.secondary-cta {
+  margin-top: 1.5em;
+}
+
+.cta-subtext {
+  color: #ccc;
+  margin-bottom: 0.5em;
+}
+
+.personal-cta-button, .shop-cta-button {
+  color: var(--accent1-color);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.2em;
+  transition: color 0.3s ease;
+}
+
+.personal-cta-button:hover, .shop-cta-button:hover {
+  color: white;
+}
+
+.cta-trust-signal {
+  color: #a0a0a0;
+  margin-top: 1em;
+  font-size: 0.9em;
+}
+
+/* CTA Banner Styles */
+.cta-banner {
+  background: var(--primary-color) url('../images/cta-background.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 3em 2em;
+  text-align: center;
+  color: white;
+}
+
+.cta-banner-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cta-banner-title {
+  font-size: 2.8em;
+  font-family: var(--heading-font);
+  margin-bottom: 0.5em;
+}
+
+.cta-banner-text {
+  font-size: 1.3em;
+  margin-bottom: 1.5em;
+}
+
+.cta-banner-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  flex-wrap: wrap;
+  margin-bottom: 1.5em;
+}
+
+.cta-banner-secondary a {
+  color: var(--accent1-color);
+  text-decoration: none;
+  font-weight: bold;
+  margin: 0 1em;
+}
+
+.cta-banner-secondary a:hover {
+  color: white;
+}
+
+.cta-divider {
+  color: #555;
+  margin: 0 0.5em;
+}
+
 @import url('https://fonts.googleapis.com/css?family=IM+Fell+French+Canon+SC|Lato');
 /* @import url('https://fonts.googleapis.com/css2?family=Unlock&display=swap'); */
 @import url('https://fonts.googleapis.com/css2?family=League+Gothic&family=Unlock&display=swap');
@@ -167,6 +277,37 @@
   font-weight: 300;
   font-size: large;
 }
+
+/* New styles for improved homepage content */
+.hero-subtitle {
+  color: white;
+  font-family: var(--heading-font);
+  font-size: 2.5em;
+  text-align: center;
+  margin: 1em 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+.key-benefits {
+  background: rgba(46, 64, 83, 0.9);
+  border-radius: 15px;
+  padding: 1.5em;
+  margin-top: 1.5em;
+}
+
+.benefit-point {
+  color: white;
+  font-size: 1.1em;
+  margin: 0.8em 0;
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.benefit-point strong {
+  color: var(--accent1-color);
+}
 /* div {
     background-color: var(--accent3-color);
 } */
@@ -181,19 +322,57 @@ nav {
   display: flex;
 }
 .link{
-    font-size: 2.5em;
-    padding: 5px;
+    font-size: 2.2em;
+    padding: 8px 12px;
     background-color: var(--primary-color);
-    border-radius: 5px;
+    border-radius: 8px;
     text-decoration: none;
     color: var(--headline-color-on-dark);
     font-family: var(--heading-font);
-    margin: 0 1%;
+    margin: 0 0.5%;
+    transition: all 0.3s ease;
 }
 .link:hover {
   background-color: var(--secondary-color);
   color: whitesmoke;
   cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Mobile hamburger menu */
+.mobile-menu-toggle {
+  display: none;
+  background: var(--primary-color);
+  border: none;
+  color: white;
+  font-size: 2em;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.mobile-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--primary-color);
+  flex-direction: column;
+  padding: 1em;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.mobile-nav.active {
+  display: flex;
+}
+
+.mobile-nav .link {
+  margin: 0.5em 0;
+  text-align: center;
+  font-size: 2em;
 }
 
 
@@ -925,4 +1104,35 @@ h1 {
   .our_app_example {
     height: 60rem;
   }
-} 
+  
+  /* CTA Mobile Styles */
+  .store_buttons_large {
+    max-width: 180px;
+  }
+  
+  .cta-banner {
+    padding: 2em 1em;
+  }
+  
+  .cta-banner-title {
+    font-size: 2.2em;
+  }
+  
+  .cta-banner-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .app-store-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cta-section {
+    padding: 1em;
+  }
+  
+  .cta-heading {
+    font-size: 1.8em;
+  }
+}
