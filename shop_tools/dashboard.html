@@ -212,7 +212,8 @@
             <h2 style="color: #000;" class="paragraph">Your customer access code is </h2>
             <h1 style="color: #000;"><script type="text/javascript">document.write(shop_code)</script></h1>
             <h4 style="color: #000;" class="center">(This code will continually change, do not copy!)</h4>
-            <h2 style="color: #000;" class="paragraph">Below is a QR code to both app stores for your customers to scan!</h2>
+            <h2 style="color: #000;" class="paragraph">Below is a QR code for seamless customer onboarding!</h2>
+            <h4 style="color: #000;" class="paragraph">Customers scan → Auto-redirect to app store → App pre-filled with shop code → Instant login!</h4>
             <!-- <script type="text/javascript">document.write(QR_url)</script> -->
              
             <div class="center">
@@ -221,7 +222,7 @@
                  <!-- Dynamic QR Generating text -->
                 <img id="imageBox" src="" alt="">
                 <script>
-                  document.getElementById('imageBox').setAttribute('src', 'https://quickchart.io/qr?text=jmrcycling.com/app_auth.html?shop-code=' + shop_code);
+                  document.getElementById('imageBox').setAttribute('src', 'https://quickchart.io/qr?text=https://jmrcycling.com:3001/qr/onboard/' + shop_code);
                 </script>
             </div>
             <div class="center">

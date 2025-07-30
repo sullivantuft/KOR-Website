@@ -36,16 +36,27 @@
     localStorage.getItem("shop_code");
     console.log(localStorage.getItem("shop_code"));
 
-    // URL redirectbased off of OS
+    // Get shop code from URL parameters (legacy support)
+    const urlParams = new URLSearchParams(window.location.search);
+    const legacyShopCode = urlParams.get('shop-code');
+    
+    if (legacyShopCode) {
+        console.log('Legacy shop code detected:', legacyShopCode);
+        // Store in localStorage for app retrieval
+        localStorage.setItem('legacy_shop_code', legacyShopCode);
+    }
+
+    // URL redirect based off of OS
     const ua = navigator.userAgent
     if (/android/i.test(ua)) {
-        window.location.href = 'https://google.com'
+        window.location.href = 'https://play.google.com/store/apps/details?id=com.robtuft.newKOR'
     }
     else if (/iPad|iPhone|iPod/.test(ua)){
         window.location.href = 'https://apps.apple.com/us/app/kor-keep-on-rolling/id1599601993';
     }
     else if (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {
-
+        // iPad on Safari
+        window.location.href = 'https://apps.apple.com/us/app/kor-keep-on-rolling/id1599601993';
     }
     
 
