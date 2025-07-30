@@ -1,0 +1,28 @@
+{
+  "name": "kor-website",
+  "version": "1.0.0",
+  "description": "KOR Website Testing and Deployment",
+  "scripts": {
+    "test": "selenium-side-runner KeepOnRollingTest.side",
+    "test:headless": "selenium-side-runner KeepOnRollingTest.side --browser=chrome --headless",
+    "validate": "html-validator --file=index.html --format=text",
+    "start": "python3 -m http.server 8080"
+  },
+  "devDependencies": {
+    "selenium-side-runner": "^4.0.0",
+    "html-validate": "^8.0.0",
+    "broken-link-checker": "^0.7.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/KOR.git"
+  },
+  "keywords": [
+    "website",
+    "testing",
+    "selenium",
+    "html"
+  ],
+  "author": "Mason Tuft",
+  "license": "MIT"
+}
