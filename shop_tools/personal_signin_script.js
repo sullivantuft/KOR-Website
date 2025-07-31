@@ -206,10 +206,11 @@ signin.addEventListener("submit", (e) => {
         
         console.log('Session data stored successfully');
         
-        // Success! Redirect to dashboard
-        btnText.textContent = 'Success! Redirecting...';
+        // Success! Redirect to QR onboard for automatic app routing
+        btnText.textContent = 'Success! Redirecting to app...';
         setTimeout(() => {
-            window.location.replace("./personal_dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
+            const shopCode = result.plan_type[0].shop_code;
+            window.location.replace(`https://jmrcycling.com:3001/qr/onboard/${shopCode}`);
         }, 1000);
     })
     .catch(error => {
