@@ -46,10 +46,10 @@ async function createAuth0User(email, password, name, token) {
         const response = await fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", {
             method: "POST",
             headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             },
-            body: new URLSearchParams({
+            body: JSON.stringify({
                 "email": email,
                 "password": password,
                 "connection": "Username-Password-Authentication",
@@ -61,6 +61,10 @@ async function createAuth0User(email, password, name, token) {
         const parsed = JSON.parse(result);
         
         if (parsed.error) {
+            // Handle specific Auth0 errors
+            if (parsed.error === 'invalid_token' || parsed.message?.includes('expired')) {
+                throw new Error('Authentication token expired. Please try again.');
+            }
             throw new Error(parsed.message || 'Failed to create Auth0 user');
         }
         
