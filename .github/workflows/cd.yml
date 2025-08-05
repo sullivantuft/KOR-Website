@@ -54,7 +54,7 @@ jobs:
     - name: Setup SSH for deployment
       run: |
         mkdir -p ~/.ssh
-        printf '%s\n' "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/deploy_key
         chmod 600 ~/.ssh/deploy_key
         echo "Host ${{ secrets.PROD_SERVER_HOST }}" >> ~/.ssh/config
         echo "  HostName ${{ secrets.PROD_SERVER_HOST }}" >> ~/.ssh/config
