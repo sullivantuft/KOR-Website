@@ -99,7 +99,7 @@ jobs:
       run: npm run test:e2e
       
     - name: Upload Playwright report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: playwright-report
@@ -133,7 +133,7 @@ jobs:
       run: npx playwright test tests/accessibility/
       
     - name: Upload accessibility report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: accessibility-report
@@ -222,7 +222,7 @@ jobs:
       run: npm run build:prod
       
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-files
         path: dist/
@@ -254,7 +254,7 @@ jobs:
       continue-on-error: true
       
     - name: Upload visual diff report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: visual-regression-report
