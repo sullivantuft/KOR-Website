@@ -30,4 +30,4 @@ npm run build:prod
 
 The site is automatically deployed to production when changes are pushed to the main branch via GitHub Actions.
 
-Last deployment test: 2025-08-05 21:55 - SSH authentication fixed
+Last deployment test: 2025-08-05 22:09 - Base64 SSH key encoding implemented
