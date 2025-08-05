@@ -7,8 +7,9 @@
     <title>KOR | Sign In</title>
     <link type="text/css" rel="stylesheet" href="../styles/styles.css">
     <link rel="icon" href="../images/KOR_app_Logo.png">
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <script defer src="personal_signin_script.js"></script><!--used during development, if development is buggy. Try commenting out this line-->
-    <script defer src="https://jmrcycling.com/shop_tools/personal_signin_script.js"></script>
+    <!-- <script defer src="https://jmrcycling.com/shop_tools/personal_signin_script.js"></script> -->
 
     
 </head>
@@ -31,46 +32,72 @@
 
     </header> -->
 
-    <main>
-        <div>
+    <main class="signin-main">
+        <div id="error_msg" class="login_window" style="background-color: #ff4444; color: white; padding: 2rem; border-radius: 8px; margin: 2rem auto; max-width: 600px; text-align: center; display: none;">
+            <h1 style="margin-bottom: 1rem; color: white;">Access Denied</h1>
+            <p style="margin-bottom: 1.5rem; line-height: 1.6;">You need a valid subscription to access this personal registration page. If you think you 
+                should have access, please reach out to us on our <a href="../contact_us.html" style="color: #ffdddd; text-decoration: underline;">contact page</a>.
+            </p>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">To create your personal account, you need valid subscription and invoice IDs from your KOR purchase.</p>
+            </div>
         </div>
-        <div class="login_window">
-            <div id="error"></div>
-            <h1>Create an Account</h1>
-            <form id="signin">
+        <div class="signin-container">
+            <div id="signin_box" class="signin-window">
+                <div class="signin-header">
+                    <div class="signin-logo">
+                        <img src="../images/KOR_app_Logo.png" alt="KOR Logo" class="logo-image">
+                    </div>
+                    <h1 class="signin-title">Create Your Account</h1>
+                    <p class="signin-subtitle">Join KOR and start your cycling journey today</p>
+                </div>
+                
+                <div id="error" class="error-message" role="alert" aria-live="polite"></div>
+                
+                <form id="signin" class="signin-form" novalidate>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <input type="text" id="name" name="name" placeholder="Enter your full name" required aria-describedby="name-help">
+                            <label for="name">Full Name</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="name-help">Enter your first and last name</div>
+                        </div>
 
-                <div class="input_field">
+                        <div class="input-group">
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required aria-describedby="email-help">
+                            <label for="email">Email Address</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="email-help">We'll use this for your account login</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="password" id="password" name="password" placeholder="Create a secure password" required aria-describedby="password-help" minlength="8">
+                            <label for="password">Password</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="password-help">Minimum 8 characters required</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required aria-describedby="phone-help">
+                            <label for="phone">Phone Number</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="phone-help">For account verification and updates</div>
+                        </div>
+                    </div>
                     
-                    <input type="text" id="name" name="name" placeholder="" required>
-                    <label for="shop_name">Name: </label>
-                    <span></span>
-                </div>
-
-                <div class="input_field">
+                    <div class="form-actions">
+                        <button class="signin-btn" type="submit">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-spinner" style="display: none;"></span>
+                        </button>
+                    </div>
                     
-                    <input type="email" id="email" name="email" placeholder="" required>
-                    <label for="email">Email: </label>
-                    <span></span>
-                </div>
-                <div class="input_field">
-                    
-                    <input type="password" id="password" name="password" placeholder="" required>
-                    <label for="password">Password: </label>
-                    <span></span>
-                </div>
-                <div class="input_field">
-                    
-                    <input type="tel" id="phone" name="phone" placeholder="" required>
-                    <label for="phone">Phone #: </label>
-                    <span></span>
-                </div>
-                <div class="form_line">
-                    <button class="btn" type="submit">Create an Account</button>
-                </div>
-
-            </form>
+                    <div class="signin-footer">
+                        <p>Already have an account? <a href="./login.html" class="signin-link">Sign In</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
-
     </main>
 
     <!-- <footer>

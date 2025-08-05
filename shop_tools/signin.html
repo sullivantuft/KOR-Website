@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOR | Sign In</title>
+    <title>KOR | Shop Sign Up</title>
     <link type="text/css" rel="stylesheet" href="../styles/styles.css">
     <link rel="icon" href="../images/KOR_app_Logo.png">
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
     <!--used during development, if development is buggy. Try commenting out this line-->
     <script defer src="signin_script.js"></script>
-    <script defer src="https://jmrcycling.com/shop_tools/signin_script.js"></script>
+    <!-- <script defer src="https://jmrcycling.com/shop_tools/signin_script.js"></script> -->
 
     <!-- <script>
 
@@ -65,54 +65,79 @@ signin.addEventListener("submit", (e) => {
 
     </header> -->
 
-    <main>
-        <div id="error_msg" class="login_window" style="background-color: red; display: none;">
-            <h1>Error</h1>
-            <p>It seems that you are not authorized to be on this page. If you think you 
-                should be on this page, please reach out to us on our <a href="../contact_us.html">contact page.</a>
+    <main class="signin-main">
+        <div id="error_msg" class="login_window" style="background-color: #ff4444; color: white; padding: 2rem; border-radius: 8px; margin: 2rem auto; max-width: 600px; text-align: center; display: none;">
+            <h1 style="margin-bottom: 1rem; color: white;">Access Denied</h1>
+            <p style="margin-bottom: 1.5rem; line-height: 1.6;">You need a valid subscription to access this shop registration page. If you think you 
+                should have access, please reach out to us on our <a href="../contact_us.html" style="color: #ffdddd; text-decoration: underline;">contact page</a>.
             </p>
-
-            <!-- <p class="paragraph">Your subscription Id is <script type="text/javascript">document.write(sub_Id)</script></p> -->
-            <!-- <p class="paragraph">Your invoice ID is <script type="text/javascript">document.write(invoice_Id)</script></p> -->
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">To register your shop, you need valid subscription and invoice IDs from your KOR purchase.</p>
+            </div>
         </div>
-        <div id="signin_box" class="login_window">
-            <div id="error"></div>
-            <h1>Create an Account</h1>
-            <form id="signin" class="signin">
-            <!-- <div id="feedback"> -->
-                <label for="shop_name">Shop Name: </label>
-                <div class="input_field">
-                    <input type="text" id="shop_name" name="shop_name" placeholder="" required>
-                    <span></span>
+        <div class="signin-container">
+            <div id="signin_box" class="signin-window">
+                <div class="signin-header">
+                    <div class="signin-logo">
+                        <img src="../images/KOR_app_Logo.png" alt="KOR Logo" class="logo-image">
+                    </div>
+                    <h1 class="signin-title">Create Shop Account</h1>
+                    <p class="signin-subtitle">Join the KOR network and start managing your bike services</p>
                 </div>
-                <label for="email">Email: </label>
-                <div class="input_field">
-                    <input type="email" id="email" name="email" placeholder="" required>
-                    <span></span>
-                </div>
-                <label for="password">Password: </label>
-                <div class="input_field">
+                
+                <div id="error" class="error-message" role="alert" aria-live="polite"></div>
+                
+                <form id="signin" class="signin-form" novalidate>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <input type="text" id="shop_name" name="shop_name" placeholder="Enter your shop name" required aria-describedby="shop_name-help">
+                            <label for="shop_name">Shop Name</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="shop_name-help">Your business or shop name</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="email" id="email" name="email" placeholder="shop@example.com" required aria-describedby="email-help">
+                            <label for="email">Email Address</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="email-help">We'll use this for your account login</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="password" id="password" name="password" placeholder="Create a secure password" required aria-describedby="password-help" minlength="8">
+                            <label for="password">Password</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="password-help">Minimum 8 characters required</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" required aria-describedby="phone-help">
+                            <label for="phone">Company Phone Number</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="phone-help">For account verification and updates</div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <input type="text" id="shop_initials" name="shop_initials" placeholder="e.g., GC" required maxlength="4" aria-describedby="shop_initials-help">
+                            <label for="shop_initials">Shop Initials</label>
+                            <span class="input-line"></span>
+                            <div class="field-hint" id="shop_initials-help">2-4 characters (e.g., "GC" for George's Cycles)</div>
+                        </div>
+                    </div>
                     
-                    <input type="password" id="password" name="password" placeholder="" required>
-                    <span></span>
-                </div>
-                <label for="phone">Company Phone #: </label>
-                <div class="input_field">
-                    <input type="tel" id="phone" name="phone" placeholder="" required>
-                    <span></span>
-                </div>
-                <label for="phone">Shop Initials (i.e. "GC" for George's Cycles): </label>
-                <div class="input_field">
-                    <input type="text" id="shop_initials" name="shop_initials" placeholder="" required>
-                    <span></span>
-                </div>
-                <div class="form_line">
-                    <button class="btn" type="submit">Create an Account</button>
-                </div>
-            <!-- </div> -->
-            </form>
+                    <div class="form-actions">
+                        <button class="signin-btn" type="submit">
+                            <span class="btn-text">Create Account</span>
+                            <span class="btn-spinner" style="display: none;"></span>
+                        </button>
+                    </div>
+                    
+                    <div class="signin-footer">
+                        <p>Already have an account? <a href="login.html" class="signin-link">Sign In</a></p>
+                    </div>
+                </form>
+            </div>
         </div>
-
     </main>
 
     <!-- <footer>
