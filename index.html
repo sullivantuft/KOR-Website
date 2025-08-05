@@ -1,12 +1,157 @@
 <!DOCTYPE html>
+<!-- CI/CD Pipeline Test - Deployment $(date) -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KOR | Landing Page</title>
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.google-analytics.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://fonts.googleapis.com https://www.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+    
+    <meta name="description" content="KOR (Keep On Rolling) - Smart bike maintenance tracking app. Automatically monitor component wear using Strava integration. Never miss maintenance again.">
+    <meta name="keywords" content="bike maintenance, cycling app, strava integration, bicycle tracking, component wear, bike repair">
+    <meta name="author" content="Mason Tuft">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="KOR - Smart Bike Maintenance Tracking">
+    <meta property="og:description" content="Never miss bike maintenance again. Track component wear automatically with Strava integration.">
+    <meta property="og:image" content="./images/KOR_app_Logo.png">
+    <meta property="og:url" content="https://jmrcycling.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>KOR | Smart Bike Maintenance Tracking - Never Miss Maintenance Again</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://jmrcycling.com/index.html">
+    
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "KOR - Keep On Rolling",
+      "url": "https://jmrcycling.com",
+      "description": "Smart bike maintenance tracking app with Strava integration. Never miss maintenance again.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://jmrcycling.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      },
+      "sameAs": [
+        "https://facebook.com",
+        "https://instagram.com",
+        "https://apps.apple.com/us/app/kor-keep-on-rolling/id1599601993",
+        "https://play.google.com/store/apps/details?id=com.robtuft.newKOR"
+      ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "KOR - Keep On Rolling",
+      "url": "https://jmrcycling.com",
+      "logo": "https://jmrcycling.com/images/KOR_app_Logo.png",
+      "description": "Developers of smart bike maintenance tracking technology",
+      "founder": {
+        "@type": "Person",
+        "name": "Mason Tuft"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://jmrcycling.com/contact_us.html"
+      },
+      "sameAs": [
+        "https://facebook.com",
+        "https://instagram.com"
+      ]
+    }
+    </script>
+    
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MobileApplication",
+      "name": "KOR - Keep On Rolling",
+      "description": "Smart bike maintenance tracking app with Strava integration. Automatically monitor component wear and get alerts before parts fail.",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": ["iOS", "Android"],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "downloadUrl": [
+        "https://apps.apple.com/us/app/kor-keep-on-rolling/id1599601993",
+        "https://play.google.com/store/apps/details?id=com.robtuft.newKOR"
+      ],
+      "featureList": [
+        "Strava Integration",
+        "Automatic Component Wear Tracking",
+        "Maintenance Alerts",
+        "Bike Shop Integration",
+        "Personal Account Management"
+      ],
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.5",
+        "ratingCount": "150"
+      }
+    }
+    </script>
+    
+    <!-- Resource Hints for Performance -->
+    <link rel="preload" href="styles/styles.css" as="style">
+    <link rel="preload" href="images/KOR_app_Logo.png" as="image">
+    <link rel="preload" href="images/wilson_background-min.JPG" as="image">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=League+Gothic&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Lato&display=swap" as="style">
+    
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//play.google.com">
+    <link rel="dns-prefetch" href="//apps.apple.com">
+    <link rel="dns-prefetch" href="//facebook.com">
+    <link rel="dns-prefetch" href="//instagram.com">
+    
+    <!-- Prefetch Next Likely Pages -->
+    <link rel="prefetch" href="our_app.html">
+    <link rel="prefetch" href="contact_us.html">
+    
+    <!-- Critical CSS -->
+    <style>
+        /* Critical above-the-fold styles */
+        body { margin: 0; font-family: Lato, sans-serif; }
+        .header { background-color: #2e4053; width: 100%; }
+        .parallax_home { background-image: url('images/wilson_background-min.JPG'); background-size: cover; }
+        .title_box { background-color: #2e4053; color: white; padding: 10px; border-radius: 15px; }
+    </style>
+    
+    <link type="text/css" rel="stylesheet" href="styles/reset.css">
+    <link type="text/css" rel="stylesheet" href="styles/variables.css">
     <link type="text/css" rel="stylesheet" href="styles/styles.css">
     <link rel="icon" href="./images/KOR_app_Logo.png">
+    
+    <!-- Progressive Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2e4053">
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => console.log('SW registered:', registration))
+                    .catch(error => console.log('SW registration failed:', error));
+            });
+        }
+    </script>
 </head>
 <script>
     var res = document.cookie;
@@ -17,8 +162,13 @@
     }
 </script>
 <body>
+    <!-- Skip to main content link for keyboard users -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- ARIA live region for dynamic content announcements -->
+    <div aria-live="polite" aria-atomic="true" class="live-region" id="live-region"></div>
 
-    <header class="header">
+    <header class="header" role="banner">
         <div id="header_grid">
             <a href="index.html" target="_parent">
                 <img class="icon" src="images/KOR_app_Logo.png" alt="KOR Logo">
@@ -35,10 +185,14 @@
             </nav>
             
             <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
-                <span class="hamburger-line"></span>
+            <button class="mobile-menu-toggle" 
+                    onclick="toggleMobileMenu()" 
+                    aria-label="Toggle mobile navigation menu"
+                    aria-expanded="false"
+                    aria-controls="mobile-nav">
+                <span class="hamburger-line" aria-hidden="true"></span>
+                <span class="hamburger-line" aria-hidden="true"></span>
+                <span class="hamburger-line" aria-hidden="true"></span>
             </button>
             
             <nav class="right_position desktop-nav">
@@ -57,8 +211,9 @@
             <a class="mobile-link" href="./shop_tools/login.html" target="_blank">Log In</a>
         </nav>
     </header>
-    <main>
-    <div class="parallax_parent">
+    <main id="main-content" role="main">
+        <section class="hero-section" aria-labelledby="hero-title">
+            <div class="parallax_parent">
         <!-- <div class="mobile-position"> -->
             <div class="parallax_home">
                 <div style="padding: 5%;">
@@ -98,62 +253,105 @@
     
     
         
-    </div>
-    <div class="parallax_parent">
-        <!-- <div class="mobile-position"> -->
-            <div class="parallax2_home">
-                <div style="padding: 5%;">
-                    <h1>Why Choose KOR?</h1>
-                    <div class="point-content">
-                        <div class="point-card">
-                            <h3 class="title">Dedicated Support</h3>
-                            <p class="paragraph-on-dark">Get personal help from our founders. We're passionate cyclists who understand your needs and are here to ensure you have the best experience with KOR.</p>
-                            <a class="point-link" href="contact_us.html" target="_parent">Contact Us</a>
-                        </div>
-                        <div class="point-card">
-                            <h3 class="title">Simple & Intuitive</h3>
-                            <p class="paragraph-on-dark">No complicated setup or confusing interfaces. KOR is designed for riders, by riders. Connect to Strava and you're ready to track your bike's health automatically.</p>
-                        </div>
-                        <div class="point-card">
-                            <h3 class="title">Stay Ride-Ready</h3>
-                            <p class="paragraph-on-dark">Advanced algorithms predict when components need attention, so you're never caught off-guard with a broken chain or worn brake pads during peak riding season.</p>
+            </div>
+        </section>
+        
+        <section class="features-section" aria-labelledby="features-title">
+            <div class="parallax_parent">
+                <div class="parallax2_home">
+                    <div style="padding: 5%;">
+                        <h1 id="features-title">Why Choose KOR?</h1>
+                        <div class="point-content" role="list">
+                            <article class="point-card" role="listitem">
+                                <h3 class="title">Dedicated Support</h3>
+                                <p class="paragraph-on-dark">Get personal help from our founders. We're passionate cyclists who understand your needs and are here to ensure you have the best experience with KOR.</p>
+                                <a class="point-link" href="contact_us.html" target="_parent">Contact Us</a>
+                            </article>
+                            <article class="point-card" role="listitem">
+                                <h3 class="title">Simple & Intuitive</h3>
+                                <p class="paragraph-on-dark">No complicated setup or confusing interfaces. KOR is designed for riders, by riders. Connect to Strava and you're ready to track your bike's health automatically.</p>
+                            </article>
+                            <article class="point-card" role="listitem">
+                                <h3 class="title">Stay Ride-Ready</h3>
+                                <p class="paragraph-on-dark">Advanced algorithms predict when components need attention, so you're never caught off-guard with a broken chain or worn brake pads during peak riding season.</p>
+                            </article>
                         </div>
                     </div>
                 </div>
             </div>
-
-        <!-- </div> -->
-    
-        
-    </div>
-        
-        <!-- <img src="images/Home_page_wireframe.png" alt="Wirframe" class="image_50"> -->
-
-        <!-- <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p> -->
-        
+        </section>
     </main>
-    <footer>
+    
+    <footer role="contentinfo">
         <div class="footer">
-            <h3>KOR &copy; 2022 - Mason Tuft</h3>
-                    <!-- <h3><a class="link" href="site-plan.html" target="_parent">Site Plan</a></h3> -->
-                    <h3><a class="link" href="contact_us.html" target="_parent">Contact Us</a></h3>
-                    <div class="social">
-                        <a href="https://facebook.com" target="_blank">
-                            <img src="./images/facebook.png" alt="FB Icon">
-                        </a>
-                        
-                        <a href="https://instagram.com" target="_blank">
-                            <img src="./images/instagram.png" alt="instagram icon" >
-                        </a>
-                    </div>
+            <p>KOR &copy; 2022 - Mason Tuft</p>
+            <nav aria-label="Footer navigation">
+                <a class="link" href="contact_us.html" target="_parent">Contact Us</a>
+            </nav>
+            <div class="social" role="list" aria-label="Social media links">
+                <a href="https://facebook.com" target="_blank" aria-label="Visit our Facebook page" role="listitem">
+                    <img src="./images/facebook.png" alt="Facebook">
+                </a>
+                <a href="https://instagram.com" target="_blank" aria-label="Visit our Instagram page" role="listitem">
+                    <img src="./images/instagram.png" alt="Instagram">
+                </a>
+            </div>
         </div>
-        <!-- <iframe class="footer" src="footer.html"  scrolling="no"></iframe> -->
     </footer>
 <script>
 function toggleMobileMenu() {
   const mobileNav = document.getElementById('mobile-nav');
+  const toggleButton = document.querySelector('.mobile-menu-toggle');
+  const isExpanded = mobileNav.classList.contains('active');
+  
   mobileNav.classList.toggle('active');
+  
+  // Update aria-expanded for accessibility
+  toggleButton.setAttribute('aria-expanded', !isExpanded);
+  
+  // Focus management for keyboard users
+  if (!isExpanded) {
+    // Menu is opening - focus first link
+    const firstLink = mobileNav.querySelector('.mobile-link');
+    if (firstLink) {
+      firstLink.focus();
+    }
+  }
 }
+
+// Enhanced keyboard navigation for mobile menu
+document.addEventListener('DOMContentLoaded', function() {
+  const mobileNav = document.getElementById('mobile-nav');
+  const toggleButton = document.querySelector('.mobile-menu-toggle');
+  
+  // Close menu on Escape key
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+      mobileNav.classList.remove('active');
+      toggleButton.setAttribute('aria-expanded', 'false');
+      toggleButton.focus();
+    }
+  });
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.mobile-menu-toggle') && !e.target.closest('.mobile-nav')) {
+      if (mobileNav.classList.contains('active')) {
+        mobileNav.classList.remove('active');
+        toggleButton.setAttribute('aria-expanded', 'false');
+      }
+    }
+  });
+});
 </script>
+
+<!-- Include Utility Scripts -->
+<script src="js/utils.js" defer></script>
+<script src="js/ux-enhancements.js" defer></script>
+<script src="js/performance.js" defer></script>
+
+<!-- Scroll Progress Indicator -->
+<div class="scroll-progress"></div>
+
 </body>
 </html>

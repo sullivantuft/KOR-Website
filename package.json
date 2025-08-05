@@ -1,28 +1,100 @@
 {
   "name": "kor-website",
   "version": "1.0.0",
-  "description": "KOR Website Testing and Deployment",
+  "description": "KOR (Keep On Rolling) - Smart bike maintenance tracking website",
+  "main": "index.html",
   "scripts": {
-    "test": "selenium-side-runner KeepOnRollingTest.side",
-    "test:headless": "selenium-side-runner KeepOnRollingTest.side --browser=chrome --headless",
+    "test": "npm run test:unit && npm run test:e2e && npm run test:accessibility && npm run test:performance",
+    "test:unit": "jest --coverage=false",
+    "test:unit:coverage": "jest",
+    "test:e2e": "playwright test",
+    "test:selenium": "selenium-side-runner KeepOnRollingTest.side",
+    "test:selenium:headless": "selenium-side-runner KeepOnRollingTest.side --browser=chrome --headless",
+    "test:accessibility": "pa11y-ci",
+    "test:performance": "lhci autorun",
+    "test:visual": "backstop test",
+    "test:links": "broken-link-checker http://localhost:8080",
+    "lint": "npm run lint:js && npm run lint:css && npm run lint:html",
+    "lint:js": "eslint js/**/*.js",
+    "lint:css": "stylelint styles/**/*.css",
+    "lint:html": "htmlhint *.html",
     "validate": "html-validator --file=index.html --format=text",
-    "start": "python3 -m http.server 8080"
-  },
-  "devDependencies": {
-    "selenium-side-runner": "^4.0.0",
-    "html-validate": "^8.0.0",
-    "broken-link-checker": "^0.7.8"
+    "format": "prettier --write \"**/*.{js,css,html,json,md}\"",
+    "build": "npm run clean && npm run copy-files && npm run optimize",
+    "build:prod": "npm run build && npm run minify",
+    "clean": "rimraf dist",
+    "copy-files": "copyfiles -u 1 \"**/*\" \"!node_modules/**\" \"!tests/**\" \"!*.config.js\" \"!package*.json\" dist/",
+    "optimize": "npm run optimize:images && npm run optimize:css && npm run optimize:js",
+    "optimize:images": "imagemin images/*.{jpg,jpeg,png,svg} --out-dir=dist/images --plugin=imagemin-mozjpeg --plugin=imagemin-pngquant --plugin=imagemin-svgo",
+    "optimize:css": "cleancss -o dist/styles/styles.min.css styles/*.css",
+    "optimize:js": "terser js/*.js -o dist/js/scripts.min.js --compress --mangle",
+    "minify": "html-minifier --input-dir dist --output-dir dist --remove-comments --collapse-whitespace --minify-css --minify-js --file-ext html",
+    "serve": "http-server -p 8080 -c-1",
+    "serve:dist": "http-server dist -p 8080 -c-1",
+    "start": "python3 -m http.server 8080",
+    "deploy": "npm run build:prod && npm run deploy:upload",
+    "deploy:upload": "rsync -avz --delete dist/ user@jmrcycling.com:/var/www/html/",
+    "pre-commit": "npm run lint && npm run test:unit",
+    "ci": "npm run lint && npm run test && npm run build:prod",
+    "audit": "npm audit && npm run test:security",
+    "test:security": "snyk test",
+    "monitor": "npm run test:performance && npm run test:uptime",
+    "test:uptime": "node scripts/uptime-check.js"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/your-username/KOR.git"
   },
   "keywords": [
+    "bike-maintenance",
+    "strava",
+    "cycling",
+    "web-app",
+    "progressive-web-app",
     "website",
-    "testing",
-    "selenium",
-    "html"
+    "testing"
   ],
   "author": "Mason Tuft",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@lhci/cli": "^0.12.0",
+    "@playwright/test": "^1.40.0",
+    "@types/jest": "^29.5.8",
+    "backstopjs": "^6.2.2",
+    "broken-link-checker": "^0.7.8",
+    "clean-css-cli": "^5.6.2",
+    "copyfiles": "^2.4.1",
+    "eslint": "^8.54.0",
+    "html-minifier": "^4.0.0",
+    "html-validate": "^8.0.0",
+    "htmlhint": "^1.1.4",
+    "http-server": "^14.1.1",
+    "husky": "^8.0.3",
+    "identity-obj-proxy": "^3.0.0",
+    "imagemin": "^8.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^9.0.2",
+    "imagemin-svgo": "^10.0.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "pa11y-ci": "^3.0.1",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "selenium-side-runner": "^4.0.0",
+    "snyk": "^1.1248.0",
+    "stylelint": "^15.11.0",
+    "terser": "^5.24.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run pre-commit",
+      "pre-push": "npm run ci"
+    }
+  }
 }
