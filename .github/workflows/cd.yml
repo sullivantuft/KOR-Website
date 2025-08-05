@@ -52,14 +52,26 @@ jobs:
         path: dist/
         
     - name: Setup SSH for deployment
-      uses: webfactory/ssh-agent@v0.5.4
-      with:
-        ssh-private-key: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.PROD_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+        chmod 600 ~/.ssh/deploy_key
+        echo "Host ${{ secrets.PROD_SERVER_HOST }}" >> ~/.ssh/config
+        echo "  HostName ${{ secrets.PROD_SERVER_HOST }}" >> ~/.ssh/config
+        echo "  User ${{ secrets.PROD_SSH_USER }}" >> ~/.ssh/config
+        echo "  IdentityFile ~/.ssh/deploy_key" >> ~/.ssh/config
+        echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+        chmod 600 ~/.ssh/config
+        
+    - name: Test SSH connection
+      run: |
+        echo "🔍 Testing SSH connection..."
+        ssh ${{ secrets.PROD_SERVER_HOST }} "echo 'SSH connection successful!'"
         
     - name: Deploy to server via rsync
       run: |
-        echo "🚀 Deploying to jmrcycling.com..."
-        rsync -avz --delete --exclude='.git*' -e "ssh -o StrictHostKeyChecking=no" dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SERVER_HOST }}:/var/www/html/
+        echo "🚀 Deploying to ${{ secrets.PROD_SERVER_HOST }}..."
+        rsync -avz --delete --exclude='.git*' --exclude='node_modules' --exclude='coverage' --exclude='tests' --exclude='*.log' dist/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SERVER_HOST }}:/var/www/html/
         echo "✅ Deployment successful!"
         
     - name: Verify deployment with uptime check
