@@ -1,0 +1,36 @@
+Deployment started at Thu Jul 31 13:06:23 MDT 2025
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "index.html" "index.html"
+Uploading index.html to /var/www/jmrcycling.com/index.html
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "app_auth.html" "app_auth.html"
+Uploading app_auth.html to /var/www/jmrcycling.com/app_auth.html
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "shop_tools/dashboard.html" "shop_tools/dashboard.html"
+Uploading shop_tools/dashboard.html to /var/www/jmrcycling.com/shop_tools/dashboard.html
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "shop_tools/personal_signin.html" "shop_tools/personal_signin.html"
+Uploading shop_tools/personal_signin.html to /var/www/jmrcycling.com/shop_tools/personal_signin.html
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "shop_tools/personal_signin_script.js" "shop_tools/personal_signin_script.js"
+Uploading shop_tools/personal_signin_script.js to /var/www/jmrcycling.com/shop_tools/personal_signin_script.js
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "styles/styles.css" "styles/styles.css"
+Uploading styles/styles.css to /var/www/jmrcycling.com/styles/styles.css
+sftp> quit
+Connected to jmrcycling.com.
+sftp> cd /var/www/jmrcycling.com
+sftp> put "qr-guide.html" "qr-guide.html"
+Uploading qr-guide.html to /var/www/jmrcycling.com/qr-guide.html
+sftp> quit
