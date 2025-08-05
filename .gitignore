@@ -26,5 +26,5 @@ Thumbs.db
 *.swp
 *.swo
 
-# Package lock files (optional - some teams prefer to commit these)
-package-lock.json
+# Package lock files - we commit package-lock.json for CI consistency
+# package-lock.json
