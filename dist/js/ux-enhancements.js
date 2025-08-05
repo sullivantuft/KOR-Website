@@ -8,7 +8,7 @@
 /**
  * Initialize UX enhancements when DOM is loaded
  */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
   initializeUXEnhancements();
 });
 
@@ -72,9 +72,11 @@ const ScrollAnimations = {
 
   setupScrollProgress() {
     const progressBar = document.querySelector('.scroll-progress');
-    if (!progressBar) return;
+    if (!progressBar) {
+      return;
+    }
 
-    const updateProgress = KORUtils.DOM.throttle(() => {
+    const updateProgress = window.KORUtils.DOM.throttle(() => {
       const winScroll =
         document.body.scrollTop || document.documentElement.scrollTop;
       const height =
@@ -88,11 +90,13 @@ const ScrollAnimations = {
   },
 
   setupParallaxEffects() {
-    if (KORUtils.Device.prefersReducedMotion()) return;
+    if (window.KORUtils.Device.prefersReducedMotion()) {
+      return;
+    }
 
     const parallaxElements = document.querySelectorAll('.parallax-element');
 
-    const updateParallax = KORUtils.DOM.throttle(() => {
+    const updateParallax = window.KORUtils.DOM.throttle(() => {
       const scrolled = window.pageYOffset;
 
       parallaxElements.forEach(element => {
@@ -132,7 +136,7 @@ const ScrollAnimations = {
     document.body.appendChild(scrollButton);
 
     // Show/hide button based on scroll position
-    const toggleScrollButton = KORUtils.DOM.throttle(() => {
+    const toggleScrollButton = window.KORUtils.DOM.throttle(() => {
       if (window.pageYOffset > 300) {
         scrollButton.style.opacity = '1';
         scrollButton.style.transform = 'scale(1)';
@@ -171,7 +175,7 @@ const ButtonEnhancements = {
 
     buttons.forEach(button => {
       // Add loading state capability
-      button.addEventListener('click', e => {
+      button.addEventListener('click', () => {
         if (button.classList.contains('async-action')) {
           this.showLoadingState(button);
         }
@@ -179,7 +183,7 @@ const ButtonEnhancements = {
 
       // Enhanced hover effects
       button.addEventListener('mouseenter', () => {
-        if (!KORUtils.Device.prefersReducedMotion()) {
+        if (!window.KORUtils.Device.prefersReducedMotion()) {
           button.style.transform = 'translateY(-2px)';
         }
       });
@@ -200,7 +204,9 @@ const ButtonEnhancements = {
   },
 
   addRippleEffect() {
-    if (KORUtils.Device.prefersReducedMotion()) return;
+    if (window.KORUtils.Device.prefersReducedMotion()) {
+      return;
+    }
 
     const buttons = document.querySelectorAll(
       '.btn, .submit-button, .store-button-link'
@@ -338,7 +344,9 @@ const FormEnhancements = {
 
   addFloatingLabel(input) {
     const label = input.parentNode.querySelector('label');
-    if (!label) return;
+    if (!label) {
+      return;
+    }
 
     if (input.value) {
       label.classList.add('float');
@@ -364,7 +372,7 @@ const FormEnhancements = {
       inputs.forEach(input => {
         input.addEventListener(
           'input',
-          KORUtils.DOM.debounce(() => {
+          window.KORUtils.DOM.debounce(() => {
             this.validateField(input);
           }, 300)
         );
@@ -383,12 +391,14 @@ const FormEnhancements = {
       maxLength: field.getAttribute('maxlength')
     };
 
-    return KORUtils.Form.validateField(field, rules);
+    return window.KORUtils.Form.validateField(field, rules);
   },
 
   addCharacterCounter(textarea) {
     const maxLength = textarea.getAttribute('maxlength');
-    if (!maxLength) return;
+    if (!maxLength) {
+      return;
+    }
 
     const counter = document.createElement('div');
     counter.className = 'char-counter';
@@ -435,7 +445,7 @@ const FormEnhancements = {
 
       form.addEventListener(
         'input',
-        KORUtils.DOM.debounce(updateProgress, 200)
+        window.KORUtils.DOM.debounce(updateProgress, 200)
       );
     });
   }
@@ -455,7 +465,9 @@ const NavigationEnhancements = {
     const toggle = document.querySelector('.mobile-menu-toggle');
     const menu = document.querySelector('.mobile-nav');
 
-    if (!toggle || !menu) return;
+    if (!toggle || !menu) {
+      return;
+    }
 
     // Animate hamburger icon
     toggle.addEventListener('click', () => {
@@ -463,9 +475,9 @@ const NavigationEnhancements = {
 
       // Add smooth slide animation to menu
       if (menu.classList.contains('active')) {
-        KORUtils.Animation.slideDown(menu, 300);
+        window.KORUtils.Animation.slideDown(menu, 300);
       } else {
-        KORUtils.Animation.slideUp(menu, 300);
+        window.KORUtils.Animation.slideUp(menu, 300);
       }
     });
 
@@ -483,7 +495,9 @@ const NavigationEnhancements = {
     const path = window.location.pathname;
     const segments = path.split('/').filter(segment => segment);
 
-    if (segments.length <= 1) return;
+    if (segments.length <= 1) {
+      return;
+    }
 
     const breadcrumb = document.createElement('nav');
     breadcrumb.className = 'breadcrumb';
@@ -516,7 +530,9 @@ const NavigationEnhancements = {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
-    if (sections.length === 0 || navLinks.length === 0) return;
+    if (sections.length === 0 || navLinks.length === 0) {
+      return;
+    }
 
     const observer = new IntersectionObserver(
       entries => {
@@ -678,7 +694,9 @@ const TooltipSystem = {
 
   showTooltip(element) {
     const tooltipText = element.getAttribute('data-tooltip');
-    if (!tooltipText) return;
+    if (!tooltipText) {
+      return;
+    }
 
     const tooltip = document.createElement('div');
     tooltip.className = 'tooltip-popup';
@@ -730,7 +748,9 @@ const NotificationSystem = {
   },
 
   createContainer() {
-    if (document.querySelector('.notification-container')) return;
+    if (document.querySelector('.notification-container')) {
+      return;
+    }
 
     const container = document.createElement('div');
     container.className = 'notification-container';
@@ -805,7 +825,7 @@ const ProgressIndicators = {
     window.addEventListener('load', () => {
       const loader = document.querySelector('.page-loader');
       if (loader) {
-        KORUtils.Animation.fadeOut(loader, 500);
+        window.KORUtils.Animation.fadeOut(loader, 500);
       }
     });
   },
@@ -815,7 +835,7 @@ const ProgressIndicators = {
     const forms = document.querySelectorAll('form');
 
     forms.forEach(form => {
-      form.addEventListener('submit', e => {
+      form.addEventListener('submit', () => {
         const submitButton = form.querySelector('[type="submit"]');
         if (submitButton && !submitButton.classList.contains('no-progress')) {
           this.showButtonProgress(submitButton);
