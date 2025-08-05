@@ -33,8 +33,17 @@
     </header> -->
 
     <main class="signin-main">
+        <div id="error_msg" class="login_window" style="background-color: #ff4444; color: white; padding: 2rem; border-radius: 8px; margin: 2rem auto; max-width: 600px; text-align: center; display: none;">
+            <h1 style="margin-bottom: 1rem; color: white;">Access Denied</h1>
+            <p style="margin-bottom: 1.5rem; line-height: 1.6;">You need a valid subscription to access this personal registration page. If you think you 
+                should have access, please reach out to us on our <a href="../contact_us.html" style="color: #ffdddd; text-decoration: underline;">contact page</a>.
+            </p>
+            <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                <p style="margin: 0; font-size: 0.9em; opacity: 0.9;">To create your personal account, you need valid subscription and invoice IDs from your KOR purchase.</p>
+            </div>
+        </div>
         <div class="signin-container">
-            <div class="signin-window">
+            <div id="signin_box" class="signin-window">
                 <div class="signin-header">
                     <div class="signin-logo">
                         <img src="../images/KOR_app_Logo.png" alt="KOR Logo" class="logo-image">

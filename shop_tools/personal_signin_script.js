@@ -1,12 +1,17 @@
-var sub_Id = new URLSearchParams( window.location.search );
-sub_Id = sub_Id.get('sub_id');
-console.log(sub_Id);
-var invoice_Id = new URLSearchParams( window.location.search );
-invoice_Id = invoice_Id.get('invoice_id');
-console.log(invoice_Id);
-var plan_type = new URLSearchParams( window.location.search );
-plan_type = plan_type.get('plan_type');
-console.log(plan_type);
+// URL Parameters
+const urlParams = new URLSearchParams(window.location.search);
+const pageParams = {
+    sub_id: urlParams.get('sub_id'),
+    invoice_id: urlParams.get('invoice_id'),
+    plan_type: urlParams.get('plan_type')
+};
+
+// Legacy variables for compatibility
+var sub_Id = pageParams.sub_id;
+var invoice_Id = pageParams.invoice_id;
+var plan_type = pageParams.plan_type;
+
+console.log('Personal signin params:', pageParams);
 
 
 const signin = document.getElementById("signin");
@@ -141,8 +146,62 @@ function addInputValidation() {
     });
 }
 
-// Initialize validation
-addInputValidation();
+// Authorization Functions
+function checkAuthorization() {
+    const hasValidParams = pageParams.sub_id && pageParams.invoice_id && pageParams.plan_type;
+    
+    if (!hasValidParams) {
+        console.log('Personal authorization failed - missing required parameters:', pageParams);
+        showUnauthorizedAccess();
+        return false;
+    }
+    
+    console.log('Personal authorization successful with parameters:', pageParams);
+    return true;
+}
+
+function showUnauthorizedAccess() {
+    const errorMsgDiv = document.getElementById('error_msg');
+    const signinBox = document.getElementById('signin_box');
+    
+    if (errorMsgDiv && signinBox) {
+        errorMsgDiv.style.display = 'block';
+        signinBox.style.display = 'none';
+    }
+}
+
+function showAuthorizedAccess() {
+    const errorMsgDiv = document.getElementById('error_msg');
+    const signinBox = document.getElementById('signin_box');
+    
+    if (errorMsgDiv && signinBox) {
+        errorMsgDiv.style.display = 'none';
+        signinBox.style.display = 'block';
+    }
+}
+
+// Initialization Function
+function initializePersonalSignin() {
+    // Check authorization first
+    if (!checkAuthorization()) {
+        return; // Don't initialize form if not authorized
+    }
+    
+    // Show authorized access
+    showAuthorizedAccess();
+    
+    // Initialize validation
+    addInputValidation();
+    
+    console.log('Personal signin initialized successfully with params:', pageParams);
+}
+
+// Initialize when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePersonalSignin);
+} else {
+    initializePersonalSignin();
+}
 
 signin.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -204,7 +263,7 @@ signin.addEventListener("submit", (e) => {
             urlencoded.append("invoice_Id", invoice_Id);
             urlencoded.append("plan_type", plan_type);
             urlencoded.append("phone", phone);
-            urlencoded.append("user_id", userId); // Auth0 user ID
+            urlencoded.append("auth0_sub_id", userId); // Auth0 user ID
 
             const requestOptions = {
                 method: 'POST',

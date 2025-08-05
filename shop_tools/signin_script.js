@@ -4,244 +4,294 @@ if (!(query.includes("sub_id=") && query.includes("invoice_id=") && query.includ
     var x = document.getElementById("signin_box");
     if (x.style.display === "none") {
         x.style.display = "block";
-    } else {
-        x.style.display = "none";
+        } else {
+            elements.submitBtn.removeAttribute('aria-label');
+        }
     }
-    var y = document.getElementById("error_msg");
-    if (y.style.display === "none") {
-        y.style.display = "block";
-    } else {
-        y.style.display = "none";
-    }
+}
 
+function validateForm(formData) {
+    const errors = [];
+    
+    if (!formData.shop_name?.trim()) {
+        errors.push('Shop name is required');
+    }
+    
 
     // Use replaceState to redirect the user away and remove the querystring parameters
     // window.history.replaceState({}, document.title, "/shop_tools/login.html");
+    }
+    
+    if (!formData.password?.trim()) {
+        errors.push('Password is required');
+    } else if (formData.password.length < 8) {
+        errors.push('Password must be at least 8 characters long');
+    }
+    
+    if (!formData.phone?.trim()) {
+        errors.push('Phone number is required');
+    }
+    
+    if (!formData.shop_initials?.trim()) {
+        errors.push('Shop initials are required');
+    } else if (formData.shop_initials.length < 2 || formData.shop_initials.length > 4) {
+        errors.push('Shop initials must be 2-4 characters');
+    }
+    
+    return errors;
 }
 
+// API Functions
+async function getAuth0Token() {
+    try {
+        const response = await fetch(`${CONFIG.SERVER_BASE_URL}/getauth0Token`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({ access_token: 'auth0_token' })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to get Auth0 token: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        return result.token[0].auth0_token;
+    } catch (error) {
+        console.error('Auth0 token error:', error);
+        throw new Error('Failed to obtain authentication token');
+    }
+}
 
-var sub_Id = new URLSearchParams( window.location.search );
-sub_Id = sub_Id.get('sub_id');
-console.log(sub_Id);
-var invoice_Id = new URLSearchParams( window.location.search );
-invoice_Id = invoice_Id.get('invoice_id');
-console.log(invoice_Id);
-var plan_type = new URLSearchParams( window.location.search );
-plan_type = plan_type.get('plan_type');
-console.log(plan_type);
-
-
-const signin = document.getElementById("signin");
-
-
-signin.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-
-    console.log('form has been submitted');
-    // variables from form
-    var shop_name = document.getElementById("shop_name").value;
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var phone = document.getElementById("phone").value;
-    var shop_init = document.getElementById("shop_initials").value;
-
-    // auth0 token call
-    var auth0Headers = new Headers();
-    auth0Headers.append("Content-Type", "application/x-www-form-urlencoded");
-
-    var auth0urlencoded = new URLSearchParams();
-    auth0urlencoded.append("access_token", "auth0_token");
-
-    var requestOptions = {
-    method: 'POST',
-    headers: auth0Headers,
-    body: auth0urlencoded,
-    redirect: 'follow'
-    };
-    let auth0_token;
-    fetch("https://jmrcycling.com:3001/getauth0Token", requestOptions)
-    .then(response => response.text())
-    .then(result => {
-        console.log(result);
-        // console.log(JSON.parse(result));
-        result = JSON.parse(result)
-        console.log(result.token[0].auth0_token)
-        auth0_token = result.token[0].auth0_token;
-        // Dev code
-        const myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-        myHeaders.append("Authorization", "Bearer " + auth0_token);
-        myHeaders.append("Cookie", "did=s%3Av0%3A18447825-b02f-4979-a834-64659d118b10.2%2F73BuZf6zLVVPTx5t20Dh4Ud9OSjJp9KQNsPMgGKV4; did_compat=s%3Av0%3A18447825-b02f-4979-a834-64659d118b10.2%2F73BuZf6zLVVPTx5t20Dh4Ud9OSjJp9KQNsPMgGKV4");
-
-        const urlencoded = new URLSearchParams();
-        urlencoded.append("email", email);
-        urlencoded.append("password", password);
-        urlencoded.append("connection", "Username-Password-Authentication");
-        urlencoded.append("name", shop_name);
-
-        const requestOptions2 = {
-        method: "POST",
-        headers: myHeaders,
-        body: urlencoded,
-        redirect: "follow"
-        };
-
-        fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions2)
-            .then((response) => response.text())
-            .then((result) => {
-                console.log(result);
-                result = JSON.parse(result);
-                let user_id = result.user_id;
-                console.log(user_id);
-                var myHeaders = new Headers();
-                myHeaders.append("Authorization", "Bearer 97f94bee48b8ebf793f0c445c1ade27070625622");
-                myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-
-                var urlencoded = new URLSearchParams();
-                urlencoded.append("shop_name", shop_name);
-                urlencoded.append("email", email);
-                urlencoded.append("sub_Id", sub_Id);
-                urlencoded.append("invoice_Id", invoice_Id);
-                urlencoded.append("plan_type", plan_type);
-                urlencoded.append("phone", phone);
-                urlencoded.append("user_id", user_id);
-                urlencoded.append("shop_init", shop_init);
-
-                var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: urlencoded,
-                redirect: 'follow'
-                };
-
-                fetch("https://jmrcycling.com:3001/signinShop", requestOptions)
-                .then(response => response.text())
-                .then(result => {
-                    console.log(result);
-                    var urlencoded2 = new URLSearchParams();
-                    urlencoded2.append("email", email)
-                    urlencoded2.append("auth0_sub_id", user_id)
-
-                    var requestOptions2 = {
-                        method: 'POST',
-                        headers: myHeaders,
-                        body: urlencoded2,
-                        redirect: 'follow'
-                    };
-                    fetch("https://jmrcycling.com:3001/loginShop", requestOptions2)
-                            .then(response => response.json())
-                            .then(result => {
-                                console.log(('plan type ' + result.plan_type[0].plan_type));
-                                console.log(('shop_name ' + result.plan_type[0].shop_name));
-
-                                sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
-
-                                sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
-                                sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
-                                sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
-                                console.log(sessionStorage.getItem('shop_name'));
-                                console.log(sessionStorage.getItem('shop_code'));
-                                console.log(sessionStorage.getItem('plan_type'));
-                                console.log(sessionStorage.getItem('shop_token'));
-                                
-                                window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
-                            })
-                            .catch(error => console.log('error', error));
-                })
-                .catch(error => console.log('error', error));
-
-                        
-
+async function createAuth0User(formData, auth0Token) {
+    try {
+        const response = await fetch(CONFIG.AUTH0_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Authorization': `Bearer ${auth0Token}`
+            },
+            body: new URLSearchParams({
+                email: formData.email,
+                password: formData.password,
+                connection: 'Username-Password-Authentication',
+                name: formData.shop_name
             })
-            .catch((error) => console.error(error));
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Auth0 user creation failed:', errorText);
+            throw new Error('Failed to create user account');
+        }
+        
+        const result = await response.json();
+        return result.user_id;
+    } catch (error) {
+        console.error('Auth0 user creation error:', error);
+        throw new Error(error.message || 'Failed to create user account');
+    }
+}
 
-        // call create user auth0 API call
-        // var createUserHeaders = new Headers();
-        // createUserHeaders.append("Authorization", "Bearer " + auth0_token);
-        // createUserHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+async function createShopAccount(formData, userId) {
+    try {
+        const response = await fetch(`${CONFIG.SERVER_BASE_URL}/signinShop`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${CONFIG.BEARER_TOKEN}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                shop_name: formData.shop_name,
+                email: formData.email,
+                sub_Id: pageParams.sub_id || '',
+                invoice_Id: pageParams.invoice_id || '',
+                plan_type: pageParams.plan_type || '',
+                phone: formData.phone,
+                user_id: userId,
+                shop_init: formData.shop_initials
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Failed to create shop account: ${response.status}`);
+        }
+        
+        return await response.text();
+    } catch (error) {
+        console.error('Shop account creation error:', error);
+        throw new Error('Failed to create shop account');
+    }
+}
 
-        // var createUserUrlencoded = new URLSearchParams();
-        // createUserUrlencoded.append("email", email);
-        // createUserUrlencoded.append("password", password);
-        // createUserUrlencoded.append("connection", "Username-Password-Authentication");
-        // createUserUrlencoded.append("name", shop_name);
+async function loginShop(formData, userId) {
+    try {
+        const response = await fetch(`${CONFIG.SERVER_BASE_URL}/loginShop`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${CONFIG.BEARER_TOKEN}`,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: new URLSearchParams({
+                email: formData.email,
+                auth0_sub_id: userId
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Login failed: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (!result.plan_type || !result.plan_type[0]) {
+            throw new Error('Invalid login response - missing shop data');
+        }
+        
+        return result.plan_type[0];
+    } catch (error) {
+        console.error('Shop login error:', error);
+        throw new Error('Failed to complete login');
+    }
+}
 
-        // var requestOptions = {
-        //     method: 'POST',
-        //     headers: createUserHeaders,
-        //     body: createUserUrlencoded,
-        //     redirect: 'follow'
-        //   };
-          
-        //   fetch("https://dev-oseu3r74.us.auth0.com/api/v2/users", requestOptions)
-        //     .then(response => response.text())
-            // .then(result => {
-            //     console.log(result);
-            //     result = JSON.parse(result);
-            //     let user_id = result.user_id;
-            //     console.log(user_id);
-            //     var myHeaders = new Headers();
-            //     myHeaders.append("Authorization", "Bearer 97f94bee48b8ebf793f0c445c1ade27070625622");
-            //     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+// Main Signup Process
+async function handleShopSignup(formData) {
+    try {
+        setLoadingState(true);
+        
+        // Step 1: Get Auth0 token
+        showSuccess('Getting authentication token...');
+        const auth0Token = await getAuth0Token();
+        
+        // Step 2: Create Auth0 user
+        showSuccess('Creating user account...');
+        const userId = await createAuth0User(formData, auth0Token);
+        
+        // Step 3: Create shop account
+        showSuccess('Setting up shop account...');
+        await createShopAccount(formData, userId);
+        
+        // Step 4: Login and get shop data
+        showSuccess('Completing setup...');
+        const shopData = await loginShop(formData, userId);
+        
+        // Step 5: Store session data
+        sessionStorage.setItem('shop_name', shopData.shop_name);
+        sessionStorage.setItem('shop_code', shopData.shop_code);
+        sessionStorage.setItem('plan_type', shopData.plan_type);
+        sessionStorage.setItem('shop_token', shopData.shop_token);
+        
+        // Step 6: Redirect to dashboard
+        showSuccess('Account created successfully! Redirecting...');
+        
+        setTimeout(() => {
+            const dashboardUrl = `./dashboard.html?plan_type=${encodeURIComponent(shopData.plan_type)}&shop_name=${encodeURIComponent(shopData.shop_name)}&shop_code=${encodeURIComponent(shopData.shop_code)}`;
+            window.location.replace(dashboardUrl);
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Signup process failed:', error);
+        showError(error.message || 'An error occurred during account creation. Please try again.');
+        setLoadingState(false);
+    }
+}
 
-            //     var urlencoded = new URLSearchParams();
-            //     urlencoded.append("shop_name", shop_name);
-            //     urlencoded.append("email", email);
-            //     urlencoded.append("sub_Id", sub_Id);
-            //     urlencoded.append("invoice_Id", invoice_Id);
-            //     urlencoded.append("plan_type", plan_type);
-            //     urlencoded.append("phone", phone);
-            //     urlencoded.append("user_id", user_id);
+// Form Handler
+async function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    // Collect form data
+    const formData = {
+        shop_name: elements.inputs.shop_name?.value?.trim() || '',
+        email: elements.inputs.email?.value?.trim() || '',
+        password: elements.inputs.password?.value || '',
+        phone: elements.inputs.phone?.value?.trim() || '',
+        shop_initials: elements.inputs.shop_initials?.value?.trim() || ''
+    };
+    
+    // Validate form
+    const validationErrors = validateForm(formData);
+    if (validationErrors.length > 0) {
+        showError(validationErrors.join(', '));
+        return;
+    }
+    
+    // Process signup
+    await handleShopSignup(formData);
+}
 
-            //     var requestOptions = {
-            //     method: 'POST',
-            //     headers: myHeaders,
-            //     body: urlencoded,
-            //     redirect: 'follow'
-            //     };
+// Authorization Functions
+function checkAuthorization() {
+    const hasValidParams = pageParams.sub_id && pageParams.invoice_id && pageParams.plan_type;
+    
+    if (!hasValidParams) {
+        console.log('Authorization failed - missing required parameters:', pageParams);
+        showUnauthorizedAccess();
+        return false;
+    }
+    
+    console.log('Authorization successful with parameters:', pageParams);
+    return true;
+}
 
-            //     fetch("https://jmrcycling.com:3001/signinShop", requestOptions)
-            //     .then(response => response.text())
-            //     .then(result => {
-            //         console.log(result);
-            //         var urlencoded2 = new URLSearchParams();
-            //         urlencoded2.append("email", email)
-            //         urlencoded2.append("auth0_sub_id", user_id)
+function showUnauthorizedAccess() {
+    const errorMsgDiv = document.getElementById('error_msg');
+    const signinBox = document.getElementById('signin_box');
+    
+    if (errorMsgDiv && signinBox) {
+        errorMsgDiv.style.display = 'block';
+        signinBox.style.display = 'none';
+    }
+}
 
-            //         var requestOptions2 = {
-            //             method: 'POST',
-            //             headers: myHeaders,
-            //             body: urlencoded2,
-            //             redirect: 'follow'
-            //         };
-            //         fetch("https://jmrcycling.com:3001/loginShop", requestOptions2)
-            //                 .then(response => response.json())
-            //                 .then(result => {
-            //                     console.log(('plan type ' + result.plan_type[0].plan_type));
-            //                     console.log(('shop_name ' + result.plan_type[0].shop_name));
+function showAuthorizedAccess() {
+    const errorMsgDiv = document.getElementById('error_msg');
+    const signinBox = document.getElementById('signin_box');
+    
+    if (errorMsgDiv && signinBox) {
+        errorMsgDiv.style.display = 'none';
+        signinBox.style.display = 'block';
+    }
+}
 
-            //                     sessionStorage.setItem('shop_name', result.plan_type[0].shop_name);
+// Initialization
+function initializeSigninForm() {
+    // Check authorization first
+    if (!checkAuthorization()) {
+        return; // Don't initialize form if not authorized
+    }
+    
+    // Show authorized access
+    showAuthorizedAccess();
+    
+    // Get DOM elements
+    elements.form = document.getElementById('signin');
+    elements.submitBtn = document.querySelector('.signin-btn');
+    elements.btnText = document.querySelector('.btn-text');
+    elements.btnSpinner = document.querySelector('.btn-spinner');
+    elements.errorDiv = document.getElementById('error');
+    
+    // Get input elements
+    elements.inputs.shop_name = document.getElementById('shop_name');
+    elements.inputs.email = document.getElementById('email');
+    elements.inputs.password = document.getElementById('password');
+    elements.inputs.phone = document.getElementById('phone');
+    elements.inputs.shop_initials = document.getElementById('shop_initials');
+    
+    // Add form submit handler
+    if (elements.form) {
+        elements.form.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // Log successful initialization
+    console.log('Shop Signin initialized successfully with params:', pageParams);
+}
 
-            //                     sessionStorage.setItem('shop_code', result.plan_type[0].shop_code);
-            //                     sessionStorage.setItem('plan_type', result.plan_type[0].plan_type);
-            //                     sessionStorage.setItem('shop_token', result.plan_type[0]. shop_token)
-            //                     console.log(sessionStorage.getItem('shop_name'));
-            //                     console.log(sessionStorage.getItem('shop_code'));
-            //                     console.log(sessionStorage.getItem('plan_type'));
-            //                     console.log(sessionStorage.getItem('shop_token'));
-                                
-            //                     window.location.replace("./dashboard.html?plan_type=" + result.plan_type[0].plan_type + "&shop_name=" + result.plan_type[0].shop_name);
-            //                 })
-            //                 .catch(error => console.log('error', error));
-            //     })
-            //     .catch(error => console.log('error', error));
-
-                        
-
-            // })
-            // .catch(error => console.log('error', error));
-    })
-    .catch(error => console.log('error', error));
-
-});
+// Initialize when DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSigninForm);
+} else {
+    initializeSigninForm();
+}

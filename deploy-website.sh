@@ -43,15 +43,21 @@ echo ""
 echo "📁 Uploading modified files..."
 upload_file "index.html" "index.html"
 upload_file "app_auth.html" "app_auth.html"
+upload_file "contact_us.html" "contact_us.html"
+upload_file "personal_plans.html" "personal_plans.html"
 upload_file "shop_tools/dashboard.html" "shop_tools/dashboard.html"
 upload_file "shop_tools/personal_signin.html" "shop_tools/personal_signin.html"
 upload_file "shop_tools/personal_signin_script.js" "shop_tools/personal_signin_script.js"
+upload_file "shop_tools/signin.html" "shop_tools/signin.html"
+upload_file "shop_tools/signin_script.js" "shop_tools/signin_script.js"
 upload_file "styles/styles.css" "styles/styles.css"
 
 # Upload new files
 echo ""
 echo "📁 Uploading new files..."
 upload_file "qr-guide.html" "qr-guide.html"
+upload_file "shop_tools/test_authorization.html" "shop_tools/test_authorization.html"
+upload_file "shop_tools/test_personal_authorization.html" "shop_tools/test_personal_authorization.html"
 
 # Verify deployment
 echo ""
