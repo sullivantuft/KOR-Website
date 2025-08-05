@@ -46,7 +46,9 @@ const DOMUtils = {
    * @param {Object} options - Event options
    */
   addEventListener: (element, event, handler, options = {}) => {
-    if (!element || typeof handler !== 'function') return;
+    if (!element || typeof handler !== 'function') {
+      return;
+    }
 
     try {
       element.addEventListener(event, handler, options);
@@ -62,7 +64,9 @@ const DOMUtils = {
    * @param {Function} handler - Event handler
    */
   removeEventListener: (element, event, handler) => {
-    if (!element || typeof handler !== 'function') return;
+    if (!element || typeof handler !== 'function') {
+      return;
+    }
 
     try {
       element.removeEventListener(event, handler);
@@ -77,7 +81,9 @@ const DOMUtils = {
    * @returns {boolean}
    */
   isInViewport: element => {
-    if (!element) return false;
+    if (!element) {
+      return false;
+    }
 
     const rect = element.getBoundingClientRect();
     return (
@@ -115,7 +121,7 @@ const DOMUtils = {
    */
   throttle: (func, limit) => {
     let inThrottle;
-    return function () {
+    return function() {
       const args = arguments;
       const context = this;
       if (!inThrottle) {
@@ -147,7 +153,7 @@ const FormUtils = {
    * @returns {boolean}
    */
   isValidPhone: phone => {
-    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    const phoneRegex = /^[+]?[1-9][\d]{0,15}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
   },
 
@@ -186,7 +192,9 @@ const FormUtils = {
    * @param {string} message - Error message
    */
   showError: (field, message) => {
-    if (!field) return;
+    if (!field) {
+      return;
+    }
 
     // Remove existing error states
     FormUtils.clearError(field);
@@ -211,7 +219,9 @@ const FormUtils = {
    * @param {HTMLElement} field - Form field
    */
   clearError: field => {
-    if (!field) return;
+    if (!field) {
+      return;
+    }
 
     field.classList.remove('error');
     field.classList.add('success');
@@ -239,7 +249,9 @@ const FormUtils = {
    * @returns {boolean}
    */
   validateField: (field, rules = {}) => {
-    if (!field) return false;
+    if (!field) {
+      return false;
+    }
 
     const value = field.value;
     const fieldType = field.type;
@@ -295,7 +307,9 @@ const AnimationUtils = {
    * @param {number} duration - Animation duration in ms
    */
   fadeIn: (element, duration = 300) => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     element.style.opacity = '0';
     element.style.display = 'block';
@@ -322,7 +336,9 @@ const AnimationUtils = {
    * @param {number} duration - Animation duration in ms
    */
   fadeOut: (element, duration = 300) => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const startTime = performance.now();
     const startOpacity = parseFloat(getComputedStyle(element).opacity);
@@ -349,7 +365,9 @@ const AnimationUtils = {
    * @param {number} duration - Animation duration in ms
    */
   slideDown: (element, duration = 300) => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     element.style.height = '0';
     element.style.overflow = 'hidden';
@@ -381,7 +399,9 @@ const AnimationUtils = {
    * @param {number} duration - Animation duration in ms
    */
   slideUp: (element, duration = 300) => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
 
     const startHeight = element.offsetHeight;
     const startTime = performance.now();
@@ -504,7 +524,7 @@ const NetworkUtils = {
    * @param {Object} options - Request options
    * @returns {Promise}
    */
-  request: async (url, options = {}) => {
+  request: async(url, options = {}) => {
     const defaultOptions = {
       method: 'GET',
       headers: {
@@ -601,10 +621,18 @@ const DeviceUtils = {
   getScreenSize: () => {
     const width = window.innerWidth;
 
-    if (width <= 480) return 'mobile-small';
-    if (width <= 768) return 'mobile-large';
-    if (width <= 1024) return 'tablet';
-    if (width <= 1280) return 'desktop-small';
+    if (width <= 480) {
+      return 'mobile-small';
+    }
+    if (width <= 768) {
+      return 'mobile-large';
+    }
+    if (width <= 1024) {
+      return 'tablet';
+    }
+    if (width <= 1280) {
+      return 'desktop-small';
+    }
     return 'desktop-large';
   },
 

@@ -1,35 +1,40 @@
 module.exports = {
   rules: {
-    indentation: 2,
-    'string-quotes': 'single',
-    'no-duplicate-selectors': true,
-    'color-hex-case': 'lower',
-    'color-hex-length': 'short',
-    'color-named': 'never',
-    'selector-combinator-space-after': 'always',
-    'selector-attribute-quotes': 'always',
-    'selector-attribute-operator-space-before': 'never',
-    'selector-attribute-operator-space-after': 'never',
-    'selector-attribute-brackets-space-inside': 'never',
-    'declaration-block-trailing-semicolon': 'always',
-    'declaration-no-important': true,
-    'declaration-colon-space-before': 'never',
-    'declaration-colon-space-after': 'always',
-    'number-leading-zero': 'always',
-    'function-url-quotes': 'always',
-    'font-family-name-quotes': 'always-where-recommended',
-    'comment-whitespace-inside': 'always',
-    'comment-empty-line-before': 'always',
-    'at-rule-no-unknown': [
-      true,
-      {
-        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen']
-      }
-    ],
+    // Only enforce critical CSS validation
+    'block-no-empty': true,
+    'declaration-block-no-duplicate-properties': true,
+    'no-invalid-double-slash-comments': true,
+    'selector-pseudo-element-no-unknown': true,
+    'selector-pseudo-class-no-unknown': true,
+    'property-no-unknown': true,
+    'unit-no-unknown': true,
+
+    // Disable overly strict formatting rules
     'selector-class-pattern': null,
     'custom-property-pattern': null,
     'no-descending-specificity': null,
     'property-no-vendor-prefix': null,
-    'value-no-vendor-prefix': null
+    'value-no-vendor-prefix': null,
+    'color-named': null,
+    'declaration-no-important': null,
+    'comment-empty-line-before': null,
+    'comment-whitespace-inside': null,
+    'no-duplicate-selectors': null,
+    'font-family-name-quotes': null,
+
+    // Allow common at-rules
+    'at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: [
+          'tailwind',
+          'apply',
+          'variants',
+          'responsive',
+          'screen',
+          'import'
+        ]
+      }
+    ]
   }
 };

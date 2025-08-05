@@ -68,7 +68,9 @@ const imageOptimization = {
   },
 
   getOptimizedImageSrc(originalSrc, size = null) {
-    if (!originalSrc) return '';
+    if (!originalSrc) {
+      return '';
+    }
 
     // For production, implement CDN logic here
     let optimizedSrc = originalSrc;
