@@ -1,0 +1,76 @@
+{
+  "id": "simple-kor-test",
+  "version": "2.0",
+  "name": "SimpleKORTest",
+  "url": "http://localhost:8080",
+  "tests": [{
+    "id": "basic-navigation-test",
+    "name": "BasicNavigationTest",
+    "commands": [{
+      "id": "open-homepage",
+      "comment": "",
+      "command": "open",
+      "target": "/index.html",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "verify-title",
+      "comment": "",
+      "command": "verifyTitle",
+      "target": "KOR | Smart Bike Maintenance Tracking - Never Miss Maintenance Again",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "verify-logo-present",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "css=.icon",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "click-contact-link",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Contact Us",
+      "targets": [
+        ["linkText=Contact Us", "linkText"],
+        ["css=.link:nth-child(6)", "css:finder"],
+        ["xpath=//a[contains(text(),'Contact Us')]", "xpath:link"]
+      ],
+      "value": ""
+    }, {
+      "id": "verify-contact-page",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "css=h1",
+      "targets": [],
+      "value": "5000"
+    }, {
+      "id": "go-back-home",
+      "comment": "",
+      "command": "click",
+      "target": "linkText=Home",
+      "targets": [
+        ["linkText=Home", "linkText"]
+      ],
+      "value": ""
+    }, {
+      "id": "verify-back-home",
+      "comment": "",
+      "command": "waitForElementVisible",
+      "target": "css=.icon",
+      "targets": [],
+      "value": "5000"
+    }]
+  }],
+  "suites": [{
+    "id": "default-suite",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["basic-navigation-test"]
+  }],
+  "urls": ["http://localhost:8080"],
+  "plugins": []
+}

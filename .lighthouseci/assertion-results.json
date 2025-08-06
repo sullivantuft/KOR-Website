@@ -1,0 +1,226 @@
+[
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "button-name",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Buttons do not have an accessible name",
+    "auditDocumentationLink": "https://dequeuniversity.com/rules/axe/4.6/button-name"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "color-contrast",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Background and foreground colors do not have a sufficient contrast ratio.",
+    "auditDocumentationLink": "https://dequeuniversity.com/rules/axe/4.6/color-contrast"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "csp-xss",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Ensure CSP is effective against XSS attacks",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/best-practices/csp-xss/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "heading-order",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Heading elements are not in a sequentially-descending order",
+    "auditDocumentationLink": "https://dequeuniversity.com/rules/axe/4.6/heading-order"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "installable-manifest",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Web app manifest or service worker do not meet the installability requirements",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/pwa/installable-manifest/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "maskable-icon",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Manifest doesn't have a maskable icon",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/pwa/maskable-icon-audit/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "meta-description",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Document does not have a meta description",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/seo/meta-description/"
+  },
+  {
+    "name": "maxLength",
+    "expected": 0,
+    "actual": 1,
+    "values": [
+      1,
+      1
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "render-blocking-resources",
+    "level": "warn",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Eliminate render-blocking resources",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "service-worker",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Does not register a service worker that controls page and `start_url`",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/pwa/service-worker/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "splash-screen",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Is not configured for a custom splash screen",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/pwa/splash-screen/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "themed-omnibox",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Does not set a theme color for the address bar.",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/pwa/themed-omnibox/"
+  },
+  {
+    "name": "maxLength",
+    "expected": 0,
+    "actual": 1,
+    "values": [
+      1,
+      1
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "unminified-css",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Minify CSS",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/unminified-css/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0,
+    "values": [
+      0,
+      0
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditId": "unsized-images",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Image elements do not have explicit `width` and `height`",
+    "auditDocumentationLink": "https://web.dev/optimize-cls/#images-without-dimensions"
+  },
+  {
+    "name": "maxLength",
+    "expected": 0,
+    "actual": 1,
+    "values": [
+      1,
+      1
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "uses-responsive-images",
+    "level": "error",
+    "url": "http://localhost:50305/FAQ.html",
+    "auditTitle": "Properly size images",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/uses-responsive-images/"
+  }
+]
