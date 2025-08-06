@@ -28,3 +28,6 @@ Thumbs.db
 
 # Package lock files - we commit package-lock.json for CI consistency
 # package-lock.json
+
+# Deployment logs
+deploy-*.log
