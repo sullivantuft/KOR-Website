@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KOR - Connecting to Strava...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #A1CEDC 0%, #1D3D47 100%);
+            color: white;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #fc6b03;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .debug {
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: left;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Connecting to KOR...</h2>
+        <div class="spinner"></div>
+        <p>Please wait while we redirect you back to the app.</p>
+        <p><small>If nothing happens, please return to the KOR app manually.</small></p>
+        
+        <div class="debug">
+            <strong>Debug Info:</strong><br>
+            <span id="debug-info">Loading...</span>
+        </div>
+    </div>
+
+    <script>
+        function handleCallback() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const state = urlParams.get('state');
+            const error = urlParams.get('error');
+            
+            // Debug information
+            document.getElementById('debug-info').innerHTML = 
+                `URL: ${window.location.href}<br>` +
+                `Code: ${code ? 'present' : 'missing'}<br>` +
+                `State: ${state || 'missing'}<br>` +
+                `Error: ${error || 'none'}`;
+            
+            console.log('OAuth callback received:', { 
+                url: window.location.href,
+                code: code ? 'present' : 'missing', 
+                state, 
+                error 
+            });
+            
+            if (error) {
+                alert('Authentication failed: ' + error);
+                return;
+            }
+            
+            if (!code) {
+                alert('No authorization code received');
+                return;
+            }
+            
+            // Build the deep link URL to return to the app
+            const deepLinkScheme = `kor://auth?code=${encodeURIComponent(code)}`;
+            const appSchemeWithState = state ? `${deepLinkScheme}&state=${encodeURIComponent(state)}` : deepLinkScheme;
+            
+            console.log('Redirecting to app:', appSchemeWithState);
+            
+            // Try to open the app
+            window.location.href = appSchemeWithState;
+            
+            // Fallback: if the app doesn't open after 3 seconds, show instructions
+            setTimeout(() => {
+                if (document.visibilityState === 'visible') {
+                    document.body.innerHTML = `
+                        <div class="container">
+                            <h2>Almost Done!</h2>
+                            <p>Please return to the KOR app to complete the connection.</p>
+                            <p><strong>If the app didn't open automatically:</strong></p>
+                            <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
+                                <li>Open the KOR app manually</li>
+                                <li>Try the connection process again</li>
+                            </ol>
+                            <br>
+                            <button onclick="window.location.href='${appSchemeWithState}'" 
+                                    style="padding: 12px 24px; background: #fc6b03; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
+                                Open KOR App
+                            </button>
+                            <div class="debug">
+                                <strong>Debug Info:</strong><br>
+                                Deep link: ${appSchemeWithState}
+                            </div>
+                        </div>
+                    `;
+                }
+            }, 3000);
+        }
+        
+        // Execute when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', handleCallback);
+        } else {
+            handleCallback();
+        }
+    </script>
+</body>
+</html>

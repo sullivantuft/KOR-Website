@@ -162,6 +162,16 @@ upload_file() {
     
     echo "📤 Uploading: $local_file → $remote_path"
     
+    # Extract directory from remote path and create it via SSH if needed
+    remote_dir=$(dirname "$remote_path")
+    
+    # Create directories if they don't exist (skip if it's just ".")
+    if [[ "$remote_dir" != "." ]]; then
+        # Use SSH to create the directory structure
+        ssh -o StrictHostKeyChecking=no root@jmrcycling.com "mkdir -p /var/www/jmrcycling.com/$remote_dir" >> "$DEPLOY_LOG" 2>&1
+    fi
+    
+    # Upload the file via SFTP
     sftp -o StrictHostKeyChecking=no root@jmrcycling.com << EOF >> "$DEPLOY_LOG" 2>&1
 cd /var/www/jmrcycling.com
 put "$local_file" "$remote_path"
@@ -203,6 +213,7 @@ echo "📁 Uploading new files..."
 upload_file "qr-guide.html" "qr-guide.html"
 upload_file "shop_tools/test_authorization.html" "shop_tools/test_authorization.html"
 upload_file "shop_tools/test_personal_authorization.html" "shop_tools/test_personal_authorization.html"
+upload_file "oauth/authorize/index.html" "oauth/authorize/index.html"
 
 # Verify deployment
 echo ""
