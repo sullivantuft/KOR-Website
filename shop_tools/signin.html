@@ -5,9 +5,70 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KOR | Shop Sign Up</title>
-    <link type="text/css" rel="stylesheet" href="../styles/styles.css" />
-    <link rel="icon" href="../images/KOR_app_Logo.png" />
+    <link type="text/css" rel="stylesheet" href="/styles/styles.css" />
+    <link rel="icon" href="/images/KOR_app_Logo.png" />
     <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    
+    <!-- Add missing configuration scripts -->
+    <script>
+      // URL Parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const pageParams = {
+        sub_id: urlParams.get('sub_id'),
+        invoice_id: urlParams.get('invoice_id'),
+        plan_type: urlParams.get('plan_type')
+      };
+
+      // Configuration and server settings
+      const CONFIG = {
+        SERVER_BASE_URL: 'https://jmrcycling.com:3001',
+        AUTH0_API_URL: 'https://dev-oseu3r74.us.auth0.com/api/v2/users',
+        BEARER_TOKEN: 'MRCYCLING-API-ENDPOINT-TOKEN'
+      };
+
+      // UI Elements
+      const elements = {
+        form: null,
+        submitBtn: null,
+        btnText: null,
+        btnSpinner: null,
+        errorDiv: null,
+        inputs: {}
+      };
+
+      // Helper functions
+      function showError(message) {
+        const errorDiv = document.getElementById('error');
+        if (errorDiv) {
+          errorDiv.textContent = message;
+          errorDiv.style.display = 'block';
+          setTimeout(() => {
+            errorDiv.style.display = 'none';
+          }, 5000);
+        }
+      }
+
+      function showSuccess(message) {
+        console.log('Success:', message);
+      }
+
+      function setLoadingState(loading) {
+        if (!elements.submitBtn || !elements.btnText || !elements.btnSpinner) return;
+        
+        if (loading) {
+          elements.submitBtn.disabled = true;
+          elements.btnText.textContent = 'Creating Account...';
+          elements.btnSpinner.style.display = 'inline-block';
+          elements.submitBtn.classList.add('btn-loading');
+        } else {
+          elements.submitBtn.disabled = false;
+          elements.btnText.textContent = 'Create Account';
+          elements.btnSpinner.style.display = 'none';
+          elements.submitBtn.classList.remove('btn-loading');
+        }
+      }
+    </script>
+    
     <!--used during development, if development is buggy. Try commenting out this line-->
     <script defer src="signin_script.js"></script>
     <!-- <script defer src="https://jmrcycling.com/shop_tools/signin_script.js"></script> -->
@@ -109,7 +170,7 @@ signin.addEventListener("submit", (e) => {
           <div class="signin-header">
             <div class="signin-logo">
               <img
-                src="../images/KOR_app_Logo.png"
+                src="/images/KOR_app_Logo.png"
                 alt="KOR Logo"
                 class="logo-image"
               />
