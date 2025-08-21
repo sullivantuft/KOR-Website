@@ -379,14 +379,9 @@
   font-size: 0.875rem;
   color: #7f8c8d;
   margin-top: 0.5rem;
-  opacity: 0;
-  transform: translateY(-4px);
-  transition: all 0.3s ease;
-}
-
-.input-group input:focus ~ .field-hint {
   opacity: 1;
   transform: translateY(0);
+  transition: all 0.3s ease;
 }
 
 /* Form Actions */
