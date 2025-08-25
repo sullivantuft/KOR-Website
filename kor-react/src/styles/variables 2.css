@@ -1,0 +1,225 @@
+/* ==========================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   ========================================== */
+
+:root {
+  /* ==========================================
+     COLOR PALETTE
+     ========================================== */
+  
+  /* Primary Brand Colors */
+  --primary-color: #2e4053;
+  --secondary-color: #616161;
+  --accent1-color: #85ffc7;
+  --accent2-color: #110B11;
+  --accent3-color: #38302e;
+  
+  /* Semantic Colors */
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --error-color: #dc3545;
+  --info-color: #17a2b8;
+  
+  /* Neutral Colors */
+  --white: #ffffff;
+  --light-gray: #f8f9fa;
+  --medium-gray: #6c757d;
+  --dark-gray: #343a40;
+  --black: #000000;
+  
+  /* ==========================================
+     TYPOGRAPHY
+     ========================================== */
+  
+  /* Font Families */
+  --heading-font: 'League Gothic', Arial, sans-serif;
+  --paragraph-font: 'Lato', Helvetica, Arial, sans-serif;
+  --monospace-font: 'Courier New', Courier, monospace;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px */
+  --font-size-3xl: 1.875rem;  /* 30px */
+  --font-size-4xl: 2.25rem;   /* 36px */
+  --font-size-5xl: 3rem;      /* 48px */
+  --font-size-6xl: 3.75rem;   /* 60px */
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* ==========================================
+     SPACING
+     ========================================== */
+  
+  --space-xs: 0.25rem;   /* 4px */
+  --space-sm: 0.5rem;    /* 8px */
+  --space-md: 1rem;      /* 16px */
+  --space-lg: 1.5rem;    /* 24px */
+  --space-xl: 2rem;      /* 32px */
+  --space-2xl: 3rem;     /* 48px */
+  --space-3xl: 4rem;     /* 64px */
+  --space-4xl: 6rem;     /* 96px */
+  --space-5xl: 8rem;     /* 128px */
+  
+  /* ==========================================
+     LAYOUT
+     ========================================== */
+  
+  /* Container Widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1536px;
+  
+  /* Breakpoints */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* Z-Index Scale */
+  --z-dropdown: 1000;
+  --z-sticky: 1010;
+  --z-fixed: 1020;
+  --z-modal-backdrop: 1030;
+  --z-modal: 1040;
+  --z-popover: 1050;
+  --z-tooltip: 1060;
+  --z-toast: 1070;
+  
+  /* ==========================================
+     BORDERS & RADIUS
+     ========================================== */
+  
+  --border-width-thin: 1px;
+  --border-width-medium: 2px;
+  --border-width-thick: 4px;
+  
+  --border-radius-sm: 0.25rem;  /* 4px */
+  --border-radius-md: 0.5rem;   /* 8px */
+  --border-radius-lg: 0.75rem;  /* 12px */
+  --border-radius-xl: 1rem;     /* 16px */
+  --border-radius-full: 50%;
+  
+  /* ==========================================
+     SHADOWS
+     ========================================== */
+  
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  
+  /* ==========================================
+     TRANSITIONS & ANIMATIONS
+     ========================================== */
+  
+  --transition-fast: 150ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ==========================================
+     CONTEXTUAL COLORS
+     ========================================== */
+  
+  /* Text Colors */
+  --text-primary: var(--accent2-color);
+  --text-secondary: var(--medium-gray);
+  --text-muted: #6c757d;
+  --text-white: var(--white);
+  --text-dark: var(--dark-gray);
+  
+  /* Background Colors */
+  --bg-primary: var(--primary-color);
+  --bg-secondary: var(--secondary-color);
+  --bg-light: var(--light-gray);
+  --bg-white: var(--white);
+  --bg-dark: var(--dark-gray);
+  
+  /* Link Colors */
+  --link-color: var(--primary-color);
+  --link-hover-color: var(--accent1-color);
+  --link-visited-color: var(--accent3-color);
+  
+  /* Button Colors */
+  --btn-primary-bg: var(--primary-color);
+  --btn-primary-text: var(--white);
+  --btn-secondary-bg: var(--secondary-color);
+  --btn-secondary-text: var(--white);
+  
+  /* Form Colors */
+  --input-border: #ced4da;
+  --input-border-focus: var(--primary-color);
+  --input-bg: var(--white);
+  --input-text: var(--text-primary);
+  
+  /* Status Colors */
+  --border-success: var(--success-color);
+  --border-warning: var(--warning-color);
+  --border-error: var(--error-color);
+  --border-info: var(--info-color);
+}
+
+/* ==========================================
+   DARK MODE VARIABLES
+   ========================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Override colors for dark mode */
+    --text-primary: var(--white);
+    --text-secondary: #adb5bd;
+    --text-muted: #6c757d;
+    
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-light: #343a40;
+    --bg-white: #212529;
+    
+    --input-bg: #343a40;
+    --input-border: #495057;
+    --input-text: var(--white);
+  }
+}
+
+/* ==========================================
+   REDUCED MOTION PREFERENCES
+   ========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+    --transition-normal: 0ms;
+    --transition-slow: 0ms;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
