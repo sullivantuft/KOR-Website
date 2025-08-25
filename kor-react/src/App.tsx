@@ -5,12 +5,13 @@ import GoogleAnalytics, { initGA } from './components/common/GoogleAnalytics';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import Home from './components/pages/Home';
-import OurApp from './components/pages/OurApp';
 import OurStory from './components/pages/OurStory';
+import OurApp from './components/pages/OurApp';
 import SignUp from './components/pages/SignUp';
-import FAQ from './components/pages/FAQ';
-import Contact from './components/pages/Contact';
 import PersonalPlans from './components/pages/PersonalPlans';
+import Contact from './components/pages/Contact';
+import FAQ from './components/pages/FAQ';
+import QrGuide from './components/pages/QrGuide';
 import ShopLogin from './components/shop/ShopLogin';
 import ShopDashboard from './components/shop/ShopDashboard';
 import ShopSignIn from './components/shop/ShopSignIn';
@@ -68,9 +69,10 @@ function App() {
               <Route path="/our-app" element={<OurApp />} />
               <Route path="/our-story" element={<OurStory />} />
               <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/personal-plans" element={<PersonalPlans />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/contact" element={<Contact />} />
+            <Route path="/personal-plans" element={<PersonalPlans />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/qr-guide" element={<QrGuide />} />
               <Route path="/shop/login" element={<ShopLogin />} />
               <Route path="/shop/dashboard" element={<ShopDashboard />} />
               {/* Legacy-compatible routes */}
