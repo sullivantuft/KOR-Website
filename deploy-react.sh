@@ -7,7 +7,8 @@ set -euo pipefail
 # - Preserves and updates oauth/authorize/index.html (legacy page)
 #
 # Usage:
-#   ./deploy-react.sh                 # default: root@jmrcycling.com, /var/www/jmrcycling.com
+#   ./deploy-react.sh                 # default: production deploy to jmrcycling.com
+#   DEPLOY_ENV=staging ./deploy-react.sh  # deploy to staging environment
 #   REMOTE_HOST=user@host ./deploy-react.sh
 #   REMOTE_WEBROOT=/var/www/site ./deploy-react.sh
 #
@@ -20,8 +21,28 @@ REPO_ROOT="$SCRIPT_DIR"
 APP_DIR="$REPO_ROOT/kor-react"
 LEGACY_OAUTH_DIR="$REPO_ROOT/oauth/authorize"
 
-REMOTE_HOST="${REMOTE_HOST:-root@jmrcycling.com}"
-REMOTE_WEBROOT="${REMOTE_WEBROOT:-/var/www/jmrcycling.com}"
+# Environment-specific defaults
+DEPLOY_ENV="${DEPLOY_ENV:-production}"
+
+case "$DEPLOY_ENV" in
+  "staging")
+    DEFAULT_HOST="root@staging.jmrcycling.com"
+    DEFAULT_WEBROOT="/var/www/staging.jmrcycling.com"
+    DEFAULT_DOMAIN="https://staging.jmrcycling.com"
+    ;;
+  "production")
+    DEFAULT_HOST="root@jmrcycling.com"
+    DEFAULT_WEBROOT="/var/www/jmrcycling.com"
+    DEFAULT_DOMAIN="https://jmrcycling.com"
+    ;;
+  *)
+    err "Unknown DEPLOY_ENV: $DEPLOY_ENV. Use 'production' or 'staging'."
+    exit 1
+    ;;
+esac
+
+REMOTE_HOST="${REMOTE_HOST:-$DEFAULT_HOST}"
+REMOTE_WEBROOT="${REMOTE_WEBROOT:-$DEFAULT_WEBROOT}"
 
 BUILD_DIR="$APP_DIR/build"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
@@ -41,6 +62,15 @@ pushd "$APP_DIR" >/dev/null
 if [[ ! -d node_modules ]]; then
   log "Installing dependencies (npm ci) ..."
   npm ci
+fi
+
+# Set NODE_ENV based on deploy environment
+if [[ "$DEPLOY_ENV" == "staging" ]]; then
+  export NODE_ENV=staging
+  log "Building for staging environment..."
+else
+  export NODE_ENV=production
+  log "Building for production environment..."
 fi
 
 log "Running build (npm run build) ..."
@@ -110,8 +140,43 @@ EOF
   log "Deployment via sftp complete (note: stale files may remain)."
 fi
 
-log "Done. Verify at: https://jmrcycling.com/"
-log "Legacy OAuth page: https://jmrcycling.com/oauth/authorize/"
+# 4) Run health checks
+log "Running post-deploy health checks..."
+
+# Key routes to verify (environment-specific)
+DEPLOY_ROUTES=(
+  "${DEFAULT_DOMAIN}/"
+  "${DEFAULT_DOMAIN}/shop/login"
+  "${DEFAULT_DOMAIN}/shop/dashboard"
+  "${DEFAULT_DOMAIN}/our-app"
+  "${DEFAULT_DOMAIN}/contact"
+  "${DEFAULT_DOMAIN}/oauth/authorize/"
+)
+
+HEALTH_CHECK_FAILED=false
+
+for route in "${DEPLOY_ROUTES[@]}"; do
+  log "Checking $route ..."
+  
+  # Use curl to check if route returns 200
+  if curl -s -f --max-time 10 "$route" > /dev/null; then
+    log "✅ $route - OK"
+  else
+    err "❌ $route - FAILED"
+    HEALTH_CHECK_FAILED=true
+  fi
+done
+
+if [[ "$HEALTH_CHECK_FAILED" == "true" ]]; then
+  err "⚠️ Some health checks failed. Deployment completed but routes may not be working correctly."
+  err "Check nginx configuration and ensure SPA fallback is configured."
+else
+  log "✅ All health checks passed!"
+fi
+
+log "Done. Verify at: ${DEFAULT_DOMAIN}/"
+log "Legacy OAuth page: ${DEFAULT_DOMAIN}/oauth/authorize/"
+log "Environment: $DEPLOY_ENV"
 
 echo ""
 echo "Next steps:"

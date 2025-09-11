@@ -82,19 +82,27 @@ From the repo root:
 
 ```bash path=null start=null
 chmod +x ./deploy-react.sh   # one-time
-./deploy-react.sh            # builds kor-react and deploys build/ to the server
+./deploy-react.sh            # builds kor-react and deploys build/ to production
 ```
 
-Options:
+Environment-specific deploys:
 
 ```bash path=null start=null
+# Production (default)
+./deploy-react.sh
+
+# Staging
+DEPLOY_ENV=staging ./deploy-react.sh
+
+# Custom host/path
 REMOTE_HOST=user@host REMOTE_WEBROOT=/var/www/jmrcycling.com ./deploy-react.sh
 ```
 
 What the script does:
-- Builds the CRA app in `kor-react/` using `.env.production`.
-- Syncs the `build/` folder to `/var/www/jmrcycling.com` via rsync (with `--delete`).
+- Builds the CRA app in `kor-react/` using `.env.production` (or `.env.staging`).
+- Syncs the `build/` folder to the target server via rsync (with `--delete`).
 - Preserves and updates the legacy static page `oauth/authorize/index.html`.
+- Runs health checks on key routes after deployment.
 - Falls back to sftp if rsync is unavailable.
 
 ### Nginx configuration
@@ -112,12 +120,21 @@ sudo nginx -t && sudo systemctl reload nginx
 ```
 
 ### Post-deploy checks
+
+**Production:**
 - https://jmrcycling.com/
 - https://jmrcycling.com/qr-guide
 - https://jmrcycling.com/shop/login
 - https://jmrcycling.com/oauth/authorize/ (legacy static page)
+
+**Staging (if configured):**
+- https://staging.jmrcycling.com/
+- https://staging.jmrcycling.com/shop/login
+
+**General:**
 - Verify Formspree submissions on Contact/FAQ.
 - Verify GA pageviews (if GA ID configured) and Auth0 flows (if audience configured).
+- Health checks run automatically during deployment.
 
 ### Troubleshooting
 - Chargebee publishable key missing in production:

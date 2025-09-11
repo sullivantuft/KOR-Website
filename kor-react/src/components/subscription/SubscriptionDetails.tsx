@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
 // Declare Chargebee as a global variable for TypeScript
@@ -67,7 +67,7 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscriptionData = async () => {
+  const fetchSubscriptionData = useCallback(async () => {
     if (!isAuthenticated || !user?.sub) {
       setError('User not authenticated');
       return;
@@ -125,7 +125,7 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
       setLoading(false);
       onLoading?.(false);
     }
-  };
+  }, [isAuthenticated, user?.sub, subscriptionId, onError, onLoading]);
 
   const refreshData = () => {
     fetchSubscriptionData();
@@ -184,7 +184,8 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
         // Create a temporary element with Chargebee portal attributes
         const tempElement = document.createElement('a');
         tempElement.setAttribute('data-cb-type', 'portal');
-        tempElement.setAttribute('href', 'javascript:void(0)');
+        tempElement.setAttribute('href', '#');
+        tempElement.addEventListener('click', (e) => e.preventDefault());
         
         // Trigger the Chargebee portal
         tempElement.click();
@@ -219,7 +220,7 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
     if (isAuthenticated && user) {
       fetchSubscriptionData();
     }
-  }, [isAuthenticated, user, subscriptionId]);
+  }, [isAuthenticated, user, subscriptionId, fetchSubscriptionData]);
 
   const getStatusColor = (status: string): string => {
     switch (status.toLowerCase()) {

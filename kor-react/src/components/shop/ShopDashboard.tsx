@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import LegacyAuthGuard from '../auth/LegacyAuthGuard';
 import { useLegacyParams, buildLegacyUrl, logLegacyParams } from '../../hooks/useLegacyParams';
 import QrCodeGenerator from '../common/QrCodeGenerator';
 import SubscriptionDetails from '../subscription/SubscriptionDetails';
