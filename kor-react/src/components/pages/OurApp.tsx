@@ -1,9 +1,17 @@
 import React from 'react';
 import ScrollAnimations from '../common/ScrollAnimations';
+import StructuredData from '../common/StructuredData';
 
 const OurApp: React.FC = () => {
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
   return (
     <>
+      <StructuredData
+        type="website"
+        pageTitle="The KOR App — Intelligent Bike Maintenance Tracking"
+        pageDescription="See how KOR uses Strava data to track component wear, alert you before parts fail, and keep you riding."
+        url={`${baseUrl}/our-app`}
+      />
       <ScrollAnimations />
       <section className="app-screen-section">
         <div className="app-content-grid">

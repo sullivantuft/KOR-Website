@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import StructuredData from '../common/StructuredData';
 
 const FAQ: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const FAQ: React.FC = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +58,12 @@ const FAQ: React.FC = () => {
 
   return (
     <main>
+      <StructuredData
+        type="website"
+        pageTitle="Frequently Asked Questions — KOR"
+        pageDescription="Answers to common questions about KOR, personal plans, shop accounts, and getting started."
+        url={`${baseUrl}/faq`}
+      />
       <h1 style={{ color: 'black' }}>Frequently Asked Questions</h1>
       <div className="FAQ">
         <h2>Q:</h2>

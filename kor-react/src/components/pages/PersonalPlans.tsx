@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import StructuredData from '../common/StructuredData';
 
 const PersonalPlans: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
 
   const handlePlanSelect = (planType: string) => {
     setSelectedPlan(planType);
@@ -33,6 +35,12 @@ const PersonalPlans: React.FC = () => {
 
   return (
     <>
+      <StructuredData
+        type="website"
+        pageTitle="Personal Account Plans — KOR"
+        pageDescription="Track your bike maintenance for free today. Premium plans coming soon with advanced features and notifications."
+        url={`${baseUrl}/personal-plans`}
+      />
       <div className="parallax_parent">
         <div className="parallax_sign_up">
           <div style={{ padding: '5%' }}>

@@ -4,13 +4,14 @@ import StructuredData from '../common/StructuredData';
 import { trackAppDownload } from '../common/GoogleAnalytics';
 
 const Home: React.FC = () => {
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
   return (
     <>
       <StructuredData 
         type="product" 
         pageTitle="KOR - Never Miss Bike Maintenance Again | Free Bike Tracking App"
         pageDescription="Track your bike's component wear automatically with KOR. Integrated with Strava, our intelligent maintenance app alerts you before parts fail. Free download for iOS & Android."
-        url="https://keeponrolling.app/"
+        url={`${baseUrl}/`}
       />
       <section className="hero-section" aria-labelledby="hero-title">
         <div className="parallax_parent">

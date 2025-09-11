@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import StructuredData from '../common/StructuredData';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,6 +12,8 @@ const Contact: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [characterCount, setCharacterCount] = useState(0);
+
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,6 +67,12 @@ const Contact: React.FC = () => {
 
   return (
     <main>
+      <StructuredData
+        type="website"
+        pageTitle="Contact Us — KOR"
+        pageDescription="Get in touch with the KOR team for support, partnerships, and feedback."
+        url={`${baseUrl}/contact`}
+      />
       <h1 style={{ color: 'black' }}>Contact Us</h1>
       <h3 className="paragraph" style={{ color: 'black' }}>
         We love questions and feedback - and we're always happy to help! Here

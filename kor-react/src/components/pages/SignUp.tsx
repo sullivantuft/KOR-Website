@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import StructuredData from '../common/StructuredData';
 
 // Declare Chargebee as a global variable for TypeScript
 declare global {
@@ -12,14 +13,31 @@ const SignUp: React.FC = () => {
     // Initialize Chargebee when component mounts
     if (window.Chargebee) {
       const site = process.env.REACT_APP_CHARGEBEE_SITE || 'jmrcycling';
-      window.Chargebee.init({
-        site: site
-      });
-      console.log(`Chargebee initialized with site: ${site}`);
+      const publishableKey = process.env.REACT_APP_CHARGEBEE_PUBLISHABLE_KEY;
+
+      const initConfig: any = { site };
+      if (publishableKey) {
+        initConfig.publishableKey = publishableKey;
+      }
+
+      window.Chargebee.init(initConfig);
+
+      const isProduction = process.env.REACT_APP_ENVIRONMENT === 'production' || process.env.NODE_ENV === 'production';
+      if (!publishableKey) {
+        if (isProduction) {
+          console.warn('Chargebee publishable key is not configured. Some checkout features may not work in production.');
+        } else {
+          console.log('Chargebee publishable key not set - assuming development mode.');
+        }
+      }
+
+      console.log(`Chargebee initialized with site: ${site}${publishableKey ? ' and publishable key' : ''}`);
     } else {
       console.warn('Chargebee not loaded - using development fallback mode');
     }
   }, []);
+
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
 
   const handleSubscription = (planType: string, billingCycle: string) => {
     console.log(`Attempting to subscribe to ${planType} - ${billingCycle}`);
@@ -113,6 +131,12 @@ const SignUp: React.FC = () => {
 
   return (
     <>
+      <StructuredData
+        type="website"
+        pageTitle="Shop Sign Up — KOR"
+        pageDescription="Partner with KOR to invite customers, automate maintenance notifications, and enhance service."
+        url={`${baseUrl}/sign-up`}
+      />
       <div className="parallax_parent">
         <div className="parallax_sign_up">
           <div style={{ padding: '5%' }}>

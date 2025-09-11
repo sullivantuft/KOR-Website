@@ -14,7 +14,7 @@ const StructuredData: React.FC<StructuredDataProps> = ({
   pageDescription,
   url 
 }) => {
-  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://keeponrolling.app';
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
   
   const organizationSchema = {
     "@context": "https://schema.org",

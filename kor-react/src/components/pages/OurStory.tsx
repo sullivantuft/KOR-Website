@@ -1,8 +1,16 @@
 import React from 'react';
+import StructuredData from '../common/StructuredData';
 
 const OurStory: React.FC = () => {
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
   return (
     <>
+      <StructuredData
+        type="website"
+        pageTitle="Our Story — KOR"
+        pageDescription="Learn how the KOR team started and our mission to keep cyclists rolling with smart maintenance tracking."
+        url={`${baseUrl}/our-story`}
+      />
       <div className="parallax_parent">
         <div className="parallax_our_story">
           <div style={{ padding: '5%' }}>

@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../common/Header';
 import Footer from '../common/Footer';
+import StructuredData from '../common/StructuredData';
 
 const QrGuide: React.FC = () => {
+  const baseUrl = process.env.REACT_APP_SITE_URL || 'https://jmrcycling.com';
   const styles = {
     guideContainer: {
       maxWidth: '800px',
@@ -76,6 +78,12 @@ const QrGuide: React.FC = () => {
   return (
     <div>
       <Header />
+      <StructuredData
+        type="website"
+        pageTitle="QR Code System Guide — KOR"
+        pageDescription="Guide for bike shops to onboard customers via QR codes that auto-redirect to app stores with shop codes pre-filled."
+        url={`${baseUrl}/qr-guide`}
+      />
       
       <main style={{ padding: '2rem 1rem', minHeight: '80vh' }}>
         <div style={styles.guideContainer}>
