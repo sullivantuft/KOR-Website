@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import { useLegacyParams, logLegacyParams, buildLegacyUrl } from '../../hooks/useLegacyParams';
+import LegacyAuthGuard from '../auth/LegacyAuthGuard';
+import { useLegacyParams, buildLegacyUrl, logLegacyParams } from '../../hooks/useLegacyParams';
 import QrCodeGenerator from '../common/QrCodeGenerator';
-
+import SubscriptionDetails from '../subscription/SubscriptionDetails';
 interface ShopUser {
   email: string;
   name: string;
@@ -31,7 +32,7 @@ interface PlanFeatures {
 // Plan configurations based on legacy system
 const getPlanFeatures = (planType: string): PlanFeatures => {
   const plans: { [key: string]: PlanFeatures } = {
-    'Basic': {
+    'basic': {
       name: 'Basic Plan',
       maxCustomers: 50,
       maxNotifications: 100,
@@ -39,7 +40,7 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
       color: '#17a2b8',
       description: 'Perfect for small bike shops getting started with KOR'
     },
-    'Premium': {
+    'premium': {
       name: 'Premium Plan',
       maxCustomers: 200,
       maxNotifications: 500,
@@ -47,7 +48,7 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
       color: '#28a745',
       description: 'Full-featured plan for growing bike shops'
     },
-    'Pro': {
+    'pro': {
       name: 'Pro Plan',
       maxCustomers: 1000,
       maxNotifications: -1, // Unlimited
@@ -57,22 +58,129 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
     }
   };
   
-  return plans[planType] || plans['Basic'];
+  return plans[planType] || plans['basic'];
 };
 
 const ShopDashboard: React.FC = () => {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, logout, error } = useAuth0();
   const navigate = useNavigate();
   const params = useLegacyParams();
   const [shopUser, setShopUser] = useState<ShopUser | null>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [planFeatures, setPlanFeatures] = useState<PlanFeatures | null>(null);
+  const [loadingTimeout, setLoadingTimeout] = useState(false);
 
+  // Auth0 loading timeout protection
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      navigate('/shop/login');
+    let timeoutId: NodeJS.Timeout | undefined;
+    
+    if (isLoading) {
+      console.log('⏳ [ShopDashboard] Auth0 loading started, setting 10s timeout...');
+      // If Auth0 is still loading after 10 seconds, assume something went wrong
+      timeoutId = setTimeout(() => {
+        console.log('⚠️ [ShopDashboard] Auth0 loading timeout reached, forcing redirect to login');
+        setLoadingTimeout(true);
+        navigate('/shop/login');
+      }, 10000); // 10 second timeout
+    } else {
+      console.log('✅ [ShopDashboard] Auth0 loading completed:', { isAuthenticated, hasUser: !!user });
     }
-  }, [isAuthenticated, isLoading, navigate]);
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [isLoading, navigate, user, isAuthenticated]);
+
+  // Handle authentication state changes
+  useEffect(() => {
+    // If there's an Auth0 error, handle based on error type
+    if (error) {
+      console.error('❌ [ShopDashboard] Auth0 error detected:', error);
+      
+      // Check if it's a 403/authorization error that might be resolved by clearing cache
+      const is403Error = error.message.includes('403') || 
+                        error.message.includes('Forbidden') ||
+                        error.message.includes('access_denied') ||
+                        error.message.includes('unauthorized') ||
+                        error.message.toLowerCase().includes('token');
+      
+      if (is403Error) {
+        console.log('🔄 [ShopDashboard] 403/Auth error detected - attempting cache reset...');
+        
+        try {
+          // Clear Auth0 cache
+          const auth0Cache = localStorage.getItem('@@auth0spajs@@');
+          if (auth0Cache) {
+            console.log('🧹 [ShopDashboard] Clearing Auth0 cache...');
+            localStorage.removeItem('@@auth0spajs@@');
+          }
+          
+          // Clear any Auth0 related items from localStorage
+          Object.keys(localStorage).forEach(key => {
+            if (key.includes('auth0') || key.includes('@@')) {
+              console.log(`🧹 [ShopDashboard] Removing cached item: ${key}`);
+              localStorage.removeItem(key);
+            }
+          });
+          
+          // Clear sessionStorage as well (but preserve our shop data)
+          const preservedData = {
+            shop_name: sessionStorage.getItem('shop_name'),
+            shop_code: sessionStorage.getItem('shop_code'),
+            plan_type: sessionStorage.getItem('plan_type'),
+            shop_token: sessionStorage.getItem('shop_token')
+          };
+          
+          // Clear Auth0 session data
+          Object.keys(sessionStorage).forEach(key => {
+            if (key.includes('auth0') || key.includes('@@')) {
+              console.log(`🧹 [ShopDashboard] Removing session item: ${key}`);
+              sessionStorage.removeItem(key);
+            }
+          });
+          
+          // Restore preserved shop data
+          Object.entries(preservedData).forEach(([key, value]) => {
+            if (value) {
+              sessionStorage.setItem(key, value);
+            }
+          });
+          
+          console.log('✅ [ShopDashboard] Cache cleared - forcing page reload for fresh auth...');
+          
+          // Force a page reload to trigger fresh Auth0 initialization
+          setTimeout(() => {
+            window.location.reload();
+          }, 100);
+          
+          return; // Exit early, page will reload
+          
+        } catch (cacheError) {
+          console.error('❌ [ShopDashboard] Error clearing cache:', cacheError);
+          // Fallback to regular login redirect if cache clearing fails
+        }
+      }
+      
+      // For non-403 errors or if cache clearing failed, redirect to login
+      console.log('🚑 [ShopDashboard] Redirecting to login due to auth error...');
+      navigate('/shop/login');
+      return;
+    }
+
+    // If loading finished and user is not authenticated, redirect to login
+    if (!isLoading && !isAuthenticated) {
+      console.log('🚑 [ShopDashboard] User not authenticated, redirecting to login...');
+      navigate('/shop/login');
+      return;
+    }
+
+    // If user is authenticated, log success
+    if (!isLoading && isAuthenticated) {
+      console.log('✅ [ShopDashboard] User is authenticated and ready');
+    }
+  }, [isAuthenticated, isLoading, navigate, error]);
 
   // Effect to log dashboard access and restore parameters from localStorage
   // Effect to handle data loading from sessionStorage (priority) and URL params (fallback)
@@ -251,21 +359,98 @@ const ShopDashboard: React.FC = () => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || loadingTimeout) {
     return (
       <div className="page-container" style={{ textAlign: 'center', padding: '2rem' }}>
         <div className="loading-spinner" style={{ margin: '2rem auto' }}>
           <div style={{ 
             border: '4px solid #f3f3f3',
-            borderTop: '4px solid #3498db',
+            borderTop: loadingTimeout ? '4px solid #e74c3c' : '4px solid #3498db',
             borderRadius: '50%',
             width: '40px',
             height: '40px',
             animation: 'spin 1s linear infinite',
             margin: '0 auto'
-          }}></div>
+          }}/>
         </div>
-        <p>Loading dashboard...</p>
+        <p style={{ color: loadingTimeout ? '#e74c3c' : '#666' }}>
+          {loadingTimeout ? 'Authentication timeout - redirecting to login...' : 'Loading dashboard...'}
+        </p>
+        
+        {/* Auth0 Error Display */}
+        {error && (
+          <div style={{
+            backgroundColor: '#ffe6e6',
+            color: '#d63031',
+            padding: '1rem',
+            borderRadius: '4px',
+            marginTop: '1rem',
+            border: '1px solid #d63031',
+            maxWidth: '400px',
+            margin: '1rem auto 0'
+          }}>
+            <p><strong>Authentication Error:</strong></p>
+            <p style={{ fontSize: '0.9rem', margin: '0.5rem 0 0 0' }}>{error.message}</p>
+          </div>
+        )}
+        
+        {/* Progress indicator for loading */}
+        {isLoading && !loadingTimeout && (
+          <div style={{
+            width: '200px',
+            height: '4px',
+            backgroundColor: '#f3f3f3',
+            borderRadius: '2px',
+            margin: '1rem auto',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              width: '50%',
+              height: '100%',
+              backgroundColor: '#3498db',
+              borderRadius: '2px',
+              animation: 'progress 2s ease-in-out infinite'
+            }} />
+          </div>
+        )}
+        
+        {/* Manual redirect button if loading takes too long */}
+        {(isLoading || loadingTimeout) && (
+          <button
+            onClick={() => {
+              console.log('🔄 [ShopDashboard] Manual redirect to login triggered');
+              navigate('/shop/login');
+            }}
+            style={{
+              backgroundColor: '#667eea',
+              color: 'white',
+              border: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '5px',
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              marginTop: '2rem',
+              transition: 'background-color 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#5a6fd8';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#667eea';
+            }}
+          >
+            Continue to Login →
+          </button>
+        )}
+        
+        {/* CSS Animation for progress bar */}
+        <style>{`
+          @keyframes progress {
+            0% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+            100% { transform: translateX(300%); }
+          }
+        `}</style>
       </div>
     );
   }
@@ -364,128 +549,6 @@ const ShopDashboard: React.FC = () => {
                 {planFeatures.name === 'Premium Plan' ? '⭐ POPULAR' : '🚀 Pro'}
               </div>
             )}
-          </div>
-        </div>
-      )}
-
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-        {/* Shop Info Card - Enhanced with parameters */}
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
-            🏪 Shop Information
-          </h3>
-          <div style={{ lineHeight: 1.6 }}>
-            <p><strong>Shop Name:</strong> {shopUser?.shopName}</p>
-            <p><strong>Owner:</strong> {shopUser?.name}</p>
-            <p><strong>Email:</strong> {shopUser?.email}</p>
-            {shopUser?.shopCode && <p><strong>Shop Code:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.shopCode}</code></p>}
-          </div>
-        </div>
-
-        {/* Subscription Card - Enhanced with parameter details */}
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
-            💳 Subscription Details
-          </h3>
-          <div style={{ lineHeight: 1.6 }}>
-            <p><strong>Plan:</strong> <span style={{ color: planFeatures?.color || '#007bff' }}>{shopUser?.subscription?.plan}</span></p>
-            <p><strong>Status:</strong> <span style={{ color: '#28a745' }}>✓ Active</span></p>
-            <p><strong>Next Billing:</strong> {shopUser?.subscription?.nextBilling}</p>
-            {shopUser?.subscription?.subId && (
-              <p style={{ fontSize: '0.9rem', color: '#666' }}>
-                <strong>Sub ID:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.subscription.subId}</code>
-              </p>
-            )}
-            {shopUser?.subscription?.invoiceId && (
-              <p style={{ fontSize: '0.9rem', color: '#666' }}>
-                <strong>Invoice ID:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.subscription.invoiceId}</code>
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Plan Limits Card - Dynamic based on plan */}
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
-            📊 Plan Usage
-          </h3>
-          <div style={{ lineHeight: 1.6 }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <strong>Customers:</strong>
-                <span>0 / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
-              </div>
-              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
-              </div>
-            </div>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <strong>Notifications:</strong>
-                <span>0 / {planFeatures?.maxNotifications === -1 ? '∞' : planFeatures?.maxNotifications}</span>
-              </div>
-              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Plan Features Section - Dynamic based on parameters */}
-      {planFeatures && (
-        <div style={{
-          backgroundColor: 'white',
-          padding: '2rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          marginTop: '2rem'
-        }}>
-          <h2 style={{ color: '#333', marginBottom: '1rem', textAlign: 'center' }}>Your {planFeatures.name} Features</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
-            {planFeatures.features.map((feature, index) => (
-              <div key={index} style={{ 
-                padding: '1rem',
-                textAlign: 'center',
-                border: `2px solid ${planFeatures.color}20`,
-                borderRadius: '8px',
-                backgroundColor: `${planFeatures.color}10`
-              }}>
-                <h4 style={{ color: planFeatures.color, marginTop: 0 }}>✓ {feature}</h4>
-                <p style={{ fontSize: '0.9rem', color: '#666', margin: 0 }}>
-                  {feature === 'Customer Management' && 'Track and manage all your bike service customers'}
-                  {feature === 'Basic Notifications' && 'Send service reminders to your customers'}
-                  {feature === 'Email Support' && 'Get help via email from our support team'}
-                  {feature === 'Advanced Customer Management' && 'Detailed customer profiles and service history'}
-                  {feature === 'Unlimited Notifications' && 'Send unlimited maintenance alerts and promotions'}
-                  {feature === 'Priority Support' && 'Get faster response times from our team'}
-                  {feature === 'Analytics Dashboard' && 'Detailed insights into your shop performance'}
-                  {feature === 'Custom Campaigns' && 'Create targeted marketing campaigns'}
-                  {feature === 'Pro Customer Management' && 'Multi-location customer management'}
-                  {feature === 'Unlimited Everything' && 'No limits on any features'}
-                  {feature === '24/7 Support' && 'Round-the-clock support via phone and chat'}
-                  {feature === 'Advanced Analytics' && 'Deep business intelligence and reporting'}
-                  {feature === 'Custom Integrations' && 'Connect with your existing business tools'}
-                  {feature === 'API Access' && 'Build custom integrations with our API'}
-                  {!feature.includes('Customer') && !feature.includes('Notification') && !feature.includes('Support') && !feature.includes('Analytics') && !feature.includes('Campaign') && !feature.includes('Integration') && !feature.includes('API') && 'Available in your current plan'}
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       )}
@@ -590,6 +653,112 @@ const ShopDashboard: React.FC = () => {
         </div>
       )}
 
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        {/* Shop Info Card - Enhanced with parameters */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        }}>
+          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
+            🏪 Shop Information
+          </h3>
+          <div style={{ lineHeight: 1.6 }}>
+            <p><strong>Shop Name:</strong> {shopUser?.shopName}</p>
+            <p><strong>Owner:</strong> {shopUser?.name}</p>
+            <p><strong>Email:</strong> {shopUser?.email}</p>
+            {shopUser?.shopCode && <p><strong>Shop Code:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.shopCode}</code></p>}
+          </div>
+        </div>
+
+        {/* Plan Limits Card - Dynamic based on plan */}
+        <div style={{
+          backgroundColor: 'white',
+          padding: '1.5rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        }}>
+          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
+            📊 Plan Usage
+          </h3>
+          <div style={{ lineHeight: 1.6 }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <strong>Customers:</strong>
+                <span>0 / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
+              </div>
+              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
+              </div>
+            </div>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <strong>Notifications:</strong>
+                <span>0 / {planFeatures?.maxNotifications === -1 ? '∞' : planFeatures?.maxNotifications}</span>
+              </div>
+              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Live Subscription Details from Chargebee API */}
+      <div style={{ marginTop: '2rem' }}>
+        <SubscriptionDetails
+          subscriptionId={shopUser?.subscription?.subId}
+          onError={(error) => console.error('Subscription Details Error:', error)}
+          onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
+        />
+      </div>
+
+      {/* Plan Features Section - Dynamic based on parameters */}
+      {planFeatures && (
+        <div style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          marginTop: '2rem'
+        }}>
+          <h2 style={{ color: '#333', marginBottom: '1rem', textAlign: 'center' }}>Your {planFeatures.name} Features</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+            {planFeatures.features.map((feature, index) => (
+              <div key={index} style={{ 
+                padding: '1rem',
+                textAlign: 'center',
+                border: `2px solid ${planFeatures.color}20`,
+                borderRadius: '8px',
+                backgroundColor: `${planFeatures.color}10`
+              }}>
+                <h4 style={{ color: planFeatures.color, marginTop: 0 }}>✓ {feature}</h4>
+                <p style={{ fontSize: '0.9rem', color: '#666', margin: 0 }}>
+                  {feature === 'Customer Management' && 'Track and manage all your bike service customers'}
+                  {feature === 'Basic Notifications' && 'Send service reminders to your customers'}
+                  {feature === 'Email Support' && 'Get help via email from our support team'}
+                  {feature === 'Advanced Customer Management' && 'Detailed customer profiles and service history'}
+                  {feature === 'Unlimited Notifications' && 'Send unlimited maintenance alerts and promotions'}
+                  {feature === 'Priority Support' && 'Get faster response times from our team'}
+                  {feature === 'Analytics Dashboard' && 'Detailed insights into your shop performance'}
+                  {feature === 'Custom Campaigns' && 'Create targeted marketing campaigns'}
+                  {feature === 'Pro Customer Management' && 'Multi-location customer management'}
+                  {feature === 'Unlimited Everything' && 'No limits on any features'}
+                  {feature === '24/7 Support' && 'Round-the-clock support via phone and chat'}
+                  {feature === 'Advanced Analytics' && 'Deep business intelligence and reporting'}
+                  {feature === 'Custom Integrations' && 'Connect with your existing business tools'}
+                  {feature === 'API Access' && 'Build custom integrations with our API'}
+                  {!feature.includes('Customer') && !feature.includes('Notification') && !feature.includes('Support') && !feature.includes('Analytics') && !feature.includes('Campaign') && !feature.includes('Integration') && !feature.includes('API') && 'Available in your current plan'}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      
+
       {/* Getting Started Section */}
       <div style={{
         backgroundColor: 'white',
@@ -667,7 +836,7 @@ const ShopDashboard: React.FC = () => {
 
       <div style={{ marginTop: '2rem', textAlign: 'center' }}>
         <p style={{ color: '#666', fontSize: '0.9rem' }}>
-          Questions about your {planFeatures?.name || 'plan'}? <a href="/contact" style={{ color: planFeatures?.color || '#007bff' }}>Contact our support team</a>
+          Questions about your {shopUser?.subscription?.plan} plan? <a href="/contact" style={{ color: planFeatures?.color || '#007bff' }}>Contact our support team</a>
         </p>
       </div>
     </div>

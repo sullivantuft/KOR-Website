@@ -2,11 +2,10 @@ const query = window.location.search;
 if (
   !(
     query.includes('sub_id=') &&
-    query.includes('invoice_id=') &&
     query.includes('plan_type=')
   )
 ) {
-  // Development query ?sub_id=test&invoice_id=test&plan_type=basic
+  // Development query ?sub_id=test&plan_type=basic
   var x = document.getElementById('signin_box');
   if (x.style.display === 'none') {
     x.style.display = 'block';
@@ -109,7 +108,7 @@ async function createShopAccount(formData, userId) {
         shop_name: formData.shop_name,
         email: formData.email,
         sub_Id: pageParams.sub_id || '',
-        invoice_Id: pageParams.invoice_id || '',
+        // invoice_Id: pageParams.invoice_id || '',
         plan_type: pageParams.plan_type || '',
         phone: formData.phone,
         user_id: userId,
@@ -230,7 +229,7 @@ async function handleFormSubmit(event) {
 // Authorization Functions
 function checkAuthorization() {
   const hasValidParams =
-    pageParams.sub_id && pageParams.invoice_id && pageParams.plan_type;
+    pageParams.sub_id && pageParams.plan_type;
 
   if (!hasValidParams) {
     console.log(

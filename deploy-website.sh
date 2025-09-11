@@ -246,6 +246,13 @@ else
     echo "❌ Signin page not accessible"
 fi
 
+echo "Testing OAuth authorize endpoint..."
+if curl -s "https://jmrcycling.com/oauth/authorize/" > /dev/null; then
+    echo "✅ OAuth authorize endpoint accessible"
+else
+    echo "❌ OAuth authorize endpoint not accessible"
+fi
+
 echo ""
 echo "🎉 Deployment completed!"
 echo "📋 Check $DEPLOY_LOG for detailed logs"
@@ -257,6 +264,7 @@ echo "🔗 Test your changes:"
 echo "   Main site: https://jmrcycling.com/"
 echo "   QR Guide:  https://jmrcycling.com/qr-guide.html"
 echo "   Dashboard: https://jmrcycling.com/shop_tools/login.html"
+echo "   OAuth:     https://jmrcycling.com/oauth/authorize/"
 echo ""
 echo "⚠️  Remember to test QR codes after deployment!"
 echo ""

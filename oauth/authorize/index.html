@@ -58,45 +58,118 @@
     </div>
 
     <script>
+        // Robustly decode a possibly URI-encoded JSON state param and extract Expo base
+        function multiDecode(value, maxDepth = 4) {
+            const results = [];
+            let current = value == null ? '' : String(value);
+            for (let i = 0; i < maxDepth; i++) {
+                results.push(current);
+                try {
+                    const next = decodeURIComponent(current);
+                    if (next === current) break;
+                    current = next;
+                } catch (_) {
+                    break;
+                }
+            }
+            return results;
+        }
+
+        function tryParseJSON(s) {
+            try { return JSON.parse(s); } catch (_) { return null; }
+        }
+
+        function extractExpoBaseFromState(stateRaw) {
+            if (!stateRaw) return '';
+            const candidates = multiDecode(stateRaw, 4);
+            // Try JSON parse on each candidate
+            for (const c of candidates) {
+                const parsed = tryParseJSON(c);
+                if (parsed && typeof parsed === 'object' && typeof parsed.b === 'string' && parsed.b.startsWith('exp://')) {
+                    return parsed.b;
+                }
+            }
+            // Regex fallback on the last decoded form
+            const last = candidates[candidates.length - 1] || '';
+            const m = last.match(/"b"\s*:\s*"(exp:\/\/[^"\\]+)"/);
+            return m && m[1] ? m[1] : '';
+        }
+
+        function normalizeBase(base) {
+            return (base || '').replace(/\/+$/, '');
+        }
+
         function handleCallback() {
             const urlParams = new URLSearchParams(window.location.search);
             const code = urlParams.get('code');
             const state = urlParams.get('state');
             const error = urlParams.get('error');
-            
+            const baseParam = urlParams.get('base'); // optional override
+            const dev = urlParams.get('dev'); // optional hint
+
+            // Attempt to recover Expo base from state
+            const stateDerivedBase = extractExpoBaseFromState(state);
+            const chosenBase = (baseParam && baseParam.trim()) ? baseParam.trim() : stateDerivedBase;
+            const deepLinkBase = normalizeBase(chosenBase);
+
             // Debug information
-            document.getElementById('debug-info').innerHTML = 
-                `URL: ${window.location.href}<br>` +
-                `Code: ${code ? 'present' : 'missing'}<br>` +
-                `State: ${state || 'missing'}<br>` +
-                `Error: ${error || 'none'}`;
-            
-            console.log('OAuth callback received:', { 
+            const debugEl = document.getElementById('debug-info');
+            if (debugEl) {
+                const decodedStates = multiDecode(state, 4);
+                debugEl.innerHTML =
+                    `URL: ${window.location.href}<br>` +
+                    `Code: ${code ? 'present' : 'missing'}<br>` +
+                    `State (raw): ${state || 'missing'}<br>` +
+                    `State decodes:<br>${decodedStates.map((s,i)=>`[${i}] ${s}`).join('<br>')}<br>` +
+                    `Derived base from state: ${stateDerivedBase || 'none'}<br>` +
+                    `Base override param: ${baseParam || 'none'}<br>` +
+                    `Dev: ${dev || 'false'}<br>` +
+                    `Error: ${error || 'none'}`;
+            }
+
+            console.log('OAuth callback received:', {
                 url: window.location.href,
-                code: code ? 'present' : 'missing', 
-                state, 
-                error 
+                hasCode: !!code,
+                rawState: state,
+                stateDerivedBase,
+                baseParam,
+                dev
             });
-            
+
             if (error) {
                 alert('Authentication failed: ' + error);
                 return;
             }
-            
+
             if (!code) {
                 alert('No authorization code received');
                 return;
             }
-            
+
             // Build the deep link URL to return to the app
-            const deepLinkScheme = `kor://auth?code=${encodeURIComponent(code)}`;
-            const appSchemeWithState = state ? `${deepLinkScheme}&state=${encodeURIComponent(state)}` : deepLinkScheme;
-            
-            console.log('Redirecting to app:', appSchemeWithState);
-            
+            const path = 'oauth/callback';
+            const query = `code=${encodeURIComponent(code)}${state ? `&state=${encodeURIComponent(state)}` : ''}`;
+
+            let appLink;
+            if (deepLinkBase && (deepLinkBase.startsWith('exp://') || deepLinkBase.startsWith('http://') || deepLinkBase.startsWith('https://'))) {
+                // Expo dev or web base: needs /--/ prefix
+                appLink = `${deepLinkBase}/--/${path}?${query}`;
+            } else if (dev === 'true' && !deepLinkBase) {
+                // Dev hint but no base provided in state; remain conservative and do nothing automatic
+                // You can optionally hardcode a temporary exp:// base for local testing.
+                appLink = `kor://${path}?${query}`;
+            } else {
+                // Production custom scheme fallback
+                const schemeBase = 'kor://';
+                const normalized = normalizeBase(schemeBase);
+                appLink = `${normalized}/${path}?${query}`;
+            }
+
+            console.log('Redirecting to app:', appLink);
+
             // Try to open the app
-            window.location.href = appSchemeWithState;
-            
+            window.location.href = appLink;
+
             // Fallback: if the app doesn't open after 3 seconds, show instructions
             setTimeout(() => {
                 if (document.visibilityState === 'visible') {
@@ -110,13 +183,13 @@
                                 <li>Try the connection process again</li>
                             </ol>
                             <br>
-                            <button onclick="window.location.href='${appSchemeWithState}'" 
+                            <button onclick="window.location.href='${appLink}'" 
                                     style="padding: 12px 24px; background: #fc6b03; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer;">
                                 Open KOR App
                             </button>
                             <div class="debug">
                                 <strong>Debug Info:</strong><br>
-                                Deep link: ${appSchemeWithState}
+                                Deep link: ${appLink}
                             </div>
                         </div>
                     `;

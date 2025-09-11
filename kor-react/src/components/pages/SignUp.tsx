@@ -11,7 +11,7 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     // Initialize Chargebee when component mounts
     if (window.Chargebee) {
-      const site = process.env.REACT_APP_CHARGEBEE_SITE || 'kor-test';
+      const site = process.env.REACT_APP_CHARGEBEE_SITE || 'jmrcycling';
       window.Chargebee.init({
         site: site
       });
