@@ -1,9 +1,23 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { useAuth0 } from '@auth0/auth0-react';
 
 const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isAuthenticated, logout, isLoading } = useAuth0();
+  const location = useLocation();
+
+  // Check if we're on a shop page (dashboard, login, etc.)
+  const isOnShopPage = location.pathname.startsWith('/shop');
+
+  const handleLogout = () => {
+    logout({
+      logoutParams: {
+        returnTo: window.location.origin
+      }
+    });
+  };
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -40,12 +54,23 @@ const Header: React.FC = () => {
         </button>
 
         <nav className="right_position desktop-nav">
-          <Link 
-            className="link" 
-            to="/shop/login"
-          >
-            Log In
-          </Link>
+          {isLoading ? (
+            <span className="link loading-auth">Loading...</span>
+          ) : isOnShopPage && isAuthenticated ? (
+            <button 
+              className="link"
+              onClick={handleLogout}
+            >
+              Log Out
+            </button>
+          ) : (
+            <Link 
+              className="link" 
+              to="/shop/login"
+            >
+              Log In
+            </Link>
+          )}
         </nav>
       </div>
 
@@ -69,9 +94,23 @@ const Header: React.FC = () => {
         <Link className="mobile-link" to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
           Contact Us
         </Link>
-        <Link className="mobile-link" to="/shop/login" onClick={() => setIsMobileMenuOpen(false)}>
-          Log In
-        </Link>
+        {isLoading ? (
+          <span className="mobile-link loading-auth">Loading...</span>
+        ) : isOnShopPage && isAuthenticated ? (
+          <button 
+            className="mobile-link" 
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              handleLogout();
+            }}
+          >
+            Log Out
+          </button>
+        ) : (
+          <Link className="mobile-link" to="/shop/login" onClick={() => setIsMobileMenuOpen(false)}>
+            Log In
+          </Link>
+        )}
       </nav>
     </header>
   );
