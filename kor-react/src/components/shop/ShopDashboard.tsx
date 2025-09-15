@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import { useLegacyParams, buildLegacyUrl, logLegacyParams } from '../../hooks/useLegacyParams';
+import { useLegacyParams, logLegacyParams } from '../../hooks/useLegacyParams';
 import QrCodeGenerator from '../common/QrCodeGenerator';
 import SubscriptionDetails from '../subscription/SubscriptionDetails';
 interface ShopUser {
@@ -61,7 +61,7 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
 };
 
 const ShopDashboard: React.FC = () => {
-  const { user, isAuthenticated, isLoading, logout, error } = useAuth0();
+  const { user, isAuthenticated, isLoading, error } = useAuth0();
   const navigate = useNavigate();
   const params = useLegacyParams();
   const [shopUser, setShopUser] = useState<ShopUser | null>(null);
@@ -347,16 +347,6 @@ const ShopDashboard: React.FC = () => {
     }
   }, [isAuthenticated, user, params]);
 
-  const handleLogout = () => {
-    // Build login URL with current parameters preserved
-    const loginUrl = buildLegacyUrl('/shop/login', params);
-    
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin + loginUrl
-      }
-    });
-  };
 
   if (isLoading || loadingTimeout) {
     return (
@@ -497,20 +487,6 @@ const ShopDashboard: React.FC = () => {
             </p>
           )}
         </div>
-        <button
-          onClick={handleLogout}
-          style={{
-            backgroundColor: 'rgba(255,255,255,0.2)',
-            color: 'white',
-            border: '1px solid rgba(255,255,255,0.3)',
-            padding: '0.5rem 1rem',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease'
-          }}
-        >
-          Logout
-        </button>
       </div>
 
       {/* Plan-specific information banner */}

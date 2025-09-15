@@ -906,6 +906,29 @@ nav {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+/* Ensure button elements with link classes inherit exact same styling */
+button.link {
+  font-size: 2.2em;
+  padding: 8px 12px;
+  background-color: var(--primary-color);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--headline-color-on-dark);
+  font-family: var(--heading-font);
+  margin: 0 0.5%;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+button.link:hover {
+  background-color: var(--secondary-color);
+  color: whitesmoke;
+  cursor: pointer;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
 /* Mobile hamburger menu */
 .mobile-menu-toggle {
   display: none;
@@ -953,6 +976,26 @@ nav {
 }
 
 .mobile-link:hover {
+  background-color: var(--secondary-color);
+}
+
+/* Ensure button elements with mobile-link classes inherit exact same styling */
+button.mobile-link {
+  color: white;
+  text-decoration: none;
+  font-size: 1.8em;
+  font-family: var(--heading-font);
+  text-align: center;
+  padding: 0.8em;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  width: 100%;
+}
+
+button.mobile-link:hover {
   background-color: var(--secondary-color);
 }
 
