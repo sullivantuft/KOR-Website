@@ -102,8 +102,12 @@ const ShopSignIn: React.FC = () => {
         shop_code: formData.shop_initials.toUpperCase()
       });
 
-      // Redirect to dashboard with success parameters
-      navigate(successUrl);
+      // Authenticate, then return to dashboard with params
+      await loginWithRedirect({
+        authorizationParams: {
+          redirect_uri: window.location.origin + successUrl
+        }
+      });
 
     } catch (error) {
       console.error('Shop signup error:', error);

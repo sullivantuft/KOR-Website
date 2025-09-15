@@ -55,7 +55,7 @@ const SignUp: React.FC = () => {
         if (confirmed) {
           // Simulate successful subscription in development
           alert('Simulated successful subscription! Redirecting to dashboard...');
-          window.location.href = '/shop-dashboard?success=true&plan=' + encodeURIComponent(`${planType}-${billingCycle}`);
+          window.location.href = '/shop/dashboard?success=true&plan=' + encodeURIComponent(`${planType}-${billingCycle}`);
         }
         return;
       } else {
@@ -98,13 +98,13 @@ const SignUp: React.FC = () => {
             id: planId,
             type: 'checkout_new_subscription',
             embed: false,
-            success_url: `${window.location.origin}/shop-dashboard?success=true`,
+            success_url: `${window.location.origin}/shop/dashboard?success=true`,
             cancel_url: `${window.location.origin}/sign-up?cancelled=true`
           };
         },
         success: (hostedPageId: string) => {
           console.log('Checkout successful:', hostedPageId);
-          window.location.href = `/shop-dashboard?success=true&subscription=${hostedPageId}`;
+          window.location.href = `/shop/dashboard?success=true&subscription=${hostedPageId}`;
         },
         error: (error: any) => {
           console.error('Checkout error:', error);
@@ -121,7 +121,7 @@ const SignUp: React.FC = () => {
         alert('Chargebee configuration error in development. Using fallback simulation.');
         const confirmed = window.confirm(`Simulate subscription to ${planType} - ${billingCycle}?`);
         if (confirmed) {
-          window.location.href = '/shop-dashboard?success=true&plan=' + encodeURIComponent(`${planType}-${billingCycle}`);
+          window.location.href = '/shop/dashboard?success=true&plan=' + encodeURIComponent(`${planType}-${billingCycle}`);
         }
       } else {
         alert('Unable to open checkout. Please contact support.');
