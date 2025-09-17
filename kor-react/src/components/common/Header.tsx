@@ -8,10 +8,23 @@ const Header: React.FC = () => {
   const { isAuthenticated, logout, isLoading } = useAuth0();
   const location = useLocation();
 
+  // Soft auth: consider sessionStorage shop data as an authenticated shop session while Auth0 hydrates
+  const sessionHasShopData = typeof window !== 'undefined' && !!(sessionStorage.getItem('shop_name') && sessionStorage.getItem('plan_type'));
+  const softAuthenticated = isAuthenticated || sessionHasShopData;
+  const showLoading = isLoading && !softAuthenticated;
+
   // Check if we're on a shop page (dashboard, login, etc.)
   const isOnShopPage = location.pathname.startsWith('/shop');
 
   const handleLogout = () => {
+    try {
+      // Clear legacy session data to avoid soft-auth illusions after logout
+      sessionStorage.removeItem('shop_name');
+      sessionStorage.removeItem('shop_code');
+      sessionStorage.removeItem('plan_type');
+      sessionStorage.removeItem('shop_token');
+    } catch {}
+
     logout({
       logoutParams: {
         returnTo: window.location.origin
@@ -54,9 +67,9 @@ const Header: React.FC = () => {
         </button>
 
         <nav className="right_position desktop-nav">
-          {isLoading ? (
+          {showLoading ? (
             <span className="link loading-auth">Loading...</span>
-          ) : isOnShopPage && isAuthenticated ? (
+          ) : isOnShopPage && softAuthenticated ? (
             <button 
               className="link"
               onClick={handleLogout}
@@ -94,9 +107,9 @@ const Header: React.FC = () => {
         <Link className="mobile-link" to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
           Contact Us
         </Link>
-        {isLoading ? (
+        {showLoading ? (
           <span className="mobile-link loading-auth">Loading...</span>
-        ) : isOnShopPage && isAuthenticated ? (
+        ) : isOnShopPage && softAuthenticated ? (
           <button 
             className="mobile-link" 
             onClick={() => {

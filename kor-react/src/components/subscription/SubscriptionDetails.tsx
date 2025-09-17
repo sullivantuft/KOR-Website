@@ -67,12 +67,18 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscriptionData = useCallback(async () => {
-    if (!isAuthenticated || !user?.sub) {
-      setError('User not authenticated');
-      return;
-    }
+  const getFallbackSubscriptionId = useCallback((): string | null => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const fromUrl = params.get('sub_id');
+      if (fromUrl) return fromUrl;
+      const fromLS = localStorage.getItem('kor_param_sub_id');
+      if (fromLS) return fromLS;
+    } catch {}
+    return null;
+  }, []);
 
+  const fetchSubscriptionData = useCallback(async () => {
     setLoading(true);
     setError(null);
     onLoading?.(true);
@@ -85,14 +91,20 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
         auth: authToken
       };
 
-      // Use provided subscription ID or Auth0 sub ID
+      const fallbackSubId = getFallbackSubscriptionId();
+
+      // Identifier priority: explicit prop -> fallback sub_id -> auth0_sub_id
       if (subscriptionId) {
         requestBody.subscription_id = subscriptionId;
-      } else {
+      } else if (fallbackSubId) {
+        requestBody.subscription_id = fallbackSubId;
+      } else if (isAuthenticated && user?.sub) {
         requestBody.auth0_sub_id = user.sub;
+      } else {
+        throw new Error('Awaiting authentication or subscription ID');
       }
 
-      console.log('Fetching subscription data with:', requestBody);
+      console.log('Fetching subscription data with:', { ...requestBody, auth: '***' });
 
       const response = await fetch(`${baseUrl}/getChargebeeSubscription`, {
         method: 'POST',
@@ -103,8 +115,9 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+        let errorData: any = null;
+        try { errorData = await response.json(); } catch {}
+        throw new Error((errorData && errorData.error) || `HTTP ${response.status}: ${response.statusText}`);
       }
 
       const data = await response.json();
@@ -125,7 +138,7 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
       setLoading(false);
       onLoading?.(false);
     }
-  }, [isAuthenticated, user?.sub, subscriptionId, onError, onLoading]);
+  }, [isAuthenticated, user?.sub, subscriptionId, onError, onLoading, getFallbackSubscriptionId]);
 
   const refreshData = () => {
     fetchSubscriptionData();
@@ -217,10 +230,11 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
       console.warn('Chargebee.js not loaded');
     }
     
-    if (isAuthenticated && user) {
+    const haveSubId = !!subscriptionId || !!getFallbackSubscriptionId();
+    if (haveSubId || (isAuthenticated && user)) {
       fetchSubscriptionData();
     }
-  }, [isAuthenticated, user, subscriptionId, fetchSubscriptionData]);
+  }, [isAuthenticated, user, subscriptionId, fetchSubscriptionData, getFallbackSubscriptionId]);
 
   const getStatusColor = (status: string): string => {
     switch (status.toLowerCase()) {
@@ -244,19 +258,6 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div style={{ 
-        padding: '1rem', 
-        textAlign: 'center',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        border: '1px solid #dee2e6'
-      }}>
-        <p>Please log in to view subscription details.</p>
-      </div>
-    );
-  }
 
   if (loading) {
     return (

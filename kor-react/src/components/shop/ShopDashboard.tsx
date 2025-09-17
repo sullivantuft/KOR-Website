@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLegacyParams, logLegacyParams } from '../../hooks/useLegacyParams';
 import QrCodeGenerator from '../common/QrCodeGenerator';
 import SubscriptionDetails from '../subscription/SubscriptionDetails';
+import ShopUsersAndBikes from './ShopUsersAndBikes';
 interface ShopUser {
   email: string;
   name: string;
@@ -41,17 +42,17 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
     },
     'premium': {
       name: 'Premium Plan',
-      maxCustomers: 200,
-      maxNotifications: 500,
+      maxCustomers: -1, // Unlimited customers
+      maxNotifications: -1, // Unlimited notifications
       features: ['Advanced Customer Management', 'Unlimited Notifications', 'Priority Support', 'Analytics Dashboard', 'Custom Campaigns'],
       color: '#28a745',
       description: 'Full-featured plan for growing bike shops'
     },
     'pro': {
       name: 'Pro Plan',
-      maxCustomers: 1000,
-      maxNotifications: -1, // Unlimited
-      features: ['Pro Customer Management', 'Unlimited Everything', '24/7 Support', 'Advanced Analytics', 'Custom Integrations', 'API Access'],
+      maxCustomers: -1, // Unlimited customers
+      maxNotifications: -1, // Unlimited notifications
+      features: ['Pro Customer Management', 'Unlimited Everything', '24/7 Support', 'Advanced Analytics', 'Custom Integrations'], // Removed 'API Access'
       color: '#6f42c1',
       description: 'Complete solution for large bike shop networks'
     }
@@ -68,19 +69,23 @@ const ShopDashboard: React.FC = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [planFeatures, setPlanFeatures] = useState<PlanFeatures | null>(null);
   const [loadingTimeout, setLoadingTimeout] = useState(false);
+  
+  // Live customer usage state
+  const [customerCount, setCustomerCount] = useState<number | null>(null);
+  const [customerCountLoading, setCustomerCountLoading] = useState(false);
+  const [customerCountError, setCustomerCountError] = useState<string | null>(null);
 
   // Auth0 loading timeout protection
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined;
     
     if (isLoading) {
-      console.log('⏳ [ShopDashboard] Auth0 loading started, setting 10s timeout...');
-      // If Auth0 is still loading after 10 seconds, assume something went wrong
+      console.log('⏳ [ShopDashboard] Auth0 loading started, setting 8s timeout...');
+      // If Auth0 is still loading after 8 seconds, show manual login option but do not auto-redirect
       timeoutId = setTimeout(() => {
-        console.log('⚠️ [ShopDashboard] Auth0 loading timeout reached, forcing redirect to login');
+        console.log('⚠️ [ShopDashboard] Auth0 loading timeout reached, showing manual login option (no auto-redirect)');
         setLoadingTimeout(true);
-        navigate('/shop/login');
-      }, 10000); // 10 second timeout
+      }, 8000); // reduce timeout and avoid forced navigation
     } else {
       console.log('✅ [ShopDashboard] Auth0 loading completed:', { isAuthenticated, hasUser: !!user });
     }
@@ -168,11 +173,17 @@ const ShopDashboard: React.FC = () => {
       return;
     }
 
-    // If loading finished and user is not authenticated, redirect to login
-    if (!isLoading && !isAuthenticated) {
-      console.log('🚑 [ShopDashboard] User not authenticated, redirecting to login...');
+    // If loading finished and user is not authenticated
+    // Only redirect if we do NOT have session-based shop data
+    const hasSessionShopData = !!(sessionStorage.getItem('shop_name') && sessionStorage.getItem('plan_type'));
+    if (!isLoading && !isAuthenticated && !hasSessionShopData) {
+      console.log('🚑 [ShopDashboard] User not authenticated and no session shop data, redirecting to login...');
       navigate('/shop/login');
       return;
+    }
+
+    if (!isLoading && !isAuthenticated && hasSessionShopData) {
+      console.log('🟡 [ShopDashboard] Not authenticated yet, but session shop data exists - staying on dashboard (soft load)');
     }
 
     // If user is authenticated, log success
@@ -310,15 +321,15 @@ const ShopDashboard: React.FC = () => {
     });
     
     if (isAuthenticated && user) {
-      const planType = params.plan_type || 'Basic';
+      const planType = params.plan_type || sessionStorage.getItem('plan_type') || 'Basic';
       const features = getPlanFeatures(planType);
       setPlanFeatures(features);
       
       const shopUserData = {
         email: user.email || '',
         name: user.name || user.email || 'Shop Owner',
-        shopName: params.shop_name || user.nickname || `${features.name.split(' ')[0]} Bike Shop`,
-        shopCode: params.shop_code || 'SHOP' + Math.random().toString(36).substr(2, 4).toUpperCase(),
+        shopName: params.shop_name || sessionStorage.getItem('shop_name') || user.nickname || `${features.name.split(' ')[0]} Bike Shop`,
+        shopCode: params.shop_code || sessionStorage.getItem('shop_code') || 'SHOP' + Math.random().toString(36).substr(2, 4).toUpperCase(),
         subscription: {
           plan: planType,
           status: 'active',
@@ -347,8 +358,81 @@ const ShopDashboard: React.FC = () => {
     }
   }, [isAuthenticated, user, params]);
 
+  // Soft prefill from sessionStorage to speed up refresh experience
+  useEffect(() => {
+    const sessionData = {
+      shop_name: sessionStorage.getItem('shop_name'),
+      shop_code: sessionStorage.getItem('shop_code'),
+      plan_type: sessionStorage.getItem('plan_type')
+    };
+    if (!shopUser && sessionData.shop_name && sessionData.plan_type) {
+      const planType = sessionData.plan_type;
+      const features = getPlanFeatures(planType);
+      setPlanFeatures((prev) => prev || features);
+      setShopUser({
+        email: '',
+        name: 'Shop Owner',
+        shopName: sessionData.shop_name || undefined,
+        shopCode: sessionData.shop_code || undefined,
+        subscription: {
+          plan: planType,
+          status: 'active'
+        }
+      });
+      console.log('⚡ [ShopDashboard] Prefilled dashboard from sessionStorage while auth initializes');
+    }
+  }, [shopUser]);
 
-  if (isLoading || loadingTimeout) {
+  // Fetch live customer count using existing backend API (works during soft-auth too)
+  useEffect(() => {
+    const shop_token = sessionStorage.getItem('shop_token');
+    if (!shop_token) {
+      console.log('ℹ️ [ShopDashboard] No shop_token in sessionStorage; skipping user count fetch.');
+      return;
+    }
+
+    const baseUrl = process.env.REACT_APP_API_BASE_URL || 'https://jmrcycling.com:3001';
+    const authToken = process.env.REACT_APP_API_AUTH_TOKEN || '1893784827439273928203838';
+
+    setCustomerCountLoading(true);
+    setCustomerCountError(null);
+
+    (async () => {
+      try {
+        const response = await fetch(`${baseUrl}/getShopUsers`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ auth: authToken, shop_token }) as unknown as BodyInit,
+          redirect: 'follow' as RequestRedirect
+        });
+
+        if (!response.ok) {
+          const errText = await response.text().catch(() => '');
+          throw new Error(`HTTP ${response.status} ${errText}`);
+        }
+
+        const data = await response.json();
+        if (data && data.message === 'success') {
+          const count = typeof data.user_count === 'number' ? data.user_count : Array.isArray(data.users) ? data.users.length : 0;
+          setCustomerCount(count);
+          console.log('👥 [ShopDashboard] Loaded customer count:', count);
+        } else {
+          throw new Error(data?.error || 'Failed to load user count');
+        }
+      } catch (err) {
+        console.error('❌ [ShopDashboard] Failed to fetch shop user count:', err);
+        setCustomerCountError(err instanceof Error ? err.message : 'Unknown error');
+      } finally {
+        setCustomerCountLoading(false);
+      }
+    })();
+  }, [isAuthenticated, shopUser?.shopCode]);
+
+
+  // Allow the dashboard to render if we have session-based shop data, even while Auth0 initializes
+  const hasSessionShopData = !!(typeof window !== 'undefined' && sessionStorage.getItem('shop_name') && sessionStorage.getItem('plan_type'));
+
+  if ((isLoading || loadingTimeout) && !hasSessionShopData) {
     return (
       <div className="page-container" style={{ textAlign: 'center', padding: '2rem' }}>
         <div className="loading-spinner" style={{ margin: '2rem auto' }}>
@@ -363,7 +447,7 @@ const ShopDashboard: React.FC = () => {
           }}/>
         </div>
         <p style={{ color: loadingTimeout ? '#e74c3c' : '#666' }}>
-          {loadingTimeout ? 'Authentication timeout - redirecting to login...' : 'Loading dashboard...'}
+          {loadingTimeout ? 'Authentication taking longer than usual...' : 'Loading dashboard...'}
         </p>
         
         {/* Auth0 Error Display */}
@@ -444,8 +528,9 @@ const ShopDashboard: React.FC = () => {
     );
   }
 
-  if (!isAuthenticated) {
-    return null; // Will redirect to login
+  // If not authenticated but we have session-based shop data, allow soft rendering
+  if (!isAuthenticated && !hasSessionShopData) {
+    return null; // Will redirect to login (or show loader if above)
   }
 
   return (
@@ -507,9 +592,6 @@ const ShopDashboard: React.FC = () => {
                 <div>
                   <strong>Customer Limit:</strong> {planFeatures.maxCustomers === -1 ? 'Unlimited' : planFeatures.maxCustomers.toLocaleString()}
                 </div>
-                <div>
-                  <strong>Notifications:</strong> {planFeatures.maxNotifications === -1 ? 'Unlimited' : planFeatures.maxNotifications.toLocaleString()}
-                </div>
               </div>
             </div>
             {planFeatures.maxCustomers !== 50 && (
@@ -527,6 +609,39 @@ const ShopDashboard: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Getting Started Section (moved just below Plan Features banner) */}
+      <div style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        marginTop: '1rem',
+        textAlign: 'center'
+      }}>
+        <h2 style={{ color: '#333', marginBottom: '1rem' }}>Getting Started with JMR Cycling</h2>
+        <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+          Your dashboard is being prepared with all the features of your {planFeatures?.name || 'plan'}.
+        </p>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
+          <div style={{ padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📱</div>
+            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Download KOR App</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>Your customers will use your shop code: <strong>{shopUser?.shopCode}</strong></p>
+          </div>
+          <div style={{ padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚙️</div>
+            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Configure Settings</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>Customize notifications and shop preferences</p>
+          </div>
+          <div style={{ padding: '1rem' }}>
+            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
+            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Start Managing</h4>
+            <p style={{ fontSize: '0.9rem', color: '#666' }}>Begin tracking customer bike maintenance</p>
+          </div>
+        </div>
+      </div>
 
       {/* QR Code Section - Matching Legacy Dashboard */}
       {shopUser?.shopCode && (
@@ -628,6 +743,11 @@ const ShopDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* Users & Bikes Section */}
+      <div style={{ marginTop: '2rem' }}>
+        <ShopUsersAndBikes accentColor={planFeatures?.color || '#667eea'} />
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         {/* Shop Info Card - Enhanced with parameters */}
         <div style={{
@@ -641,7 +761,6 @@ const ShopDashboard: React.FC = () => {
           </h3>
           <div style={{ lineHeight: 1.6 }}>
             <p><strong>Shop Name:</strong> {shopUser?.shopName}</p>
-            <p><strong>Owner:</strong> {shopUser?.name}</p>
             <p><strong>Email:</strong> {shopUser?.email}</p>
             {shopUser?.shopCode && <p><strong>Shop Code:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.shopCode}</code></p>}
           </div>
@@ -661,20 +780,20 @@ const ShopDashboard: React.FC = () => {
             <div style={{ marginBottom: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <strong>Customers:</strong>
-                <span>0 / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
+                <span>{customerCountLoading ? 'Loading…' : (customerCount ?? 0)} / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
               </div>
-              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
-              </div>
-            </div>
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <strong>Notifications:</strong>
-                <span>0 / {planFeatures?.maxNotifications === -1 ? '∞' : planFeatures?.maxNotifications}</span>
-              </div>
-              <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                <div style={{ backgroundColor: planFeatures?.color || '#007bff', height: '100%', width: '0%' }}></div>
-              </div>
+              {planFeatures?.maxCustomers !== -1 && (
+                <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ 
+                    backgroundColor: planFeatures?.color || '#007bff', 
+                    height: '100%', 
+                    width: `${(planFeatures?.maxCustomers && planFeatures.maxCustomers > 0 && (customerCount ?? 0) >= 0) ? Math.min(100, Math.round(((customerCount ?? 0) / planFeatures.maxCustomers) * 100)) : 0}%` 
+                  }}></div>
+                </div>
+              )}
+              {customerCountError && (
+                <p style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.5rem' }}>Error loading customers: {customerCountError}</p>
+              )}
             </div>
           </div>
         </div>
@@ -723,8 +842,7 @@ const ShopDashboard: React.FC = () => {
                   {feature === '24/7 Support' && 'Round-the-clock support via phone and chat'}
                   {feature === 'Advanced Analytics' && 'Deep business intelligence and reporting'}
                   {feature === 'Custom Integrations' && 'Connect with your existing business tools'}
-                  {feature === 'API Access' && 'Build custom integrations with our API'}
-                  {!feature.includes('Customer') && !feature.includes('Notification') && !feature.includes('Support') && !feature.includes('Analytics') && !feature.includes('Campaign') && !feature.includes('Integration') && !feature.includes('API') && 'Available in your current plan'}
+                  {!feature.includes('Customer') && !feature.includes('Notification') && !feature.includes('Support') && !feature.includes('Analytics') && !feature.includes('Campaign') && !feature.includes('Integration') && 'Available in your current plan'}
                 </p>
               </div>
             ))}
@@ -732,40 +850,9 @@ const ShopDashboard: React.FC = () => {
         </div>
       )}
 
+
       
 
-      {/* Getting Started Section */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        marginTop: '2rem',
-        textAlign: 'center'
-      }}>
-        <h2 style={{ color: '#333', marginBottom: '1rem' }}>Getting Started with {shopUser?.shopName}</h2>
-        <p style={{ color: '#666', marginBottom: '1.5rem' }}>
-          Your dashboard is being prepared with all the features of your {planFeatures?.name || 'plan'}.
-        </p>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📱</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Download KOR App</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Your customers will use your shop code: <strong>{shopUser?.shopCode}</strong></p>
-          </div>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚙️</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Configure Settings</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Customize notifications and shop preferences</p>
-          </div>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Start Managing</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Begin tracking customer bike maintenance</p>
-          </div>
-        </div>
-      </div>
 
       {/* Enhanced Debug Info (Development Only) */}
       {process.env.NODE_ENV === 'development' && (
