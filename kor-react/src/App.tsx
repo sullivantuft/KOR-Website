@@ -18,6 +18,7 @@ import ShopSignIn from './components/shop/ShopSignIn';
 import LegacyParamsDemo from './components/demo/LegacyParamsDemo';
 import ParameterTestPage from './components/demo/ParameterTestPage';
 import PersonalSignIn from './components/personal/PersonalSignIn';
+import OAuthAuthorize from './components/oauth/OAuthAuthorize';
  import './styles/styles.css';
 
 function App() {
@@ -72,9 +73,10 @@ function App() {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/personal-plans" element={<PersonalPlans />} />
               <Route path="/personal/signin" element={<PersonalSignIn />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/qr-guide" element={<QrGuide />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/qr-guide" element={<QrGuide />} />
+              <Route path="/oauth/authorize/*" element={<OAuthAuthorize />} />
               <Route path="/shop/login" element={<ShopLogin />} />
               <Route path="/shop/dashboard" element={<ShopDashboard />} />
               {/* Legacy-compatible routes */}

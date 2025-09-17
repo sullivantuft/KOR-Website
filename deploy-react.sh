@@ -167,6 +167,24 @@ for route in "${DEPLOY_ROUTES[@]}"; do
   fi
 done
 
+# Extra content checks to ensure correct handler for /oauth/authorize
+log "Performing content checks for OAuth authorize endpoint..."
+# 1) The SPA route should respond at /oauth/authorize/ with the React root container
+if curl -s --max-time 10 "${DEFAULT_DOMAIN}/oauth/authorize/" | grep -q "<div id=\"root\"></div>"; then
+  log "✅ /oauth/authorize/ serves SPA shell (React root present)"
+else
+  err "⚠️ /oauth/authorize/ may not be serving the SPA shell (React root not found)"
+  HEALTH_CHECK_FAILED=true
+fi
+
+# 2) The legacy static fallback should exist at /oauth/authorize/index.html and include marker text
+if curl -s --max-time 10 "${DEFAULT_DOMAIN}/oauth/authorize/index.html" | grep -qi "Connecting to KOR"; then
+  log "✅ /oauth/authorize/index.html legacy page present"
+else
+  err "⚠️ Legacy oauth/authorize/index.html not found or missing expected content"
+  # not fatal, but warn
+fi
+
 if [[ "$HEALTH_CHECK_FAILED" == "true" ]]; then
   err "⚠️ Some health checks failed. Deployment completed but routes may not be working correctly."
   err "Check nginx configuration and ensure SPA fallback is configured."
