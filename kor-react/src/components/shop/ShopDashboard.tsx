@@ -5,6 +5,7 @@ import { useLegacyParams, logLegacyParams } from '../../hooks/useLegacyParams';
 import QrCodeGenerator from '../common/QrCodeGenerator';
 import SubscriptionDetails from '../subscription/SubscriptionDetails';
 import ShopUsersAndBikes from './ShopUsersAndBikes';
+import SendNotificationsPanel from './SendNotificationsPanel';
 interface ShopUser {
   email: string;
   name: string;
@@ -321,8 +322,9 @@ const ShopDashboard: React.FC = () => {
     });
     
     if (isAuthenticated && user) {
-      const planType = params.plan_type || sessionStorage.getItem('plan_type') || 'Basic';
-      const features = getPlanFeatures(planType);
+      const planTypeRaw = (params.plan_type || sessionStorage.getItem('plan_type') || 'basic').toString();
+      const normalizedPlanType = planTypeRaw.toLowerCase();
+      const features = getPlanFeatures(normalizedPlanType);
       setPlanFeatures(features);
       
       const shopUserData = {
@@ -331,7 +333,7 @@ const ShopDashboard: React.FC = () => {
         shopName: params.shop_name || sessionStorage.getItem('shop_name') || user.nickname || `${features.name.split(' ')[0]} Bike Shop`,
         shopCode: params.shop_code || sessionStorage.getItem('shop_code') || 'SHOP' + Math.random().toString(36).substr(2, 4).toUpperCase(),
         subscription: {
-          plan: planType,
+          plan: planTypeRaw,
           status: 'active',
           nextBilling: '2024-02-15',
           subId: params.sub_id || undefined,
@@ -340,7 +342,7 @@ const ShopDashboard: React.FC = () => {
       };
       
       console.log('🏢 [ShopDashboard] Setting shop user data:', {
-        planType,
+        planType: normalizedPlanType,
         shopUserData,
         parametersUsed: {
           sub_id: params.sub_id,
@@ -366,8 +368,9 @@ const ShopDashboard: React.FC = () => {
       plan_type: sessionStorage.getItem('plan_type')
     };
     if (!shopUser && sessionData.shop_name && sessionData.plan_type) {
-      const planType = sessionData.plan_type;
-      const features = getPlanFeatures(planType);
+      const planTypeRaw = (sessionData.plan_type || 'basic').toString();
+      const normalizedPlanType = planTypeRaw.toLowerCase();
+      const features = getPlanFeatures(normalizedPlanType);
       setPlanFeatures((prev) => prev || features);
       setShopUser({
         email: '',
@@ -375,7 +378,7 @@ const ShopDashboard: React.FC = () => {
         shopName: sessionData.shop_name || undefined,
         shopCode: sessionData.shop_code || undefined,
         subscription: {
-          plan: planType,
+          plan: planTypeRaw,
           status: 'active'
         }
       });
@@ -747,6 +750,17 @@ const ShopDashboard: React.FC = () => {
       <div style={{ marginTop: '2rem' }}>
         <ShopUsersAndBikes accentColor={planFeatures?.color || '#667eea'} />
       </div>
+
+      {/* Premium/Pro: Send Notifications */}
+      {(() => {
+        const planTypeParam = (params.plan_type || sessionStorage.getItem('plan_type') || '').toString().toLowerCase();
+        const canSendNotifications = planTypeParam === 'premium' || planTypeParam === 'pro';
+        return canSendNotifications ? (
+          <div style={{ marginTop: '2rem' }}>
+            <SendNotificationsPanel />
+          </div>
+        ) : null;
+      })()}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
         {/* Shop Info Card - Enhanced with parameters */}
