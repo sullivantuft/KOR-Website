@@ -6,6 +6,7 @@ import QrCodeGenerator from '../common/QrCodeGenerator';
 import SubscriptionDetails from '../subscription/SubscriptionDetails';
 import ShopUsersAndBikes from './ShopUsersAndBikes';
 import SendNotificationsPanel from './SendNotificationsPanel';
+import { resumeSubscription as cbResumeSubscription } from '../../services/chargebeeClient';
 interface ShopUser {
   email: string;
   name: string;
@@ -76,6 +77,8 @@ const ShopDashboard: React.FC = () => {
   const [customerCountLoading, setCustomerCountLoading] = useState(false);
   const [customerCountError, setCustomerCountError] = useState<string | null>(null);
   const [shopStatus, setShopStatus] = useState<string>('active');
+  const [resumeLoading, setResumeLoading] = useState(false);
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
   
   // Helper to determine if user is inactive
   const isInactiveUser = (shopStatus || 'active') !== 'active';
@@ -692,12 +695,54 @@ const ShopDashboard: React.FC = () => {
           </p>
           
           <button
-            onClick={() => {
-              // Open Chargebee Customer Portal - similar to SubscriptionDetails implementation
+            onClick={async () => {
+              setResumeLoading(true);
+              
+              // First try to resume directly via API (like SubscriptionDetails does)
+              try {
+                // Try to get subscription ID from multiple sources
+                const subId = subscriptionId ||  // From SubscriptionDetails callback
+                             shopUser?.subscription?.subId || 
+                             new URLSearchParams(window.location.search).get('sub_id') || 
+                             localStorage.getItem('kor_param_sub_id');
+                
+                console.log('🔍 [Resume CTA] Looking for subscription ID:', {
+                  fromSubscriptionDetails: subscriptionId,
+                  fromShopUser: shopUser?.subscription?.subId,
+                  fromURL: new URLSearchParams(window.location.search).get('sub_id'),
+                  fromLocalStorage: localStorage.getItem('kor_param_sub_id'),
+                  final: subId
+                });
+                             
+                if (subId) {
+                  if (window.confirm('Resume your subscription now?')) {
+                    console.log('✅ [Resume CTA] Attempting direct resume for subscription:', subId);
+                    await cbResumeSubscription({ subscriptionId: subId });
+                    
+                    // Success! Refresh the page data
+                    console.log('🎉 [Resume CTA] Subscription resumed successfully!');
+                    window.location.reload(); // Refresh to update shop status
+                    return;
+                  } else {
+                    console.log('❌ [Resume CTA] User cancelled confirmation dialog');
+                    setResumeLoading(false);
+                    return;
+                  }
+                } else {
+                  console.log('⚠️ [Resume CTA] No subscription ID found, skipping direct resume');
+                }
+              } catch (error) {
+                console.log('❌ [Resume CTA] Direct resume failed, falling back to customer portal:', error);
+              }
+              
+              // Fallback: Open Chargebee Customer Portal
+              console.log('Opening Chargebee Customer Portal as fallback...');
+              
               if (!window.Chargebee) {
                 console.warn('Chargebee.js not loaded, opening portal in new window');
                 const portalUrl = `https://jmrcycling.chargebee.com/portal/v2/login`;
                 window.open(portalUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+                setResumeLoading(false);
                 return;
               }
               
@@ -722,19 +767,23 @@ const ShopDashboard: React.FC = () => {
                 const site = process.env.REACT_APP_CHARGEBEE_SITE || 'jmrcycling';
                 const portalUrl = `https://${site}.chargebee.com/portal/v2/login`;
                 window.open(portalUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+              } finally {
+                setResumeLoading(false);
               }
             }}
+            disabled={resumeLoading}
             style={{
-              backgroundColor: '#ffc107',
+              backgroundColor: resumeLoading ? '#ccc' : '#ffc107',
               color: '#333',
               border: 'none',
               padding: '1rem 2rem',
               borderRadius: '8px',
               fontSize: '1.2rem',
               fontWeight: 'bold',
-              cursor: 'pointer',
+              cursor: resumeLoading ? 'not-allowed' : 'pointer',
               boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-              transition: 'all 0.3s ease'
+              transition: 'all 0.3s ease',
+              opacity: resumeLoading ? 0.7 : 1
             }}
             onMouseOver={(e) => {
               e.currentTarget.style.transform = 'translateY(-2px)';
@@ -745,7 +794,7 @@ const ShopDashboard: React.FC = () => {
               e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
             }}
           >
-            🚀 Resume Subscription
+            {resumeLoading ? '⏳ Resuming...' : '🚀 Resume Subscription'}
           </button>
         </div>
       )}
@@ -1005,6 +1054,13 @@ const ShopDashboard: React.FC = () => {
           subscriptionId={shopUser?.subscription?.subId}
           onError={(error) => console.error('Subscription Details Error:', error)}
           onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
+          onSubscriptionData={(data) => {
+            // Capture subscription ID for use in Resume CTA
+            if (data?.subscriptionId) {
+              console.log('📊 [ShopDashboard] Captured subscription ID:', data.subscriptionId);
+              setSubscriptionId(data.subscriptionId);
+            }
+          }}
         />
       </div>
 

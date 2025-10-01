@@ -56,12 +56,14 @@ interface SubscriptionDetailsProps {
   subscriptionId?: string;
   onError?: (error: string) => void;
   onLoading?: (loading: boolean) => void;
+  onSubscriptionData?: (data: SubscriptionData | null) => void;
 }
 
 const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
   subscriptionId,
   onError,
-  onLoading
+  onLoading,
+  onSubscriptionData
 }) => {
   const { user, isAuthenticated } = useAuth0();
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
@@ -135,10 +137,13 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
         if (data.subscription) {
           setSubscriptionData(data.subscription);
           console.log('Successfully fetched subscription data:', data.subscription);
+          // Notify parent component of subscription data
+          onSubscriptionData?.(data.subscription);
         } else {
           // Backend may return 200 with shop_status when the shop exists but is not active
           console.log('No active subscription found. Backend status:', data.shop_status || 'unknown');
           setSubscriptionData(null);
+          onSubscriptionData?.(null);
         }
       } else {
         throw new Error(data.error || 'Failed to fetch subscription data');
@@ -153,7 +158,7 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
       setLoading(false);
       onLoading?.(false);
     }
-  }, [isAuthenticated, user?.sub, subscriptionId, onError, onLoading, getFallbackSubscriptionId]);
+  }, [isAuthenticated, user?.sub, subscriptionId, onError, onLoading, getFallbackSubscriptionId, onSubscriptionData]);
 
   const refreshData = () => {
     fetchSubscriptionData();
