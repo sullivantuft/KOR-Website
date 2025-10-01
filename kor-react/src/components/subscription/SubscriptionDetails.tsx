@@ -131,9 +131,15 @@ const SubscriptionDetails: React.FC<SubscriptionDetailsProps> = ({
 
       const data = await response.json();
 
-      if (data.message === 'success' && data.subscription) {
-        setSubscriptionData(data.subscription);
-        console.log('Successfully fetched subscription data:', data.subscription);
+      if (data.message === 'success') {
+        if (data.subscription) {
+          setSubscriptionData(data.subscription);
+          console.log('Successfully fetched subscription data:', data.subscription);
+        } else {
+          // Backend may return 200 with shop_status when the shop exists but is not active
+          console.log('No active subscription found. Backend status:', data.shop_status || 'unknown');
+          setSubscriptionData(null);
+        }
       } else {
         throw new Error(data.error || 'Failed to fetch subscription data');
       }

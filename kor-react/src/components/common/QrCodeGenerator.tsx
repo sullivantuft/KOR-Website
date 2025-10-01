@@ -15,7 +15,7 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
   className = '',
   onError
 }) => {
-  const [qrImageUrl, setQrImageUrl] = useState<string>('');
+  const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
 
@@ -190,22 +190,24 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
         display: 'inline-block'
       }}>
-        <img
-          src={qrImageUrl}
-          alt={`QR Code for ${shopName || shopCode}`}
-          style={{
-            width: `${size}px`,
-            height: `${size}px`,
-            maxWidth: '100%'
-          }}
-          onLoad={() => console.log('✅ [QrCodeGenerator] QR code image loaded')}
-          onError={(e) => {
-            const errorMsg = 'Failed to load QR code image';
-            console.error('❌ [QrCodeGenerator] Image load error:', e);
-            setError(errorMsg);
-            onError?.(errorMsg);
-          }}
-        />
+        {qrImageUrl ? (
+          <img
+            src={qrImageUrl}
+            alt={`QR Code for ${shopName || shopCode}`}
+            style={{
+              width: `${size}px`,
+              height: `${size}px`,
+              maxWidth: '100%'
+            }}
+            onLoad={() => console.log('✅ [QrCodeGenerator] QR code image loaded')}
+            onError={(e) => {
+              const errorMsg = 'Failed to load QR code image';
+              console.error('❌ [QrCodeGenerator] Image load error:', e);
+              setError(errorMsg);
+              onError?.(errorMsg);
+            }}
+          />
+        ) : null}
       </div>
 
       {/* Action Buttons */}

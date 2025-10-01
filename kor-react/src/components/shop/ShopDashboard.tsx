@@ -75,6 +75,7 @@ const ShopDashboard: React.FC = () => {
   const [customerCount, setCustomerCount] = useState<number | null>(null);
   const [customerCountLoading, setCustomerCountLoading] = useState(false);
   const [customerCountError, setCustomerCountError] = useState<string | null>(null);
+  const [shopStatus, setShopStatus] = useState<string>('active');
 
   // Auth0 loading timeout protection
   useEffect(() => {
@@ -416,6 +417,8 @@ const ShopDashboard: React.FC = () => {
 
         const data = await response.json();
         if (data && data.message === 'success') {
+          const status = data.shop_status || 'active';
+          setShopStatus(status);
           const count = typeof data.user_count === 'number' ? data.user_count : Array.isArray(data.users) ? data.users.length : 0;
           setCustomerCount(count);
           console.log('👥 [ShopDashboard] Loaded customer count:', count);
@@ -578,7 +581,7 @@ const ShopDashboard: React.FC = () => {
       </div>
 
       {/* Plan-specific information banner */}
-      {planFeatures && (
+      {planFeatures && (shopStatus || 'active') !== 'active' && (
         <div style={{
           backgroundColor: 'white',
           padding: '1.5rem',
@@ -754,12 +757,32 @@ const ShopDashboard: React.FC = () => {
       {/* Premium/Pro: Send Notifications */}
       {(() => {
         const planTypeParam = (params.plan_type || sessionStorage.getItem('plan_type') || '').toString().toLowerCase();
-        const canSendNotifications = planTypeParam === 'premium' || planTypeParam === 'pro';
-        return canSendNotifications ? (
+        const isPremiumOrPro = planTypeParam === 'premium' || planTypeParam === 'pro';
+        const isActiveShop = (shopStatus || 'active') === 'active';
+        if (!isPremiumOrPro) return null;
+        if (!isActiveShop) {
+          return (
+            <div style={{ marginTop: '2rem' }}>
+              <div style={{
+                backgroundColor: '#fff3cd',
+                border: '1px solid #ffeeba',
+                color: '#856404',
+                padding: '1rem',
+                borderRadius: '8px'
+              }}>
+                <strong>Notifications are disabled</strong>
+                <p style={{ margin: '0.5rem 0 0 0' }}>
+                  Your subscription status is <strong>{shopStatus || 'unknown'}</strong>. Resume or activate your subscription to send notifications.
+                </p>
+              </div>
+            </div>
+          );
+        }
+        return (
           <div style={{ marginTop: '2rem' }}>
             <SendNotificationsPanel />
           </div>
-        ) : null;
+        );
       })()}
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
@@ -814,16 +837,18 @@ const ShopDashboard: React.FC = () => {
       </div>
 
       {/* Live Subscription Details from Chargebee API */}
-      <div style={{ marginTop: '2rem' }}>
-        <SubscriptionDetails
-          subscriptionId={shopUser?.subscription?.subId}
-          onError={(error) => console.error('Subscription Details Error:', error)}
-          onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
-        />
-      </div>
+      {(shopStatus || 'active') !== 'active' && (
+        <div style={{ marginTop: '2rem' }}>
+          <SubscriptionDetails
+            subscriptionId={shopUser?.subscription?.subId}
+            onError={(error) => console.error('Subscription Details Error:', error)}
+            onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
+          />
+        </div>
+      )}
 
       {/* Plan Features Section - Dynamic based on parameters */}
-      {planFeatures && (
+      {planFeatures && (shopStatus || 'active') !== 'active' && (
         <div style={{
           backgroundColor: 'white',
           padding: '2rem',
