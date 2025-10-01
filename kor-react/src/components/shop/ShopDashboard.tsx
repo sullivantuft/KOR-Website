@@ -837,15 +837,13 @@ const ShopDashboard: React.FC = () => {
       </div>
 
       {/* Live Subscription Details from Chargebee API */}
-      {(shopStatus || 'active') !== 'active' && (
-        <div style={{ marginTop: '2rem' }}>
-          <SubscriptionDetails
-            subscriptionId={shopUser?.subscription?.subId}
-            onError={(error) => console.error('Subscription Details Error:', error)}
-            onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
-          />
-        </div>
-      )}
+      <div style={{ marginTop: '2rem' }}>
+        <SubscriptionDetails
+          subscriptionId={shopUser?.subscription?.subId}
+          onError={(error) => console.error('Subscription Details Error:', error)}
+          onLoading={(loading) => console.log('Subscription Details Loading:', loading)}
+        />
+      </div>
 
       {/* Plan Features Section - Dynamic based on parameters */}
       {planFeatures && (shopStatus || 'active') !== 'active' && (
