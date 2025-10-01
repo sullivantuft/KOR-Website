@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 interface QrCodeGeneratorProps {
-  shopCode: string;
+  shopCode?: string;
   shopName?: string;
   size?: number;
   className?: string;
   onError?: (error: string) => void;
+  genericMode?: boolean; // For inactive users - shows generic app download
+  genericUrl?: string; // Custom URL for generic mode
 }
 
 const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
@@ -13,7 +15,9 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
   shopName,
   size = 200,
   className = '',
-  onError
+  onError,
+  genericMode = false,
+  genericUrl = 'https://jmrcycling.com/app_auth.html'
 }) => {
   const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -114,9 +118,9 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
     }
   };
 
-  // Generate QR code when shopCode changes
+  // Generate QR code when shopCode or genericMode changes
   useEffect(() => {
-    if (!shopCode) {
+    if (!genericMode && !shopCode) {
       setError('Shop code is required');
       return;
     }
@@ -125,14 +129,25 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
     setError('');
     
     try {
-      const onboardingUrl = `https://jmrcycling.com:3001/qr/onboard/${shopCode}`;
-      const url = `https://quickchart.io/qr?text=${encodeURIComponent(onboardingUrl)}&size=${size}`;
-      setQrImageUrl(url);
+      let targetUrl: string;
+      
+      if (genericMode) {
+        // Generic mode for inactive users
+        targetUrl = genericUrl;
+      } else {
+        // Normal shop-specific mode for active users
+        targetUrl = `https://jmrcycling.com:3001/qr/onboard/${shopCode}`;
+      }
+      
+      const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(targetUrl)}&size=${size}`;
+      setQrImageUrl(qrUrl);
+      
       console.log('📱 [QrCodeGenerator] QR code generated:', {
-        shopCode,
-        shopName,
-        qrUrl: url,
-        onboardingUrl
+        mode: genericMode ? 'generic' : 'shop-specific',
+        shopCode: genericMode ? 'N/A' : shopCode,
+        shopName: genericMode ? 'N/A' : shopName,
+        targetUrl,
+        qrUrl
       });
     } catch (err) {
       const errorMsg = 'Failed to generate QR code';
@@ -142,7 +157,7 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
     } finally {
       setIsLoading(false);
     }
-  }, [shopCode, size, shopName, onError]);
+  }, [shopCode, size, shopName, onError, genericMode, genericUrl]);
 
   if (isLoading) {
     return (
@@ -270,15 +285,31 @@ const QrCodeGenerator: React.FC<QrCodeGeneratorProps> = ({
         marginTop: '1rem',
         lineHeight: 1.4
       }}>
-        <p style={{ margin: '0.5rem 0' }}>
-          <strong>Shop Code:</strong> <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px' }}>{shopCode}</code>
-        </p>
-        <p style={{ margin: '0.5rem 0' }}>
-          <strong>Onboarding URL:</strong><br />
-          <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px', fontSize: '0.7rem' }}>
-            https://jmrcycling.com:3001/qr/onboard/{shopCode}
-          </code>
-        </p>
+        {genericMode ? (
+          <>
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Mode:</strong> <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px' }}>Generic App Access</code>
+            </p>
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Target URL:</strong><br />
+              <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                {genericUrl}
+              </code>
+            </p>
+          </>
+        ) : (
+          <>
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Shop Code:</strong> <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px' }}>{shopCode}</code>
+            </p>
+            <p style={{ margin: '0.5rem 0' }}>
+              <strong>Onboarding URL:</strong><br />
+              <code style={{ backgroundColor: '#f1f1f1', padding: '2px 6px', borderRadius: '4px', fontSize: '0.7rem' }}>
+                https://jmrcycling.com:3001/qr/onboard/{shopCode}
+              </code>
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

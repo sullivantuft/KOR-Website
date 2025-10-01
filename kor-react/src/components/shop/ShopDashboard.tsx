@@ -76,6 +76,9 @@ const ShopDashboard: React.FC = () => {
   const [customerCountLoading, setCustomerCountLoading] = useState(false);
   const [customerCountError, setCustomerCountError] = useState<string | null>(null);
   const [shopStatus, setShopStatus] = useState<string>('active');
+  
+  // Helper to determine if user is inactive
+  const isInactiveUser = (shopStatus || 'active') !== 'active';
 
   // Auth0 loading timeout protection
   useEffect(() => {
@@ -540,7 +543,27 @@ const ShopDashboard: React.FC = () => {
   }
 
   return (
-    <div className="page-container" style={{ maxWidth: '1400px', margin: '2rem auto', padding: '2rem' }}>
+    <div className="page-container" style={{ 
+      maxWidth: '1400px', 
+      margin: '2rem auto', 
+      padding: '2rem',
+      position: 'relative'
+    }}>
+      {/* Blur overlay for inactive users */}
+      {isInactiveUser && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(255, 255, 255, 0.75)',
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)', // Safari support
+          zIndex: 5,
+          pointerEvents: 'none' // Allow clicks through to content
+        }} />
+      )}
       {showSuccessMessage && (
         <div style={{
           backgroundColor: '#e6f7e6',
@@ -565,7 +588,9 @@ const ShopDashboard: React.FC = () => {
         backgroundColor: planFeatures?.color || '#007bff',
         color: 'white',
         borderRadius: '12px',
-        backgroundImage: 'linear-gradient(135deg, ' + (planFeatures?.color || '#007bff') + ', ' + (planFeatures?.color || '#007bff') + '90)'
+        backgroundImage: 'linear-gradient(135deg, ' + (planFeatures?.color || '#007bff') + ', ' + (planFeatures?.color || '#007bff') + '90)',
+        position: 'relative',
+        zIndex: isInactiveUser ? 10 : 'auto' // Ensure header stays above blur
       }}>
         <div>
           <h1 style={{ color: 'white', margin: 0, marginBottom: '0.5rem' }}>Welcome, {shopUser?.shopName}!</h1>
@@ -580,8 +605,8 @@ const ShopDashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Plan-specific information banner */}
-      {planFeatures && (shopStatus || 'active') !== 'active' && (
+      {/* Plan-specific information banner - REVERSED: now shows only for ACTIVE users */}
+      {planFeatures && (shopStatus || 'active') === 'active' && (
         <div style={{
           backgroundColor: 'white',
           padding: '1.5rem',
@@ -616,41 +641,117 @@ const ShopDashboard: React.FC = () => {
         </div>
       )}
 
-      {/* Getting Started Section (moved just below Plan Features banner) */}
-      <div style={{
-        backgroundColor: 'white',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        marginTop: '1rem',
-        textAlign: 'center'
-      }}>
-        <h2 style={{ color: '#333', marginBottom: '1rem' }}>Getting Started with JMR Cycling</h2>
-        <p style={{ color: '#666', marginBottom: '1.5rem' }}>
-          Your dashboard is being prepared with all the features of your {planFeatures?.name || 'plan'}.
-        </p>
-        
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📱</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Download KOR App</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Your customers will use your shop code: <strong>{shopUser?.shopCode}</strong></p>
-          </div>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚙️</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Configure Settings</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Customize notifications and shop preferences</p>
-          </div>
-          <div style={{ padding: '1rem' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
-            <h4 style={{ color: planFeatures?.color || '#007bff' }}>Start Managing</h4>
-            <p style={{ fontSize: '0.9rem', color: '#666' }}>Begin tracking customer bike maintenance</p>
+      {/* Getting Started Section for ACTIVE users, Resume CTA for INACTIVE users */}
+      {(shopStatus || 'active') === 'active' ? (
+        <div style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          marginTop: '1rem',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ color: '#333', marginBottom: '1rem' }}>Getting Started with JMR Cycling</h2>
+          <p style={{ color: '#666', marginBottom: '1.5rem' }}>
+            Your dashboard is being prepared with all the features of your {planFeatures?.name || 'plan'}.
+          </p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1.5rem' }}>
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📱</div>
+              <h4 style={{ color: planFeatures?.color || '#007bff' }}>Download KOR App</h4>
+              <p style={{ fontSize: '0.9rem', color: '#666' }}>Your customers will use your shop code: <strong>{shopUser?.shopCode}</strong></p>
+            </div>
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>⚙️</div>
+              <h4 style={{ color: planFeatures?.color || '#007bff' }}>Configure Settings</h4>
+              <p style={{ fontSize: '0.9rem', color: '#666' }}>Customize notifications and shop preferences</p>
+            </div>
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🚀</div>
+              <h4 style={{ color: planFeatures?.color || '#007bff' }}>Start Managing</h4>
+              <p style={{ fontSize: '0.9rem', color: '#666' }}>Begin tracking customer bike maintenance</p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div style={{
+          backgroundColor: '#fff3cd',
+          border: '2px solid #ffc107',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          marginTop: '1rem',
+          textAlign: 'center',
+          position: 'relative',
+          zIndex: 10 // Keep Resume CTA above blur
+        }}>
+          <h2 style={{ color: '#856404', marginBottom: '1rem' }}>⚠️ Subscription {shopStatus === 'paused' ? 'Paused' : 'Inactive'}</h2>
+          <p style={{ color: '#856404', marginBottom: '1.5rem', fontSize: '1.1rem' }}>
+            Your subscription is currently <strong>{shopStatus}</strong>. Resume your subscription to unlock all features and continue managing your bike shop.
+          </p>
+          
+          <button
+            onClick={() => {
+              // Open Chargebee Customer Portal - similar to SubscriptionDetails implementation
+              if (!window.Chargebee) {
+                console.warn('Chargebee.js not loaded, opening portal in new window');
+                const portalUrl = `https://jmrcycling.chargebee.com/portal/v2/login`;
+                window.open(portalUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+                return;
+              }
+              
+              try {
+                const site = process.env.REACT_APP_CHARGEBEE_SITE || 'jmrcycling';
+                
+                window.Chargebee.init({ site: site });
+                const cbInstance = window.Chargebee.getInstance();
+                
+                if (cbInstance && cbInstance.setPortalSession) {
+                  cbInstance.setPortalSession(() => ({
+                    redirect_url: window.location.href,
+                    forward_url: window.location.href
+                  }));
+                  cbInstance.openPortal();
+                } else {
+                  const portalUrl = `https://${site}.chargebee.com/portal/v2/login`;
+                  window.open(portalUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+                }
+              } catch (error) {
+                console.error('Error opening Chargebee portal:', error);
+                const site = process.env.REACT_APP_CHARGEBEE_SITE || 'jmrcycling';
+                const portalUrl = `https://${site}.chargebee.com/portal/v2/login`;
+                window.open(portalUrl, '_blank', 'width=800,height=600,scrollbars=yes,resizable=yes');
+              }
+            }}
+            style={{
+              backgroundColor: '#ffc107',
+              color: '#333',
+              border: 'none',
+              padding: '1rem 2rem',
+              borderRadius: '8px',
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+              cursor: 'pointer',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.2)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)';
+            }}
+          >
+            🚀 Resume Subscription
+          </button>
+        </div>
+      )}
 
-      {/* QR Code Section - Matching Legacy Dashboard */}
-      {shopUser?.shopCode && (
+      {/* QR Code Section - Different content for active vs inactive users */}
+      {shopUser?.shopCode && (shopStatus || 'active') === 'active' && (
         <div style={{
           backgroundColor: 'white',
           padding: '2rem',
@@ -748,11 +849,63 @@ const ShopDashboard: React.FC = () => {
           </div>
         </div>
       )}
+      
+      {/* Generic App QR Code for INACTIVE users */}
+      {(shopStatus || 'active') !== 'active' && (
+        <div style={{
+          backgroundColor: 'white',
+          padding: '2rem',
+          borderRadius: '8px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+          marginTop: '2rem',
+          textAlign: 'center'
+        }}>
+          <h2 style={{ color: '#333', marginBottom: '1rem' }}>📱 KOR App Access</h2>
+          <p style={{ color: '#666', marginBottom: '0.5rem', fontSize: '1.1rem' }}>
+            <strong>Download the KOR App</strong>
+          </p>
+          <p style={{ color: '#666', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+            Access the general KOR app. Resume your subscription to enable shop-specific features.
+          </p>
+          
+          {/* Generic QR Code for app download */}
+          <QrCodeGenerator 
+            genericMode={true}
+            genericUrl="https://jmrcycling.com/app_auth.html"
+            size={200}
+            onError={(error) => console.error('Generic QR Code Error:', error)}
+          />
+        </div>
+      )}
 
-      {/* Users & Bikes Section */}
-      <div style={{ marginTop: '2rem' }}>
-        <ShopUsersAndBikes accentColor={planFeatures?.color || '#667eea'} />
-      </div>
+      {/* Users & Bikes Section - Modified for inactive users */}
+      {(shopStatus || 'active') === 'active' ? (
+        <div style={{ marginTop: '2rem' }}>
+          <ShopUsersAndBikes accentColor={planFeatures?.color || '#667eea'} />
+        </div>
+      ) : (
+        <div style={{ marginTop: '2rem' }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+            border: '2px solid #ffc107'
+          }}>
+            <h3 style={{ color: '#856404', marginTop: 0, display: 'flex', alignItems: 'center' }}>
+              👥 Your Customers (Read Only)
+            </h3>
+            <p style={{ color: '#856404', marginBottom: '1rem', fontSize: '0.9rem' }}>
+              Bike tracking is disabled while your subscription is {shopStatus}. Resume to manage bikes and send notifications.
+            </p>
+            <ShopUsersAndBikes 
+              accentColor="#ffc107" 
+              readOnlyMode={true}
+              showBikes={false}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Premium/Pro: Send Notifications */}
       {(() => {
@@ -785,59 +938,69 @@ const ShopDashboard: React.FC = () => {
         );
       })()}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
-        {/* Shop Info Card - Enhanced with parameters */}
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
-            🏪 Shop Information
-          </h3>
-          <div style={{ lineHeight: 1.6 }}>
-            <p><strong>Shop Name:</strong> {shopUser?.shopName}</p>
-            <p><strong>Email:</strong> {shopUser?.email}</p>
-            {shopUser?.shopCode && <p><strong>Shop Code:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.shopCode}</code></p>}
+      {/* Only show these cards for ACTIVE users */}
+      {(shopStatus || 'active') === 'active' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.5rem' }}>
+          {/* Shop Info Card - Enhanced with parameters */}
+          <div style={{
+            backgroundColor: 'white',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
+              🏪 Shop Information
+            </h3>
+            <div style={{ lineHeight: 1.6 }}>
+              <p><strong>Shop Name:</strong> {shopUser?.shopName}</p>
+              <p><strong>Email:</strong> {shopUser?.email}</p>
+              {shopUser?.shopCode && <p><strong>Shop Code:</strong> <code style={{ backgroundColor: '#f8f9fa', padding: '2px 6px', borderRadius: '4px' }}>{shopUser.shopCode}</code></p>}
+            </div>
           </div>
-        </div>
 
-        {/* Plan Limits Card - Dynamic based on plan */}
-        <div style={{
-          backgroundColor: 'white',
-          padding: '1.5rem',
-          borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-        }}>
-          <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
-            📊 Plan Usage
-          </h3>
-          <div style={{ lineHeight: 1.6 }}>
-            <div style={{ marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <strong>Customers:</strong>
-                <span>{customerCountLoading ? 'Loading…' : (customerCount ?? 0)} / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
-              </div>
-              {planFeatures?.maxCustomers !== -1 && (
-                <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ 
-                    backgroundColor: planFeatures?.color || '#007bff', 
-                    height: '100%', 
-                    width: `${(planFeatures?.maxCustomers && planFeatures.maxCustomers > 0 && (customerCount ?? 0) >= 0) ? Math.min(100, Math.round(((customerCount ?? 0) / planFeatures.maxCustomers) * 100)) : 0}%` 
-                  }}></div>
+          {/* Plan Limits Card - Only show for ACTIVE users */}
+          <div style={{
+            backgroundColor: 'white',
+            padding: '1.5rem',
+            borderRadius: '8px',
+            boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+          }}>
+            <h3 style={{ marginTop: 0, color: '#333', display: 'flex', alignItems: 'center' }}>
+              📊 Plan Usage
+            </h3>
+            <div style={{ lineHeight: 1.6 }}>
+              <div style={{ marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <strong>Customers:</strong>
+                  <span>{customerCountLoading ? 'Loading…' : (customerCount ?? 0)} / {planFeatures?.maxCustomers === -1 ? '∞' : planFeatures?.maxCustomers}</span>
                 </div>
-              )}
-              {customerCountError && (
-                <p style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.5rem' }}>Error loading customers: {customerCountError}</p>
-              )}
+                {planFeatures?.maxCustomers !== -1 && (
+                  <div style={{ backgroundColor: '#e9ecef', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
+                    <div style={{ 
+                      backgroundColor: planFeatures?.color || '#007bff', 
+                      height: '100%', 
+                      width: `${(planFeatures?.maxCustomers && planFeatures.maxCustomers > 0 && (customerCount ?? 0) >= 0) ? Math.min(100, Math.round(((customerCount ?? 0) / planFeatures.maxCustomers) * 100)) : 0}%` 
+                    }}></div>
+                  </div>
+                )}
+                {customerCountError && (
+                  <p style={{ color: '#e74c3c', fontSize: '0.85rem', marginTop: '0.5rem' }}>Error loading customers: {customerCountError}</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Live Subscription Details from Chargebee API */}
-      <div style={{ marginTop: '2rem' }}>
+      <div style={{ 
+        marginTop: '2rem',
+        position: 'relative',
+        zIndex: isInactiveUser ? 10 : 'auto', // Keep above blur for inactive users
+        filter: isInactiveUser ? 'none' : 'none', // No filter needed, SubscriptionDetails handles its own styling
+        borderRadius: isInactiveUser ? '8px' : 'none',
+        boxShadow: isInactiveUser ? '0 4px 20px rgba(255, 193, 7, 0.2)' : 'none'
+      }}>
         <SubscriptionDetails
           subscriptionId={shopUser?.subscription?.subId}
           onError={(error) => console.error('Subscription Details Error:', error)}
@@ -851,8 +1014,11 @@ const ShopDashboard: React.FC = () => {
           backgroundColor: 'white',
           padding: '2rem',
           borderRadius: '8px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-          marginTop: '2rem'
+          boxShadow: '0 4px 20px rgba(255, 193, 7, 0.3), 0 2px 10px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(255, 193, 7, 0.3)',
+          marginTop: '2rem',
+          position: 'relative',
+          zIndex: 10 // Keep above blur for inactive users
         }}>
           <h2 style={{ color: '#333', marginBottom: '1rem', textAlign: 'center' }}>Your {planFeatures.name} Features</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
