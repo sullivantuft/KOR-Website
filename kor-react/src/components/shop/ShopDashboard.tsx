@@ -31,6 +31,8 @@ interface PlanFeatures {
 }
 
 // Plan configurations based on legacy system
+
+//TODO create family plan 
 const getPlanFeatures = (planType: string): PlanFeatures => {
   const plans: { [key: string]: PlanFeatures } = {
     'basic': {
