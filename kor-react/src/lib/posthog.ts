@@ -1,8 +1,8 @@
 import posthog from 'posthog-js'
 
 export const initPostHog = () => {
-  // Initialize PostHog when enabled (including development for testing)
-  const shouldInitialize = process.env.REACT_APP_POSTHOG_ENABLED === 'true'
+  // Initialize PostHog in production by default, or when explicitly enabled in development
+  const shouldInitialize = process.env.NODE_ENV === 'production' || process.env.REACT_APP_POSTHOG_ENABLED === 'true'
   
   if (typeof window !== 'undefined' && shouldInitialize) {
     posthog.init(process.env.REACT_APP_POSTHOG_KEY || '', {
