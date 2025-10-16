@@ -32,7 +32,7 @@ interface PlanFeatures {
 
 // Plan configurations based on legacy system
 
-//TODO create family plan 
+ 
 const getPlanFeatures = (planType: string): PlanFeatures => {
   const plans: { [key: string]: PlanFeatures } = {
     'basic': {
@@ -58,7 +58,15 @@ const getPlanFeatures = (planType: string): PlanFeatures => {
       features: ['Pro Customer Management', 'Unlimited Everything', '24/7 Support', 'Advanced Analytics', 'Custom Integrations'], // Removed 'API Access'
       color: '#6f42c1',
       description: 'Complete solution for large bike shop networks'
-    }
+    }, 
+    'family': {
+      name: 'Family Plan',
+      maxCustomers: 5, // Unlimited customers
+      maxNotifications: -1, // Unlimited notifications
+      features: ['Advanced Customer Management', 'Unlimited Notifications', 'Priority Support', 'Analytics Dashboard', 'Custom Campaigns'],
+      color: '#ffc107',
+      description: 'The ideal solution for a family of up to 6 bikers'
+    },
   };
   
   return plans[planType] || plans['basic'];
